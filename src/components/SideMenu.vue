@@ -1,0 +1,122 @@
+<template>
+    <div class="side-menu-container">
+        <h3 @click="goToTop">TOP</h3>
+        <h3 @click="goToBottom">BOTTOM</h3>
+        <h3 @click="goToShoes">SHOES</h3>
+        <div
+            @click="handleMixMatchClick"
+            class="mixMatch-container"
+        >
+            <h3 @click="goToMixAndMatch">MIX & MATCH</h3>
+            <ph-caret-down
+                v-if="!showMixMatchMenu"
+                :size="24"
+            />
+            <ph-caret-up
+                v-else
+                :size="24"
+            />
+        </div>
+        <div
+            v-if="showMixMatchMenu"
+            class="mixMatch-menu"
+        >
+            <h4 class="casual">CASUAL</h4>
+            <h4>FORMAL</h4>
+        </div>
+
+    </div>
+</template>
+
+<script setup>
+import { PhCaretDown, PhCaretUp } from "@phosphor-icons/vue"
+import { ref } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
+const router = useRouter()
+
+const showMixMatchMenu = ref(false)
+
+const handleMixMatchClick = () =>
+{
+    showMixMatchMenu.value = !showMixMatchMenu.value
+}
+
+
+const goToTop = () =>
+{
+    router.push({ name: 'TopView' })
+}
+
+const goToBottom = () =>
+{
+    router.push({ name: 'BottomView' })
+}
+
+const goToShoes = () =>
+{
+    router.push({ name: 'ShoesView' })
+}
+
+const goToMixAndMatch = () =>
+{
+    router.push({ name: 'MixAndMatchView' })
+}
+</script>
+
+<style scoped>
+.side-menu-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #F5F5F5;
+    height: 100vh;
+    width: 25vw;
+    padding: 2rem;
+    z-index: 10;
+}
+
+h3 {
+    margin-bottom: 30px;
+    cursor: pointer;
+}
+
+h4:hover,
+h3:hover {
+    color: rgb(248, 57, 120);
+}
+
+.mixMatch-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+
+}
+
+.mixMatch-container h3 {
+    margin-bottom: 0;
+    margin-right: 15px;
+}
+
+.mixMatch-menu {
+    display: flex;
+    flex-direction: column;
+    margin-left: 100px;
+    align-items: flex-end;
+    margin-top: 10px;
+    width: 6vw;
+}
+
+h4 {
+    margixAndMatchViewtom: 15px;
+    cursor: pointer;
+}
+
+.casual {
+    margin-right: 4px;
+}
+</style>
