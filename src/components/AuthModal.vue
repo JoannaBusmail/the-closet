@@ -1,19 +1,29 @@
 <template>
     <h5>{{ title }}</h5>
+
     <form>
         <div class="input-container">
-            <input
+            <InputText
+                class="primary"
                 type="text"
                 placeholder="Email"
+                v-model=email
+                @update:modelValue="$emit('update:emailInputValue', $event)"
             />
-            <input
+            <InputText
+                class="primary"
                 type="password"
                 placeholder="Password"
+                v-model=password
+                @update:modelValue="$emit('update:passwordInputValue', $event)"
             />
-            <input
+            <InputText
                 v-if="!isLogin"
+                class="primary"
                 type="password"
                 placeholder="Confirm Password"
+                v-model=confirmPassword
+                @update:modelValue="$emit('update:confirmPasswordInputValue', $event)"
             />
         </div>
         <div class="button-container">
@@ -33,22 +43,30 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import Button from './Button.vue'
+import InputText from './InputText.vue'
 
 
 
-const emit = defineEmits([ 'cancelBtn' ])
+const emit = defineEmits([ 'cancelBtn', 'update:emailInputValue', 'update:passwordInputValue', 'update:confirmPasswordInputValue' ])
 
 
 const props = defineProps({
-    isLogin: Boolean
+    isLogin: Boolean,
+
 })
+
+const email = ref('')
+const password = ref('')
+const confirmPassword = ref('')
 
 const handleCancel = () =>
 {
     emit('cancelBtn')
 }
+
+
 const title = computed(() => { return props.isLogin ? 'LOGIN' : 'SIGN UP' })
 
 
@@ -70,26 +88,6 @@ h5 {
     justify-content: center;
     width: 100%;
 }
-
-input {
-    width: 90%;
-    height: 2rem;
-    margin: 15px 0;
-    border: 1px solid #a8a5a5;
-    border-radius: 10px;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    font-size: 14px;
-    padding: 0 15px;
-
-}
-
-
-input:focus {
-    outline: none;
-    border: 1px solid rgb(248, 57, 120);
-}
-
-
 
 .button-container {
     display: flex;

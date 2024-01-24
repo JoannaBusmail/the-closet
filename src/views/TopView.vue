@@ -5,6 +5,7 @@
     >
         <div class="content-container">
             <h1>TOP</h1>
+
             <UploadPhoto />
         </div>
 
@@ -13,11 +14,13 @@
 
 <script setup>
 import UploadPhoto from '@/components/UploadPhoto.vue'
+import { ref } from 'vue'
 
 import { useUIActions } from '@/composables/useUIActions.js'
 
 
 const { contentStyles } = useUIActions()
+
 
 </script>
 

@@ -47,6 +47,7 @@ const { showSideMenu, toggleSideMenu, showModal, toggleModal } = useUIActions()
 
 const isLogin = ref(false)
 
+
 const handleChevronClick = () =>
 {
     toggleSideMenu()
