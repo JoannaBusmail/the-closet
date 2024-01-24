@@ -1,10 +1,11 @@
 <template>
     <div class="overlay">
         <div class="modal">
-            <button
-                @click="closeModal"
-                class="close"
-            >X</button>
+            <Button
+                @btnClick="closeModal"
+                btnName="X"
+                btnType="close"
+            ></Button>
             <slot name="modalContent"></slot>
 
         </div>
@@ -12,6 +13,7 @@
 </template>
 
 <script setup>
+import Button from './Button.vue'
 
 
 
@@ -38,27 +40,11 @@ const closeModal = () =>
 
 .modal {
     width: 650px;
-    background-color: white;
+    background-color: #fff;
     border-radius: 10px;
     padding: 30px;
     position: relative;
     display: flex;
     flex-direction: column;
-}
-
-.modal .close {
-    border: none;
-    padding: 10px;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    background-color: rgb(248, 57, 120);
-    border-radius: 100%;
-    color: white;
-    font-size: 12px;
-    align-self: flex-end;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 </style>

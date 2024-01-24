@@ -61,6 +61,7 @@ const handleAuthModal = (action) =>
 const handleCancelBtn = () =>
 {
     showModal.value = false
+    event.preventDefault()
 }
 
 </script>   

@@ -18,14 +18,19 @@
             v-if="!user"
             class="auth-buttons"
         >
-            <Button btnName="PROFILE" />
+            <Button
+                btnName="PROFILE"
+                btnType="principal"
+            />
             <Button
                 @btnClick="() => handleAuth('signUp')"
                 btnName="SIGN UP"
+                btnType="principal"
             />
             <Button
                 @btnClick="() => handleAuth('login')"
                 btnName="LOGIN"
+                btnType="principal"
             />
         </div>
         <div

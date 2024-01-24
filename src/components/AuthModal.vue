@@ -17,8 +17,15 @@
             />
         </div>
         <div class="button-container">
-            <button @click="handleCancel">Cancel</button>
-            <button>Submit</button>
+            <Button
+                @btnClick="handleCancel"
+                btnName="Cancel"
+                btnType="secondary"
+            ></Button>
+            <Button
+                btnName="Submit"
+                btnType="secondary"
+            ></Button>
         </div>
 
 
@@ -27,12 +34,21 @@
 
 <script setup>
 import { computed } from 'vue'
+import Button from './Button.vue'
+
+
+
+const emit = defineEmits([ 'cancelBtn' ])
+
 
 const props = defineProps({
     isLogin: Boolean
 })
 
-const emit = defineEmits([ 'cancelBtn' ])
+const handleCancel = () =>
+{
+    emit('cancelBtn')
+}
 const title = computed(() => { return props.isLogin ? 'LOGIN' : 'SIGN UP' })
 
 
@@ -81,24 +97,6 @@ input:focus {
     width: 100%;
     gap: 40px;
     margin-top: 25px;
-
-}
-
-button {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    width: 100px;
-    height: 30px;
-    border: none;
-    border-radius: 10px;
-    background-color: rgb(248, 57, 120);
-    color: #fff;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #ff96ca;
 
 }
 </style>
