@@ -14,31 +14,56 @@
                 :size="24"
             />
         </div>
-        <div
-            v-if="!user"
-            class="auth-buttons"
-        >
-            <Button
-                btnName="PROFILE"
-                btnType="principal"
-            />
-            <Button
-                @btnClick="() => handleAuth('signUp')"
-                btnName="SIGN UP"
-                btnType="principal"
-            />
-            <Button
-                @btnClick="() => handleAuth('login')"
-                btnName="LOGIN"
-                btnType="principal"
-            />
+        <div v-if="!isSmallScreen">
+            <div
+                v-if="!user"
+                class="auth-buttons"
+            >
+                <Button
+                    btnName="PROFILE"
+                    btnType="principal"
+                />
+                <Button
+                    @btnClick="() => handleAuth('signUp')"
+                    btnName="SIGN UP"
+                    btnType="principal"
+                />
+                <Button
+                    @btnClick="() => handleAuth('login')"
+                    btnName="LOGIN"
+                    btnType="principal"
+                />
+            </div>
+            <div
+                v-else
+                class="auth-buttons"
+            >
+                <Avatar />
+                <Button btnName="LOGOUT" />
+
+            </div>
         </div>
-        <div
-            v-else
-            class="auth-buttons"
-        >
-            <Avatar />
-            <Button btnName="LOGOUT" />
+        <div v-else>
+            <div
+                v-if="!user"
+                class="auth-mobile-btns"
+            >
+                <ph-user-circle
+                    class="mobile-btn"
+                    :size="24"
+                />
+                <ph-password
+                    class="mobile-btn"
+                    :size="24"
+                />
+                <ph-sign-in
+                    class="mobile-btn"
+                    :size="24"
+                />
+            </div>
+            <div v-else>
+                <ph-password :size="24" />
+            </div>
 
         </div>
 
@@ -49,9 +74,12 @@
 <script setup>
 import Button from './Button.vue'
 import Avatar from './Avatar.vue'
-import { PhCaretDown } from "@phosphor-icons/vue"
+import { PhCaretDown, PhUserCircle, PhSignIn, PhPassword, PhSignOut } from "@phosphor-icons/vue"
 import { PhCaretUp } from "@phosphor-icons/vue"
 import { ref } from 'vue'
+import { useUIActions } from '@/composables/useUIActions.js'
+
+const { isSmallScreen } = useUIActions()
 
 const caretUp = ref(false)
 const user = ref(null)
@@ -79,6 +107,7 @@ const handleAuth = (action) =>
 .navBar-Container {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     background-color: #F5F5F5;
     padding: 0 2rem;
     height: 5rem;
@@ -98,15 +127,30 @@ const handleAuth = (action) =>
 h1 {
     font-size: 28px;
     margin-right: 20px;
-
-
 }
+
+@media screen and (max-width: 768px) {
+    h1 {
+        font-size: 18px;
+        margin-right: 5px;
+    }
+}
+
 
 
 .auth-buttons {
     display: flex;
     margin-left: auto;
+}
 
+.auth-mobile-btns {
+    display: flex;
+    margin-left: 20px;
+    align-items: center;
+}
+
+.mobile-btn {
+    margin: 0 15px;
 }
 </style>
 ```

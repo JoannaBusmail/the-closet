@@ -16,13 +16,14 @@
 import { useUIActions } from '@/composables/useUIActions.js'
 
 
-const { contentStyles } = useUIActions()
+const { contentStyles, isSmallScreen } = useUIActions()
 
 
 </script>
 
 <style scoped>
 .content-container {
+    width: 100%;
     height: 100vh;
     background-color: rgb(248, 57, 120);
     display: flex;
@@ -35,9 +36,19 @@ const { contentStyles } = useUIActions()
 
 }
 
+@media screen and (max-width: 768px) {
+    .content-container {
+        width: 100%;
+        overflow: hidden;
+        top: 0;
+
+
+    }
+}
+
 .content-overlay {
     width: 100%;
-    position: absolute;
+    position: relative;
     top: 12%;
     left: 0;
     overflow: hidden;

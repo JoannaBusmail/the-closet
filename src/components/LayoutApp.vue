@@ -73,6 +73,11 @@ const handleCancelBtn = () =>
     flex-direction: row;
     position: relative;
     align-items: center;
+}
 
+@media screen and (max-width: 768px) {
+    .layout-container {
+        flex-direction: column;
+    }
 }
 </style>

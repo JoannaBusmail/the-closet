@@ -78,9 +78,27 @@ const goToMixAndMatch = () =>
     z-index: 10;
 }
 
+@media screen and (max-width: 768px) {
+    .side-menu-container {
+        flex-direction: row;
+        width: 100%;
+        height: auto;
+        padding: 1rem;
+        justify-content: space-between;
+        padding: 20px 15px;
+    }
+}
+
 h3 {
     margin-bottom: 30px;
     cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+    h3 {
+        font-size: 14px;
+
+    }
 }
 
 h4:hover,
@@ -97,6 +115,16 @@ h3:hover {
 
 }
 
+@media screen and (max-width: 768px) {
+    .mixMatch-containeru {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 5px;
+        width: 6vw;
+    }
+}
+
+
 .mixMatch-container h3 {
     margin-bottom: 0;
     margin-right: 15px;
@@ -111,8 +139,17 @@ h3:hover {
     width: 6vw;
 }
 
+@media screen and (max-width: 768px) {
+    .mixMatch-menu {
+        flex-direction: row;
+        margin-left: 10px;
+        align-items: flex-start;
+        margin-top: 5px;
+        width: 6vw;
+    }
+}
+
 h4 {
-    margixAndMatchViewtom: 15px;
     cursor: pointer;
 }
 

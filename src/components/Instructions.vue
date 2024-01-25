@@ -48,11 +48,8 @@ const instructions = [
 @media (max-width: 768px) {
     .stepNum {
         width: 1.5em;
-        /* Ajusta para pantallas más pequeñas */
         height: 1.5em;
-        /* Ajusta para pantallas más pequeñas */
         font-size: 16px;
-        /* Ajusta para pantallas más pequeñas */
     }
 }
 </style>

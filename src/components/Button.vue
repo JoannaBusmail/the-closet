@@ -1,5 +1,6 @@
 <template>
     <button
+        class="fixedStyles"
         :class="btnClass"
         @click="handleBtnClick"
     >{{ btnName }}</button>
@@ -40,15 +41,14 @@ const btnClass = computed(() =>
 </script>
 
 <style scoped>
-.principle-btn,
-.secondary-btn,
-.close-btn {
+.fixedStyles {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     font-size: 14px;
     border: none;
     background-color: #F5F5F5;
     padding: 6px 12px;
-    margin-right: 15px;
+
+    margin-left: 15px;
     color: #070707;
     cursor: pointer;
 
