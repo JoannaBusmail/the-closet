@@ -1,5 +1,6 @@
 <template>
     <input
+        class="fixedStyles"
         :class="inputStyle"
         :type="type"
         :placeholder="placeholder"
@@ -32,8 +33,7 @@ const inputStyle = computed(() =>
 
 </script>
 <style scoped>
-.primary,
-.secondary {
+.fixedStyles {
     width: 90%;
     height: 2rem;
     margin: 15px 10px;
@@ -47,7 +47,7 @@ const inputStyle = computed(() =>
 }
 
 .secondary {
-    width: 30%;
+    width: 75%;
 }
 
 
@@ -55,5 +55,11 @@ const inputStyle = computed(() =>
 .secondary:focus {
     outline: none;
     border: 1px solid rgb(248, 57, 120);
+}
+
+@media screen and (max-width: 768px) {
+    .secondary {
+        width: 50%;
+    }
 }
 </style>
