@@ -1,6 +1,9 @@
 <template>
     <div class="upload-container">
-        <form class="upload-form-container">
+        <form
+            class="upload-form-container"
+            @submit.prevent="handleUploadPhotoInfo"
+        >
             <div class="input-container">
                 {{ color }}
                 <div class="file-text-input">
@@ -15,6 +18,7 @@
                         type="file"
                         id="inputFile"
                         accept=".jpg, .png, .jpeg"
+                        @change="handleUploadImage"
                     />
                     <InputText
                         class="secondary"
@@ -26,12 +30,12 @@
                 <div class="radio-input">
                     <InputRadio
                         v-for="(option, index) in radioOptions"
-                        v-model="selectedRadio"
+                        v-model="style"
                         :key="index"
                         :id="option.id"
                         :label="option.label"
                         :value="option.value"
-                    >{{ selectedRadio }}
+                    >
                     </InputRadio>
                 </div>
             </div>
@@ -54,6 +58,13 @@ import Button from './Button.vue'
 import InputText from './InputText.vue'
 import InputRadio from './InputRadio.vue'
 import { ref, watchEffect } from 'vue'
+import { useUploadDataStore } from '@/stores/uploadData'
+import { storeToRefs } from 'pinia'
+
+// UPLOAD DATA STORE
+const uploadDataStore = useUploadDataStore()
+const { handleUploadImage, handleUploadPhotoInfo } = uploadDataStore
+const { color, style } = storeToRefs(uploadDataStore)
 
 const emit = defineEmits([ 'update:colorInputValue' ])
 
@@ -63,14 +74,14 @@ const radioOptions = ref([
     { id: 'elegant', label: 'Elegant', value: 'elegant' },
 ])
 
-const color = ref('')
-const selectedRadio = ref('')
+//const color = ref('')
+//const selectedRadio = ref('')
 
 
-watchEffect(() =>
+/*watchEffect(() =>
 {
     console.log(selectedRadio.value)
-})
+})*/
 
 
 </script>
@@ -153,4 +164,4 @@ watchEffect(() =>
     }
 }
 </style>
-  
+  @/stores/uploadData

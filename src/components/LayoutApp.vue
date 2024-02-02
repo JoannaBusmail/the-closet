@@ -1,16 +1,9 @@
 <template>
     <main>
-        <ModalContainer
-            @closeModal="handleAuthModal"
-            v-if="showModal"
-        > <template #modalContent>
-                <AuthModal
-                    :isLogin="isLogin"
-                    @cancelBtn="handleCancelBtn"
-                >
-                </AuthModal>
-            </template>
-        </ModalContainer>
+
+        <AuthModal :isLogin="isLogin">
+        </AuthModal>
+
 
         <NavBar
             @chevronClick="handleChevronClick"
@@ -27,7 +20,6 @@
             </ContentContainer>
 
         </div>
-
     </main>
 </template>
 
@@ -42,7 +34,7 @@ import ContentContainer from './ContentContainer.vue'
 import { ref } from 'vue'
 import { useUIActions } from '@/composables/useUIActions.js'
 
-const { showSideMenu, toggleSideMenu, showModal, toggleModal } = useUIActions()
+const { showSideMenu, toggleSideMenu, toggleModal } = useUIActions()
 
 
 const isLogin = ref(false)
@@ -59,11 +51,6 @@ const handleAuthModal = (action) =>
     isLogin.value = action === 'login'
 }
 
-const handleCancelBtn = () =>
-{
-    showModal.value = false
-    event.preventDefault()
-}
 
 </script>   
 

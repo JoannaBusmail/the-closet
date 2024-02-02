@@ -1,55 +1,77 @@
 <template>
-    <h5>{{ title }}</h5>
+    <ModalContainer
+        v-if="showModal"
+        @closeModal="handleCancel"
+    >
+        <template #modalContent>
+            <h5>{{ title }}</h5>
 
-    <form>
-        <div class="input-container">
-            <InputText
-                class="primary"
-                type="text"
-                placeholder="Email"
-                v-model=email
-                @update:modelValue="$emit('update:emailInputValue', $event)"
-            />
-            <InputText
-                class="primary"
-                type="password"
-                placeholder="Password"
-                v-model=password
-                @update:modelValue="$emit('update:passwordInputValue', $event)"
-            />
-            <InputText
-                v-if="!isLogin"
-                class="primary"
-                type="password"
-                placeholder="Confirm Password"
-                v-model=confirmPassword
-                @update:modelValue="$emit('update:confirmPasswordInputValue', $event)"
-            />
-        </div>
-        <div class="button-container">
-            <Button
-                @btnClick="handleCancel"
-                btnName="Cancel"
-                btnType="secondary"
-            ></Button>
-            <Button
-                btnName="Submit"
-                btnType="secondary"
-            ></Button>
-        </div>
+            <form @submit.prevent="handleSubmit">
+                <div class="input-container">
+
+                    <InputText
+                        v-if="!isLogin"
+                        class="primary"
+                        type="text"
+                        placeholder="Username"
+                        v-model=userCredentials.username
+                    />
+                    <InputText
+                        class="primary"
+                        type="text"
+                        placeholder="Email"
+                        v-model=userCredentials.email
+                    />
+                    <InputText
+                        class="primary"
+                        type="password"
+                        placeholder="Password"
+                        v-model=userCredentials.password
+                    />
+                    <ErrorMessageComp
+                        v-if="errorMessage"
+                        :message="errorMessage"
+                    />
+                </div>
+                <div class="button-container">
+                    <Button
+                        @btnClick="handleCancel"
+                        btnName="Cancel"
+                        btnType="secondary"
+                    ></Button>
+                    <Button
+                        btnName="Submit"
+                        btnType="secondary"
+                        :disabled="loading"
+                    ></Button>
+                </div>
 
 
-    </form>
+            </form>
+        </template>
+    </ModalContainer>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, reactive } from 'vue'
+import ModalContainer from '@/components/ModalContainer.vue'
 import Button from './Button.vue'
 import InputText from './InputText.vue'
+import ErrorMessageComp from './ErrorMessageComp.vue'
+import { useUserStore } from '@/stores/users'
+import { storeToRefs } from 'pinia'
+import { useUIActions } from '@/composables/useUIActions.js'
+
+const { showModal, toggleModal } = useUIActions()
+
+// STORE
+const userStore = useUserStore()
+const { handleSignup, handleLogin } = userStore
+const { errorMessage, loading, user } = storeToRefs(userStore)
 
 
 
-const emit = defineEmits([ 'cancelBtn', 'update:emailInputValue', 'update:passwordInputValue', 'update:confirmPasswordInputValue' ])
+
 
 
 const props = defineProps({
@@ -57,13 +79,44 @@ const props = defineProps({
 
 })
 
-const email = ref('')
-const password = ref('')
-const confirmPassword = ref('')
+const userCredentials = reactive({
+    username: '',
+    email: '',
+    password: '',
 
-const handleCancel = () =>
+})
+
+const clearCredentialsInput = () =>
 {
-    emit('cancelBtn')
+    userCredentials.username = ''
+    userCredentials.email = ''
+    userCredentials.password = ''
+
+}
+
+const handleSubmit = async () =>
+{
+
+    if (props.isLogin) {
+        await handleLogin({ email: userCredentials.email, password: userCredentials.password })
+    } else {
+        await handleSignup(userCredentials)
+        console.log('userCredentials', userCredentials)
+    }
+    if (user.value) {
+
+        clearCredentialsInput()
+    }
+    toggleModal()
+
+}
+
+const handleCancel = (e) =>
+{
+    e.preventDefault()
+    toggleModal()
+    clearCredentialsInput()
+    errorMessage.value = ''
 }
 
 

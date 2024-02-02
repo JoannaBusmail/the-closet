@@ -7,24 +7,35 @@
             <h1>{{ sectionName }}</h1>
 
             <UploadPhoto />
+            <Spinner v-if="loadingPosts" />
+            <Cards
+                v-else
+                :postData="postData"
+                :loadingPosts="loadingPosts"
+            />
+
+
         </div>
+
 
     </div>
 </template>
 
 <script setup>
 import UploadPhoto from '@/components/UploadPhoto.vue'
-import { ref } from 'vue'
-
+import Cards from './Cards.vue'
+import Spinner from './Spinner.vue'
 import { useUIActions } from '@/composables/useUIActions.js'
-
 
 const { contentStyles } = useUIActions()
 
 const props = defineProps({
-    sectionName: String
+    sectionName: String,
+    postData: Array,
+    loadingPosts: Boolean
 
 })
+
 
 
 </script>

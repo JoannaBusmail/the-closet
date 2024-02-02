@@ -1,11 +1,34 @@
 <template>
-    <SectionsContent sectionName="TOP">
-
+    <SectionsContent
+        sectionName="TOP"
+        :postData="posts"
+        :loadingPosts="loadingPosts"
+    >
     </SectionsContent>
 </template>
 
 <script setup>
-import SectionsContent from '@/components/SectionsContent.vue';
+import SectionsContent from '@/components/SectionsContent.vue'
+import { onMounted, watch } from 'vue'
+import { useUserStore } from '@/stores/users'
+import { useFetchDataStore } from '@/stores/fetchData'
+import { storeToRefs } from 'pinia'
+
+const userStore = useUserStore()
+const { user: loggedUser } = storeToRefs(userStore)
+
+
+// FETCH DATA STORE
+const fetchDataStore = useFetchDataStore()
+const { fetchTopPosts } = fetchDataStore
+const { posts, loadingPosts } = storeToRefs(fetchDataStore)
+
+
+
+onMounted(() =>
+{
+    fetchTopPosts()
+})
 
 </script>
 
