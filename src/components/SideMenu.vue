@@ -72,7 +72,7 @@ const goToMixAndMatch = () =>
     flex-direction: column;
     align-items: flex-start;
     background-color: #F5F5F5;
-    height: 100vh;
+    min-height: 100vh;
     width: 25vw;
     padding: 2rem;
     z-index: 10;

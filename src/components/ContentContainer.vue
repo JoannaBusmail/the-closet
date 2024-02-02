@@ -39,6 +39,7 @@ const { contentStyles, isSmallScreen } = useUIActions()
 @media screen and (max-width: 768px) {
     .content-container {
         width: 100%;
+        height: 100vh;
         overflow: hidden;
         top: 0;
 

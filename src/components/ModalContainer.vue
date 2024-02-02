@@ -19,9 +19,9 @@ import Button from './Button.vue'
 
 const emit = defineEmits([ 'closeModal' ])
 
-const closeModal = () =>
+const closeModal = (e) =>
 {
-    emit('closeModal')
+    emit('closeModal', e)
 }
 
 </script>

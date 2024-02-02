@@ -17,9 +17,9 @@ const props = defineProps({
 const emit = defineEmits([ 'btnClick' ])
 
 
-const handleBtnClick = () =>
+const handleBtnClick = (e) =>
 {
-    emit('btnClick')
+    emit('btnClick', e)
 }
 
 

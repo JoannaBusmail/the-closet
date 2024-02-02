@@ -39,7 +39,11 @@
                 class="auth-buttons"
             >
                 <Avatar />
-                <Button btnName="LOGOUT" />
+                <Button
+                    btnName="LOGOUT"
+                    btnType="principal"
+                    @btnClick="handleLogout"
+                />
 
             </div>
         </div>
@@ -78,11 +82,21 @@ import { PhCaretDown, PhUserCircle, PhSignIn, PhPassword, PhSignOut } from "@pho
 import { PhCaretUp } from "@phosphor-icons/vue"
 import { ref } from 'vue'
 import { useUIActions } from '@/composables/useUIActions.js'
+import { useUserStore } from '@/stores/users'
+import { storeToRefs } from 'pinia'
+
+
+const userStore = useUserStore()
+const { handleLogout } = userStore
+const { user } = storeToRefs(userStore)
+
+
+
 
 const { isSmallScreen } = useUIActions()
 
 const caretUp = ref(false)
-const user = ref(null)
+
 
 const emit = defineEmits([ 'chevronClick', 'loginClick', 'signUpClick' ])
 
