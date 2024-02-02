@@ -36,7 +36,7 @@ const inputStyle = computed(() =>
 .fixedStyles {
     width: 90%;
     height: 2rem;
-    margin: 15px 10px;
+    margin: 10px 10px;
     border: 1px solid #a8a5a5;
     border-radius: 10px;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;

@@ -13,5 +13,6 @@ const props = defineProps({
 <style scoped>
 p {
     color: red;
+    margin-bottom: 10px;
 }
 </style>

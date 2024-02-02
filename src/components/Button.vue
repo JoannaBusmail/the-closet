@@ -3,6 +3,7 @@
         class="fixedStyles"
         :class="btnClass"
         @click="handleBtnClick"
+        :disabled="disabled"
     >{{ btnName }}</button>
 </template>
 
@@ -12,6 +13,7 @@ import { computed } from 'vue'
 const props = defineProps({
     btnName: String,
     btnType: 'principal' | 'secondary' | 'close',
+    disabled: Boolean
 })
 
 const emit = defineEmits([ 'btnClick' ])
@@ -47,8 +49,7 @@ const btnClass = computed(() =>
     border: none;
     background-color: #F5F5F5;
     padding: 6px 12px;
-
-    margin-left: 15px;
+    margin: 0 10px;
     color: #070707;
     cursor: pointer;
 
@@ -79,6 +80,11 @@ const btnClass = computed(() =>
 .secondary-btn:hover {
     color: rgb(248, 57, 120);
     font-weight: 600;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 </style>
 ```
