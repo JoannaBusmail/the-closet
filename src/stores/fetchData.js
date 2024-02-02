@@ -10,11 +10,11 @@ export const useFetchDataStore = defineStore('fetchData', () => {
     const userStore = useUserStore()
     const { user } = storeToRefs(userStore)
 
-    watchEffect(() => {
+    /*watchEffect(() => {
         if (user.value) {
           fetchTopPosts()
         }
-      })
+      })*/
 
     const topPosts = ref([])
     const lastCardIndex = ref(1)

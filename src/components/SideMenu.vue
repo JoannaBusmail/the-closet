@@ -32,7 +32,16 @@
 import { PhCaretDown, PhCaretUp } from "@phosphor-icons/vue"
 import { ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
+
+import { useUserStore } from '@/stores/users'
+import { storeToRefs } from 'pinia'
+
+
 const router = useRouter()
+
+const userStore = useUserStore()
+const { user: loggedUser } = storeToRefs(userStore)
+
 
 const showMixMatchMenu = ref(false)
 
@@ -44,22 +53,23 @@ const handleMixMatchClick = () =>
 
 const goToTop = () =>
 {
-    router.push({ name: 'TopView' })
+    if (loggedUser.value)
+        router.push(`/closet/top/${loggedUser?.value.username}`)
 }
 
 const goToBottom = () =>
 {
-    router.push({ name: 'BottomView' })
+    router.push(`/closet/bottom/${loggedUser?.value.username}`)
 }
 
 const goToShoes = () =>
 {
-    router.push({ name: 'ShoesView' })
+    router.push(`/closet/shoes/${loggedUser?.value.username}`)
 }
 
 const goToMixAndMatch = () =>
 {
-    router.push({ name: 'MixAndMatchView' })
+    router.push(`/closet/mixandmatch/${loggedUser?.value.username}`)
 }
 </script>
 

@@ -14,6 +14,7 @@ import { useUserStore } from '@/stores/users'
 import { useFetchDataStore } from '@/stores/fetchData'
 import { storeToRefs } from 'pinia'
 
+
 const userStore = useUserStore()
 const { user: loggedUser } = storeToRefs(userStore)
 
@@ -22,6 +23,7 @@ const { user: loggedUser } = storeToRefs(userStore)
 const fetchDataStore = useFetchDataStore()
 const { fetchTopPosts } = fetchDataStore
 const { topPosts, loadingPosts } = storeToRefs(fetchDataStore)
+
 
 
 

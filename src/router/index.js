@@ -4,6 +4,22 @@ import TopView from '../views/TopView.vue'
 import BottomView from '../views/BottomView.vue'
 import ShoesView from '../views/ShoesView.vue'
 import MixAndMatchView from '../views/MixAndMatchView.vue'
+import { useUserStore } from '@/stores/users'
+import { storeToRefs } from 'pinia'
+
+
+const requireAuth = (to, from, next) => {
+  const userStore = useUserStore()
+  const { user: loggedUser } = storeToRefs(userStore)
+
+  if (loggedUser.value) {
+    next()
+  }else {
+    next({ name: 'home' })
+  }
+}
+
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,24 +31,28 @@ const router = createRouter({
     },
  
       {
-        path: '/closet/top',
+        path: '/closet/top/:username',
         name: 'TopView',
-        component: TopView
+        component: TopView,
+        beforeEnter: requireAuth
       },
       {
-        path: '/closet/bottom',
+        path: '/closet/bottom/:username',
         name: 'BottomView',
-        component: BottomView
+        component: BottomView,
+        beforeEnter: requireAuth
       },
       {
-        path: '/closet/shoes',
+        path: '/closet/shoes/:username',
         name: 'ShoesView',
-        component: ShoesView
+        component: ShoesView,
+        beforeEnter: requireAuth
       },
       {
-        path: '/closet/mixandmatch',
+        path: '/closet/mixandmatch/:username',
         name: 'MixAndMatchView',
-        component: MixAndMatchView
+        component: MixAndMatchView,
+        beforeEnter: requireAuth
       },
     
   ]
