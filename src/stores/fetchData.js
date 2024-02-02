@@ -16,7 +16,7 @@ export const useFetchDataStore = defineStore('fetchData', () => {
         }
       })
 
-    const posts = ref([])
+    const topPosts = ref([])
     const lastCardIndex = ref(1)
     const ownersIds = ref([])
     const reachEndOfPosts = ref(false)
@@ -34,32 +34,24 @@ export const useFetchDataStore = defineStore('fetchData', () => {
             .order('created_at', { ascending: false })
 
 
-            posts.value = fetchTopPosts
+            topPosts.value = fetchTopPosts
             loadingPosts.value = false
             
       };
       
     }
-
+    
+    const addNewPost = (newPost) => {
+        topPosts.value = [newPost, ...topPosts.value]
+    }
 
  
     
-    return { fetchTopPosts, posts, loadingPosts}
+    return { fetchTopPosts, topPosts, loadingPosts, addNewPost}
 })
 
 
-    /*const fetchTopPosts = async () => {
-        const { data: fetchTopPosts } = await supabase
-        .from('top')
-        .select()
-        .in('owner_id', loggedUser.value.id)
-        .order('created_at', { ascending: false })
-
-
-        posts.value = fetchTopPosts
-        loadingPosts.value = false
-    }
-*/
+ 
 
     /*const fetchNextTopPosts = async () => {
 

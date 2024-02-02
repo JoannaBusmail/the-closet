@@ -1,7 +1,7 @@
 <template>
     <SectionsContent
         sectionName="TOP"
-        :postData="posts"
+        :postData="topPosts"
         :loadingPosts="loadingPosts"
     >
     </SectionsContent>
@@ -21,7 +21,7 @@ const { user: loggedUser } = storeToRefs(userStore)
 // FETCH DATA STORE
 const fetchDataStore = useFetchDataStore()
 const { fetchTopPosts } = fetchDataStore
-const { posts, loadingPosts } = storeToRefs(fetchDataStore)
+const { topPosts, loadingPosts } = storeToRefs(fetchDataStore)
 
 
 

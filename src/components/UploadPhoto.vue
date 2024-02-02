@@ -4,14 +4,26 @@
             class="upload-form-container"
             @submit.prevent="handleUploadPhotoInfo"
         >
-            <div class="input-container">
+            <Spinner v-if="uploadingPost" />
+
+            <div
+                v-else
+                class="input-container"
+            >
                 {{ color }}
                 <div class="file-text-input">
                     <label
                         for="inputFile"
                         class="custom-file-upload"
                     >
-                        <span class="file-upload-text">Upload photo</span>
+                        <span
+                            v-if="uploadingImage"
+                            class="file-upload-text"
+                        >. . .</span>
+                        <span
+                            v-else
+                            class="file-upload-text"
+                        >{{ selectedFileName ? selectedFileName : 'Upload photo' }}</span>
                     </label>
                     <input
                         class="input-file"
@@ -38,15 +50,23 @@
                     >
                     </InputRadio>
                 </div>
+
             </div>
+            <ErrorMessageComp
+                v-if="errorMessage"
+                :message="errorMessage"
+            />
             <div class="button-container">
+
                 <Button
                     btnName="OK"
                     btnType="secondary"
+                    :disabled="uploadingPost"
                 ></Button>
                 <Button
                     btnName="CANCEL"
                     btnType="secondary"
+                    @btnClick="handlleCancelUpload"
                 ></Button>
             </div>
         </form>
@@ -57,14 +77,16 @@
 import Button from './Button.vue'
 import InputText from './InputText.vue'
 import InputRadio from './InputRadio.vue'
+import Spinner from './Spinner.vue'
+import ErrorMessageComp from './ErrorMessageComp.vue'
 import { ref, watchEffect } from 'vue'
 import { useUploadDataStore } from '@/stores/uploadData'
 import { storeToRefs } from 'pinia'
 
 // UPLOAD DATA STORE
 const uploadDataStore = useUploadDataStore()
-const { handleUploadImage, handleUploadPhotoInfo } = uploadDataStore
-const { color, style } = storeToRefs(uploadDataStore)
+const { handleUploadImage, handleUploadPhotoInfo, handlleCancelUpload } = uploadDataStore
+const { color, style, uploadingPost, uploadingImage, selectedFileName, errorMessage } = storeToRefs(uploadDataStore)
 
 const emit = defineEmits([ 'update:colorInputValue' ])
 
@@ -139,23 +161,25 @@ const radioOptions = ref([
 }
 
 .file-upload-text {
-    display: flex;
-    align-items: center;
+    display: block;
     height: 100%;
+    width: 100px;
+    justify-self: center;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.9rem;
+
 }
 
-.button-container {
-    margin-left: 20px;
-}
+
 
 @media screen and (max-width: 768px) {
     .input-container {
         flex-direction: column;
     }
 
-    .button-container {
-        margin-left: 0;
-    }
+
 
     .custom-file-upload {
         width: 50%;
@@ -164,4 +188,3 @@ const radioOptions = ref([
     }
 }
 </style>
-  @/stores/uploadData
