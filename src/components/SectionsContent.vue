@@ -12,6 +12,8 @@
                 v-else
                 :postData="postData"
                 :loadingPosts="loadingPosts"
+                @btnClick="handleCardBtnClick"
+                @intersect="emitIntersectEvent"
             />
 
 
@@ -36,7 +38,18 @@ const props = defineProps({
 
 })
 
+const emit = defineEmits([ 'btnClick', 'intersect' ])
 
+const handleCardBtnClick = (post) =>
+{
+    console.log('Button clicked in section component:', post)
+    emit('btnClick', post)
+}
+
+const emitIntersectEvent = () =>
+{
+    emit('intersect')
+}
 
 </script>
 

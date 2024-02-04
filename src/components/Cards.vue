@@ -6,20 +6,33 @@
             :key="post.id"
             :post="post"
             :loadingPosts="loadingPosts"
+            @btnClick="$emit('btnClick', post)"
+        />
+        <Observer
+            v-if="postData.length"
+            @intersect="emitIntersectEvent"
         />
     </div>
 </template>
 
 <script setup>
 import Card from './Card.vue'
-import Spinner from './Spinner.vue'
+import Observer from './Observer.vue'
 
+
+const emit = defineEmits([ 'intersect' ])
+
+const emitIntersectEvent = () =>
+{
+    emit('intersect')
+}
 
 const props = defineProps({
     postData: Array,
     loadingPosts: Boolean
 
 })
+
 
 
 </script>

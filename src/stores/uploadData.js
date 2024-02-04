@@ -7,9 +7,6 @@ import { useFetchDataStore } from '@/stores/fetchData'
 
 
 
-
-
-
 export const useUploadDataStore = defineStore('uploadData', () => { 
 
 
@@ -19,7 +16,7 @@ export const useUploadDataStore = defineStore('uploadData', () => {
 
     // FETCH DATA STORE
     const fetchDataStore = useFetchDataStore()
-    const { addNewPost } = fetchDataStore
+    const { addNewPost, fetchTopPosts } = fetchDataStore
   
 
     const color = ref('')
@@ -68,15 +65,20 @@ export const useUploadDataStore = defineStore('uploadData', () => {
                   style: style.value,
                   owner_id: user.value.id,
                 };
+
             
+                addNewPost(newPost);
                 await supabase.from('top').insert(newPost);
             
               
-                addNewPost(newPost);
+               // addNewPost(newPost);
+               await fetchTopPosts()
+             
               }
     
         }
         resetValues()
+        uploadingPost.value = false
       
      
 

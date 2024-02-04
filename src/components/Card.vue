@@ -4,7 +4,12 @@
     <div
         v-else
         class="card-container"
-    >
+    > <Button
+            class="close-btn"
+            btnName="X"
+            btnType="close"
+            @btnClick="$emit('btnClick', post)"
+        ></Button>
         <img
             class="image"
             :src="`${VITE_BASE_PHOTO_URL}${post.url}`"
@@ -18,6 +23,7 @@
 </template>
 <script setup>
 import Spinner from './Spinner.vue'
+import Button from './Button.vue'
 
 const { VITE_BASE_PHOTO_URL } = import.meta.env
 
@@ -25,6 +31,8 @@ const props = defineProps({
     post: Object,
     loadingPosts: Boolean
 })
+
+
 
 
 </script>
@@ -39,6 +47,7 @@ const props = defineProps({
     border: 1px solid #ccc;
     border-radius: 10px;
     margin: 20px 20px;
+    position: relative;
 }
 
 .image {
@@ -55,5 +64,11 @@ const props = defineProps({
     justify-content: space-between;
     width: 100%;
     padding: 15px 15px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 5px;
 }
 </style>

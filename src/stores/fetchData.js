@@ -18,7 +18,6 @@ export const useFetchDataStore = defineStore('fetchData', () => {
 
     const topPosts = ref([])
     const lastCardIndex = ref(1)
-    const ownersIds = ref([])
     const reachEndOfPosts = ref(false)
     const loadingPosts = ref(false)
 
@@ -35,6 +34,7 @@ export const useFetchDataStore = defineStore('fetchData', () => {
 
 
             topPosts.value = fetchTopPosts
+            console.log(topPosts.value)
             loadingPosts.value = false
             
       };
@@ -46,34 +46,44 @@ export const useFetchDataStore = defineStore('fetchData', () => {
     }
 
  
+    const deleteTopPostFromDB = async (id) => {
+        await supabase
+        .from('top')
+        .delete()
+        .eq('id', id)
+    }
+
+    const deleteTopPost = async (id) => {
+        topPosts.value = topPosts.value.filter(post => post.id !== id)
+        await deleteTopPostFromDB(id)
+    }
     
-    return { fetchTopPosts, topPosts, loadingPosts, addNewPost}
+
+    const fetchNextTopPosts = async () => {
+
+        if (!reachEndOfPosts.value) {
+          
+            const { data: fetchTopPosts } = await supabase
+                .from('top')
+                .select()
+                .in('owner_id', [user.value.id])
+                .range(lastCardIndex.value + 1, lastCardIndex.value + 3)
+                .order('created_at', { ascending: false })
+    
+          
+            topPosts.value = [ ...topPosts.value, ...fetchTopPosts ]
+    
+       
+            lastCardIndex.value = lastCardIndex.value + 3
+    
+            if (!fetchTopPosts.length) {
+                reachEndOfPosts.value = true
+            }
+        }
+    }
+
+    return { fetchTopPosts, topPosts, loadingPosts, addNewPost, deleteTopPost, fetchNextTopPosts }
 })
 
 
  
-
-    /*const fetchNextTopPosts = async () => {
-
-    if (!reachEndOfPosts.value) {
-      
-        const { data: fetchTopPosts } = await supabase
-            .from('top')
-            .select()
-            .in('owner_id', ownersIds.value)
-            .range(lastCardIndex.value + 1, lastCardIndex.value + 2)
-            .order('created_at', { ascending: false })
-
-      
-        posts.value = [ ...posts.value, ...fetchTopPosts ]
-
-   
-        lastCardIndex.value = lastCardIndex.value + 2
-
-        if (!fetchTopPosts.length) {
-            reachEndOfPosts.value = true
-        }
-    }
-
-
-}*/
