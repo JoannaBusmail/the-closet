@@ -3,7 +3,9 @@ import { supabase } from '../../supabase'
 import { ref } from 'vue'
 import { useUserStore } from '@/stores/users'
 import { storeToRefs } from 'pinia'
-import { useFetchDataStore } from '@/stores/fetchData'
+import { useFetchTopDataStore } from '@/stores/fetchTopData'
+import { useFetchBottomDataStore } from '@/stores/fetchBottomData'
+import { useFetchShoesDataStore } from '@/stores/fetchShoesData'
 
 
 
@@ -14,9 +16,18 @@ export const useUploadDataStore = defineStore('uploadData', () => {
     const { user } = storeToRefs(userStore)
 
 
-    // FETCH DATA STORE
-    const fetchDataStore = useFetchDataStore()
-    const { addNewPost, fetchTopPosts } = fetchDataStore
+    // FETCH TOP DATA STORE
+    const fetchTopDataStore = useFetchTopDataStore()
+    const { addNewPost, fetchTopPosts } = fetchTopDataStore
+
+    // FETCH BOTTOM DATA STORE
+    const fetchBottomDataStore = useFetchBottomDataStore()
+    const { fetchBottomPosts } = fetchBottomDataStore
+
+
+    //FETCH SHOES DATA STORE
+    const fetchShoesDataStore = useFetchShoesDataStore()
+    const { fetchShoesPosts } = fetchShoesDataStore
   
 
     const color = ref('')
@@ -26,6 +37,7 @@ export const useUploadDataStore = defineStore('uploadData', () => {
     const uploadingPost = ref(false)
     const uploadingImage = ref(false)
     const selectedFileName = ref(null)
+    const onView = ref('')
 
 
    
@@ -68,13 +80,18 @@ export const useUploadDataStore = defineStore('uploadData', () => {
 
             
                 addNewPost(newPost);
-                await supabase.from('top').insert(newPost);
-            
-              
-               // addNewPost(newPost);
-               await fetchTopPosts()
-             
-              }
+
+                if(onView.value === 'top'){
+                    await supabase.from('top').insert(newPost);
+                    await fetchTopPosts()
+                }else if(onView.value === 'bottom'){
+                    await supabase.from('bottom').insert(newPost);
+                    await fetchBottomPosts()
+                }else if(onView.value === 'shoes'){
+                    await supabase.from('shoes').insert(newPost);
+                    await fetchShoesPosts()
+                }
+            }
     
         }
         resetValues()
@@ -115,7 +132,7 @@ export const useUploadDataStore = defineStore('uploadData', () => {
       };
 
 
-    return { color, style, file, errorMessage, uploadingPost, selectedFileName, uploadingImage, handleUploadPhotoInfo, handleUploadImage, handlleCancelUpload}
+    return {onView, color, style, file, errorMessage, uploadingPost, selectedFileName, uploadingImage, handleUploadPhotoInfo, handleUploadImage, handlleCancelUpload}
 })
 
 

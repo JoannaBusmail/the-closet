@@ -6,7 +6,7 @@
         <div class="content-container">
             <h1>{{ sectionName }}</h1>
 
-            <UploadPhoto />
+            <UploadPhoto :onView="onView" />
             <Spinner v-if="loadingPosts" />
             <Cards
                 v-else
@@ -34,7 +34,8 @@ const { contentStyles } = useUIActions()
 const props = defineProps({
     sectionName: String,
     postData: Array,
-    loadingPosts: Boolean
+    loadingPosts: Boolean,
+    onView: String
 
 })
 

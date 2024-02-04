@@ -83,27 +83,26 @@ import { ref, watchEffect } from 'vue'
 import { useUploadDataStore } from '@/stores/uploadData'
 import { storeToRefs } from 'pinia'
 
+
+const props = defineProps({
+    onView: String
+})
+
 // UPLOAD DATA STORE
 const uploadDataStore = useUploadDataStore()
+console.log('onView:', props.onView)
 const { handleUploadImage, handleUploadPhotoInfo, handlleCancelUpload } = uploadDataStore
-const { color, style, uploadingPost, uploadingImage, selectedFileName, errorMessage } = storeToRefs(uploadDataStore)
+const { onView, color, style, uploadingPost, uploadingImage, selectedFileName, errorMessage } = storeToRefs(uploadDataStore)
 
 const emit = defineEmits([ 'update:colorInputValue' ])
 
+onView.value = props.onView
 
 const radioOptions = ref([
     { id: 'casual', label: 'Casual', value: 'casual' },
     { id: 'elegant', label: 'Elegant', value: 'elegant' },
 ])
 
-//const color = ref('')
-//const selectedRadio = ref('')
-
-
-/*watchEffect(() =>
-{
-    console.log(selectedRadio.value)
-})*/
 
 
 </script>

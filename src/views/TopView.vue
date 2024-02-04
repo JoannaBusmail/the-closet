@@ -3,6 +3,7 @@
         sectionName="TOP"
         :postData="topPosts"
         :loadingPosts="loadingPosts"
+        onView="top"
         @btnClick="handleBtnClick"
         @intersect="fetchNextTopPosts"
     >
@@ -14,7 +15,7 @@ import SectionsContent from '@/components/SectionsContent.vue'
 import Observer from '@/components/Observer.vue'
 import { onMounted, watch } from 'vue'
 import { useUserStore } from '@/stores/users'
-import { useFetchDataStore } from '@/stores/fetchData'
+import { useFetchTopDataStore } from '@/stores/fetchTopData'
 import { storeToRefs } from 'pinia'
 
 
@@ -24,9 +25,9 @@ const { user: loggedUser } = storeToRefs(userStore)
 
 
 // FETCH DATA STORE
-const fetchDataStore = useFetchDataStore()
-const { fetchTopPosts, deleteTopPost, fetchNextTopPosts } = fetchDataStore
-const { topPosts, loadingPosts } = storeToRefs(fetchDataStore)
+const fetchTopDataStore = useFetchTopDataStore()
+const { fetchTopPosts, deleteTopPost, fetchNextTopPosts } = fetchTopDataStore
+const { topPosts, loadingPosts } = storeToRefs(fetchTopDataStore)
 
 
 const handleBtnClick = (post) =>
@@ -38,9 +39,9 @@ const handleBtnClick = (post) =>
 }
 
 
-onMounted(() =>
+onMounted(async () =>
 {
-    fetchTopPosts()
+    await fetchTopPosts()
 })
 
 </script>

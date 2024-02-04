@@ -9,7 +9,7 @@
             @btnClick="$emit('btnClick', post)"
         />
         <Observer
-            v-if="postData.length"
+            v-if="postData && postData.length"
             @intersect="emitIntersectEvent"
         />
     </div>

@@ -1,10 +1,10 @@
 import {defineStore} from 'pinia'
 import { supabase } from '../../supabase'
-import { ref, reactive, watchEffect } from 'vue'
+import { ref } from 'vue'
 import { useUserStore } from '@/stores/users'
 import { storeToRefs } from 'pinia'
 
-export const useFetchDataStore = defineStore('fetchData', () => { 
+export const useFetchShoesDataStore = defineStore('fetchShoesData', () => { 
 
 
     const userStore = useUserStore()
@@ -12,29 +12,29 @@ export const useFetchDataStore = defineStore('fetchData', () => {
 
     /*watchEffect(() => {
         if (user.value) {
-          fetchTopPosts()
+          fetchshoesPosts()
         }
       })*/
 
-    const topPosts = ref([])
+    const shoesPosts = ref([])
     const lastCardIndex = ref(1)
     const reachEndOfPosts = ref(false)
     const loadingPosts = ref(false)
 
 
-    const fetchTopPosts = async () => {
+    const fetchShoesPosts = async () => {
         if (user.value && user.value.id) {
             loadingPosts.value = true
          
-            const { data: fetchTopPosts } = await supabase
-            .from('top')
+            const { data: fetchShoesPosts } = await supabase
+            .from('shoes')
             .select()
             .eq('owner_id', user.value.id)
             .order('created_at', { ascending: false })
 
 
-            topPosts.value = fetchTopPosts
-            console.log(topPosts.value)
+            shoesPosts.value = fetchShoesPosts
+            console.log(shoesPosts.value)
             loadingPosts.value = false
             
       };
@@ -42,28 +42,28 @@ export const useFetchDataStore = defineStore('fetchData', () => {
     }
     
     const addNewPost = (newPost) => {
-        topPosts.value = [newPost, ...topPosts.value]
+        shoesPosts.value = [newPost, ...shoesPosts.value]
     }
 
  
-    const deleteTopPostFromDB = async (id) => {
+    const deleteShoesPostFromDB = async (id) => {
         await supabase
         .from('top')
         .delete()
         .eq('id', id)
     }
 
-    const deleteTopPost = async (id) => {
-        topPosts.value = topPosts.value.filter(post => post.id !== id)
-        await deleteTopPostFromDB(id)
+    const deleteShoesPost = async (id) => {
+        shoesPosts.value = shoesPosts.value.filter(post => post.id !== id)
+        await deleteShoesPostFromDB(id)
     }
     
 
-    const fetchNextTopPosts = async () => {
+    const fetchNextShoesPosts = async () => {
 
         if (!reachEndOfPosts.value) {
           
-            const { data: fetchTopPosts } = await supabase
+            const { data: fetchShoesPosts } = await supabase
                 .from('top')
                 .select()
                 .in('owner_id', [user.value.id])
@@ -71,19 +71,17 @@ export const useFetchDataStore = defineStore('fetchData', () => {
                 .order('created_at', { ascending: false })
     
           
-            topPosts.value = [ ...topPosts.value, ...fetchTopPosts ]
+            shoesPosts.value = [ ...shoesPosts.value, ...fetchShoesPosts ]
     
        
             lastCardIndex.value = lastCardIndex.value + 3
     
-            if (!fetchTopPosts.length) {
+            if (!fetchShoesPosts.length) {
                 reachEndOfPosts.value = true
             }
         }
     }
 
-    return { fetchTopPosts, topPosts, loadingPosts, addNewPost, deleteTopPost, fetchNextTopPosts }
+    return { fetchShoesPosts, shoesPosts, loadingPosts, addNewPost, deleteShoesPost, fetchNextShoesPosts }
 })
 
-
- 
