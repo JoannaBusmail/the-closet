@@ -82,7 +82,13 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
         }
     }
 
-    return { fetchTopPosts, topPosts, loadingPosts, addNewPost, deleteTopPost, fetchNextTopPosts }
+    const setTopPosts = (posts) => {
+        topPosts.value = posts
+    }   
+
+   
+
+    return { fetchTopPosts, topPosts, loadingPosts, addNewPost, deleteTopPost, fetchNextTopPosts , setTopPosts}
 })
 
 
