@@ -1,44 +1,34 @@
-<template #content>
-    <div
-        class="container"
-        :style="contentStyles"
-    >
-        <div class="content-container">
-            <h1>MIX & MATCH</h1>
-            <div class="inputs-container">
-                <h3>{{ formName }}</h3>
+<template>
+    <div class="inputs-container">
+        <h3>{{ formName }}</h3>
 
-                <InputText
-                    class="secondary"
-                    type="text"
-                    placeholder="Color"
-                    v-model="state.color"
-                    @input="updateColor"
-                />
-                <div class="radio-input">
-                    <InputRadio
-                        v-for="(option, index) in radioOptions"
-                        v-model="state.style"
-                        :key="index"
-                        :id="option.id"
-                        :label="option.label"
-                        :value="option.value"
-                        @update:modelValue="updateStyle"
-                    >
-                    </InputRadio>
-                </div>
-            </div>
-            <Spinner v-if="isLoadingPosts" />
-            <Carrousel
-                v-else
-                :posts="posts"
-                @selectImage="selectImage"
-                :errorMessage="errorMessage"
-            />
-
-
+        <InputText
+            class="secondary"
+            type="text"
+            placeholder="Color"
+            v-model="state.color"
+            @input="updateColor"
+        />
+        <div class="radio-input">
+            <InputRadio
+                v-for="(option, index) in radioOptions"
+                v-model="state.style"
+                :key="index"
+                :id="option.id"
+                :label="option.label"
+                :value="option.value"
+                @update:modelValue="updateStyle"
+            >
+            </InputRadio>
         </div>
     </div>
+    <Spinner v-if="isLoadingPosts" />
+    <Carrousel
+        v-else
+        :posts="posts"
+        @selectImage="selectImage"
+        :errorMessage="errorMessage"
+    />
 </template>
   
 <script setup>
@@ -47,7 +37,6 @@ import Carrousel from '@/components/Carrousel.vue'
 import InputText from '@/components/InputText.vue'
 import InputRadio from './InputRadio.vue'
 import { ref, reactive } from 'vue'
-import { useUIActions } from '@/composables/useUIActions.js'
 
 
 const props = defineProps({
@@ -90,33 +79,9 @@ const radioOptions = ref([
 
 
 
-// UI AND POSTS ACTIONS
-const { contentStyles } = useUIActions()
-
-
-
-
-
-
 </script>
   
 <style scoped>
-.container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    z-index: 5;
-    transition: margin-left 0.3s ease;
-}
-
-.content-container {
-    width: calc(100% - 60px);
-    height: calc(100% - 60px);
-    margin: 30px;
-    background-color: #fff;
-}
-
-h1,
 h3 {
     padding-top: 20px;
     margin-left: 20px;

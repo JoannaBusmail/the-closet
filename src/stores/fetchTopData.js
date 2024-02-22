@@ -17,7 +17,7 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
       })*/
 
     const topPosts = ref([])
-    const filteredPosts = ref([])
+    const filteredTopPosts = ref([])
     const lastCardIndex = ref(1)
     const reachEndOfPosts = ref(false)
     const loadingPosts = ref(false)
@@ -87,13 +87,13 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
         topPosts.value = posts
     }   
 
-    const setFilteredPosts = (posts) =>{
-        filteredPosts.value = posts
+    const setFilteredTopPosts = (posts) =>{
+        filteredTopPosts.value = posts
     }
 
    
 
-    return { fetchTopPosts, topPosts, loadingPosts, filteredPosts, addNewPost, deleteTopPost, fetchNextTopPosts , setTopPosts, setFilteredPosts}
+    return { fetchTopPosts, topPosts, loadingPosts, filteredTopPosts, addNewPost, deleteTopPost, fetchNextTopPosts , setTopPosts, setFilteredTopPosts}
 })
 
 

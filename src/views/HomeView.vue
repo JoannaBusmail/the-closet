@@ -38,11 +38,9 @@ const { contentStyles } = useUIActions()
 }
 
 .image {
-    width: calc(100% - 60px);
-    /* 100% width minus 2 * 30px margin */
-    height: calc(100% - 60px);
-    /* 100% height minus 2 * 30px margin */
-    margin: 30px;
+    width: 100%;
+    height: 100vh;
+
     object-fit: cover;
     /* Preserve aspect ratio while covering the entire container */
 }
