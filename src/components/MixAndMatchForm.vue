@@ -12,17 +12,18 @@
                     class="secondary"
                     type="text"
                     placeholder="Color"
-                    v-model="color"
+                    v-model="state.color"
                     @input="updateColor"
                 />
                 <div class="radio-input">
                     <InputRadio
                         v-for="(option, index) in radioOptions"
-                        v-model="style"
+                        v-model="state.style"
                         :key="index"
                         :id="option.id"
                         :label="option.label"
                         :value="option.value"
+                        @update:modelValue="updateStyle"
                     >
                     </InputRadio>
                 </div>
@@ -32,6 +33,7 @@
                 v-else
                 :posts="posts"
                 @selectImage="selectImage"
+                :errorMessage="errorMessage"
             />
 
 
@@ -44,7 +46,7 @@ import Spinner from '@/components/Spinner.vue'
 import Carrousel from '@/components/Carrousel.vue'
 import InputText from '@/components/InputText.vue'
 import InputRadio from './InputRadio.vue'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { useUIActions } from '@/composables/useUIActions.js'
 
 
@@ -52,10 +54,11 @@ const props = defineProps({
     formName: String,
     isLoadingPosts: Boolean,
     posts: Array,
+    errorMessage: String
 })
 
 
-const emit = defineEmits([ 'selectImage', 'update' ])
+const emit = defineEmits([ 'selectImage', 'update', 'updateStyle', 'updateBoth' ])
 
 const selectImage = (index) =>
 {
@@ -65,16 +68,24 @@ const selectImage = (index) =>
 
 const updateColor = () =>
 {
-    emit('update', { color: color.value })
-    console.log(color.value)
+    emit('update', { color: state.color })
+    emit('updateBoth', { color: state.color, style: state.style })
 }
 
+const updateStyle = () =>
+{
+    emit('updateStyle', { style: state.style })
+    emit('updateBoth', { color: state.color, style: state.style })
+}
 
-const color = ref('')
-const style = ref('')
+const state = reactive({
+    color: '',
+    style: '',
+})
 const radioOptions = ref([
     { id: 'casual', label: 'Casual', value: 'casual' },
     { id: 'elegant', label: 'Elegant', value: 'elegant' },
+    { id: 'all', label: 'All', value: 'all' },
 ])
 
 

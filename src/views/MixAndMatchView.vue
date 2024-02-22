@@ -4,9 +4,10 @@
         <MixAndMatchForm
             formName="TOP"
             :isLoadingPosts="loadingPosts"
-            :posts="topPosts"
+            :posts="showPosts"
             @selectImage="selectTopPostHandler"
-            @update="filterTopPosts"
+            @updateBoth="filterPosts"
+            :errorMessage="errorMessage"
         />
         <p>Selected Image: {{ selectedPostUrl }}</p>
         <p>Selected Image: {{ selectedPostID }}</p>
@@ -23,16 +24,18 @@ import { usePostActions } from '@/composables/usePostActions.js'
 
 
 
+
 // FETCH TOP DATA STORE
 const fetchTopDataStore = useFetchTopDataStore()
-const { fetchTopPosts, setTopPosts } = fetchTopDataStore
-const { topPosts, loadingPosts } = storeToRefs(fetchTopDataStore)
+const { fetchTopPosts, setTopPosts, setFilteredPosts } = fetchTopDataStore
+const { topPosts, loadingPosts, filteredPosts } = storeToRefs(fetchTopDataStore)
 
 
 // UI AND POSTS ACTIONS
 
 const { selectedPost, selectPost } = usePostActions()
 
+const errorMessage = ref('')
 
 onMounted(async () =>
 {
@@ -45,37 +48,62 @@ const selectTopPostHandler = (index) =>
     selectPost(index, topPosts.value)
 }
 
-const filterTopPosts = ({ color }) =>
-{
-    const inputColor = color ? color.trim().toLowerCase() : null
 
-    if (!inputColor) {
-        // If color is empty, show all posts
-        fetchTopPosts()
+
+
+const filterPosts = ({ color, style }) =>
+{
+    let filtered = topPosts.value
+
+    if (color) {
+        filtered = filtered.filter(post =>
+        {
+            const postColor = post.color ? post.color.trim().toLowerCase() : ''
+            return postColor.includes(color.trim().toLowerCase())
+        })
+
+    }
+
+    if (style && style !== 'all') {
+        filtered = filtered.filter(post => post.style === style)
+    }
+
+    if (style === 'all') {
+        errorMessage.value = ''
+        setFilteredPosts(filtered)
         return
     }
 
-    const filteredPosts = topPosts.value.filter(post =>
-    {
-        const postColor = post.color.trim().toLowerCase()
-        return postColor.includes(inputColor)
-    })
 
-    if (filteredPosts.length === 0) {
-        console.log('No matching posts found.')
+    if ((color || style) && filtered.length === 0) {
+        errorMessage.value = 'No matching posts found.'
+
+    } else {
+        errorMessage.value = ''
     }
 
-    setTopPosts(filteredPosts)
+    setFilteredPosts(filtered)
 }
 
 
+
+const showPosts = computed(() =>
+{
+    if (filteredPosts.value.length === 0) {
+        if (errorMessage.value !== '') {
+            return []
+        } else {
+            return topPosts.value
+        }
+    } else {
+        return filteredPosts.value
+    }
+})
 
 
 
 const selectedPostUrl = computed(() => selectedPost.value ? selectedPost.value.url : null)
 const selectedPostID = computed(() => selectedPost.value ? selectedPost.value.id : null)
-
-
 
 
 

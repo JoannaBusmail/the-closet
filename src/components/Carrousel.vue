@@ -1,5 +1,15 @@
 <template>
-    <div class="carousel-container">
+    <ErrorMessageComp
+        class="error-message"
+        v-if="errorMessage"
+        :message="errorMessage"
+    />
+    <div
+        v-else
+        class="carousel-container"
+    >
+
+
         <div
             class="nav-button"
             @click="moveCarousel(-1)"
@@ -12,7 +22,7 @@
                 <div
                     class="carousel-item"
                     :class="{ selected: index === selectedIndex }"
-                    v-for="(post, index) in posts"
+                    v-for="(  post, index  ) in   posts  "
                     :key="index"
                     @click="selectImage(index)"
                 >
@@ -22,22 +32,29 @@
                         :alt="'Image ' + (index + 1)"
                     />
                 </div>
+
             </div>
+
+
         </div>
+
         <div
             class="nav-button"
             @click="moveCarousel(1)"
         >&#8250;</div>
+
     </div>
 </template>
   
 <script setup>
 import { ref } from 'vue'
+import ErrorMessageComp from './ErrorMessageComp.vue'
 
 const { VITE_BASE_PHOTO_URL } = import.meta.env
 
 const props = defineProps({
-    posts: Array
+    posts: Array,
+    errorMessage: String
 })
 
 const selectedIndex = ref(null)
@@ -128,6 +145,11 @@ const moveCarousel = (direction) =>
     font-size: 40px;
     cursor: pointer;
     margin: 0 15px;
+}
+
+.error-message {
+    margin-top: 20px;
+    text-align: center;
 }
 </style>
   
