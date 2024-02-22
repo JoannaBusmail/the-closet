@@ -10,11 +10,6 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
     const userStore = useUserStore()
     const { user } = storeToRefs(userStore)
 
-    /*watchEffect(() => {
-        if (user.value) {
-          fetchTopPosts()
-        }
-      })*/
 
     const topPosts = ref([])
     const filteredTopPosts = ref([])

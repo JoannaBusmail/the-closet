@@ -63,8 +63,14 @@ const emit = defineEmits([ 'selectImage' ])
 
 const selectImage = (index) =>
 {
-    emit('selectImage', index)
-    selectedIndex.value = index
+    if (selectedIndex.value === index) {
+        // Si el post seleccionado se hace clic nuevamente, deberíamos deseleccionarlo
+        selectedIndex.value = null
+    } else {
+        // De lo contrario, seleccionamos el post
+        selectedIndex.value = index
+    }
+    emit('selectImage', index) // Emitir el evento selectImage independientemente de la selección o deselección
 }
 
 const currentIndex = ref(0)

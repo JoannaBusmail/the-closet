@@ -2,7 +2,7 @@
     <SectionsContent
         sectionName="BOTTOM"
         :postData="bottomPosts"
-        :loadingPosts="loadingPosts"
+        :loadingPosts="loadingBottomPosts"
         onView="bottom"
         @btnClick="handleBtnClick"
         @intersect="fetchNextBottomPosts"
@@ -27,7 +27,7 @@ const { user: loggedUser } = storeToRefs(userStore)
 // FETCH DATA STORE
 const fetchBottomDataStore = useFetchBottomDataStore()
 const { fetchBottomPosts, deleteBottomPost, fetchNextBottomPosts } = fetchBottomDataStore
-const { bottomPosts, loadingPosts } = storeToRefs(fetchBottomDataStore)
+const { bottomPosts, loadingBottomPosts } = storeToRefs(fetchBottomDataStore)
 
 
 const handleBtnClick = (post) =>

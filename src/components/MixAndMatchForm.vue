@@ -1,34 +1,36 @@
 <template>
-    <div class="inputs-container">
-        <h3>{{ formName }}</h3>
+    <div class="form-container">
+        <div class="inputs-container">
+            <h3>{{ formName }}</h3>
 
-        <InputText
-            class="secondary"
-            type="text"
-            placeholder="Color"
-            v-model="state.color"
-            @input="updateColor"
-        />
-        <div class="radio-input">
-            <InputRadio
-                v-for="(option, index) in radioOptions"
-                v-model="state.style"
-                :key="index"
-                :id="option.id"
-                :label="option.label"
-                :value="option.value"
-                @update:modelValue="updateStyle"
-            >
-            </InputRadio>
+            <InputText
+                class="secondary"
+                type="text"
+                placeholder="Color"
+                v-model="state.color"
+                @input="updateColor"
+            />
+            <div class="radio-input">
+                <InputRadio
+                    v-for="(option, index) in radioOptions"
+                    v-model="state.style"
+                    :key="index"
+                    :id="option.id"
+                    :label="option.label"
+                    :value="option.value"
+                    @update:modelValue="updateStyle"
+                >
+                </InputRadio>
+            </div>
         </div>
+        <Spinner v-if="isLoadingPosts" />
+        <Carrousel
+            v-else
+            :posts="posts"
+            @selectImage="selectImage"
+            :errorMessage="errorMessage"
+        />
     </div>
-    <Spinner v-if="isLoadingPosts" />
-    <Carrousel
-        v-else
-        :posts="posts"
-        @selectImage="selectImage"
-        :errorMessage="errorMessage"
-    />
 </template>
   
 <script setup>
@@ -71,6 +73,7 @@ const state = reactive({
     color: '',
     style: '',
 })
+
 const radioOptions = ref([
     { id: 'casual', label: 'Casual', value: 'casual' },
     { id: 'elegant', label: 'Elegant', value: 'elegant' },
@@ -87,12 +90,17 @@ h3 {
     margin-left: 20px;
 }
 
+.form-container {
+    margin-bottom: 100px;
+}
+
 .inputs-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin-top: 20px;
+
 }
 
 .radio-input {
