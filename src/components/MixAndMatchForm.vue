@@ -29,6 +29,7 @@
             :posts="posts"
             @selectImage="selectImage"
             :errorMessage="errorMessage"
+            :carouselId="formName"
         />
     </div>
 </template>

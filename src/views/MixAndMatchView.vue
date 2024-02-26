@@ -69,19 +69,6 @@ onMounted(async () =>
 })
 
 
-/*const selectTopPostHandler = (index) =>
-{
-
-    if (selectedPost.value && selectedPost.value.top.id === topPosts.value[ index ]?.id) {
-        // Si el mismo post se selecciona nuevamente, deseleccionarlo
-        selectPost(null, null)
-
-    } else {
-        selectPost(index, topPosts.value)
-
-    }
-}*/
-
 const selectTopPostHandler = (index) =>
 {
     const post = topPosts.value[ index ]
@@ -106,11 +93,6 @@ const selectBottomPostHandler = (index) =>
     }
 }
 
-/*const selectBottomPostHandler = (index) =>
-{
-    selectPost(index, bottomPosts.value)
-}
-*/
 
 
 const filterTopPosts = ({ color, style }) =>

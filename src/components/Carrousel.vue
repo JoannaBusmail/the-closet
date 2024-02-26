@@ -18,7 +18,10 @@
             class="carousel"
             ref="carousel"
         >
-            <div class="carousel-inner">
+            <div
+                class="carousel-inner"
+                :class="'carousel-id-' + carouselId"
+            >
                 <div
                     class="carousel-item"
                     :class="{ selected: index === selectedIndex }"
@@ -54,7 +57,8 @@ const { VITE_BASE_PHOTO_URL } = import.meta.env
 
 const props = defineProps({
     posts: Array,
-    errorMessage: String
+    errorMessage: String,
+    carouselId: String
 })
 
 const selectedIndex = ref(null)
@@ -64,13 +68,13 @@ const emit = defineEmits([ 'selectImage' ])
 const selectImage = (index) =>
 {
     if (selectedIndex.value === index) {
-        // Si el post seleccionado se hace clic nuevamente, deberíamos deseleccionarlo
+
         selectedIndex.value = null
     } else {
-        // De lo contrario, seleccionamos el post
+
         selectedIndex.value = index
     }
-    emit('selectImage', index) // Emitir el evento selectImage independientemente de la selección o deselección
+    emit('selectImage', index)
 }
 
 const currentIndex = ref(0)
@@ -79,8 +83,9 @@ const currentIndex = ref(0)
 
 const moveCarousel = (direction) =>
 {
-    const container = document.querySelector('.carousel-inner')
-    const itemWidth = container.clientWidth / props.posts.length
+    const container = document.querySelector(`.carousel-id-${props.carouselId}`)
+    console.log(container)
+    const itemWidth = container?.clientWidth / props.posts.length
 
     currentIndex.value += direction
 
