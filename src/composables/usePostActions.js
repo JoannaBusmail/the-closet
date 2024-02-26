@@ -1,7 +1,7 @@
 import { reactive, computed } from 'vue';
 
 
-const selectedPost = reactive({ top: { id: null, url: null }, bottom: { id: null, url: null } })
+const selectedPost = reactive({ top: { id: null, url: null }, bottom: { id: null, url: null }, shoes: { id: null, url: null }})
 
 export function usePostActions () {
 

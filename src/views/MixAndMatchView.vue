@@ -36,6 +36,7 @@
 
             <p>Selected Top Image: {{ selectedPost.top.id }}</p>
             <p>Selected Bottom Image: {{ selectedPost.bottom.id }}</p>
+            <p>Selected Bottom Image: {{ selectedPost.shoes.id }}</p>
 
         </div>
     </div>
@@ -84,6 +85,7 @@ onMounted(async () =>
 {
     await fetchTopPosts()
     await fetchBottomPosts()
+    await fetchShoesPosts()
 
 })
 
