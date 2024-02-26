@@ -24,8 +24,19 @@
                 :errorMessage="bottomErrorMessage"
             />
 
+
+            <MixAndMatchForm
+                formName="SHOES"
+                :isLoadingPosts="loadingShoesPosts"
+                :posts="showShoesPosts"
+                @selectImage="selectShoesPostHandler"
+                @updateBoth="filterShoesPosts"
+                :errorMessage="shoesErrorMessage"
+            />
+
             <p>Selected Top Image: {{ selectedPost.top.id }}</p>
             <p>Selected Bottom Image: {{ selectedPost.bottom.id }}</p>
+
         </div>
     </div>
 </template>
@@ -35,6 +46,7 @@ import MixAndMatchForm from '@/components/MixAndMatchForm.vue'
 import { ref, computed, onMounted, reactive } from 'vue'
 import { useFetchTopDataStore } from '@/stores/fetchTopData'
 import { useFetchBottomDataStore } from '@/stores/fetchBottomData'
+import { useFetchShoesDataStore } from '@/stores/fetchShoesData'
 import { storeToRefs } from 'pinia'
 import { usePostActions } from '@/composables/usePostActions.js'
 import { useUIActions } from '@/composables/useUIActions.js'
@@ -47,18 +59,25 @@ const fetchTopDataStore = useFetchTopDataStore()
 const { fetchTopPosts, setFilteredTopPosts } = fetchTopDataStore
 const { topPosts, loadingPosts, filteredTopPosts } = storeToRefs(fetchTopDataStore)
 
-// FETCH TOP DATA STORE
+// FETCH BOTTOM DATA STORE
 const fetchBottomDataStore = useFetchBottomDataStore()
 const { fetchBottomPosts, setFilteredBottomPosts } = fetchBottomDataStore
 const { bottomPosts, loadingBottomPosts, filteredBottomPosts } = storeToRefs(fetchBottomDataStore)
 
 
+// FETCH SHOES DATA STORE
+const fetchShoesDataStore = useFetchShoesDataStore()
+const { fetchShoesPosts, setFilteredShoesPosts } = fetchShoesDataStore
+const { shoesPosts, loadingShoesPosts, filteredShoesPosts } = storeToRefs(fetchShoesDataStore)
+
+
 // UI AND POSTS ACTIONS
-const { selectedPost, selectPost } = usePostActions()
+const { selectedPost, selectPost, filterPosts, selectPostHandler, showPosts } = usePostActions()
 
 
 const topErrorMessage = ref('')
 const bottomErrorMessage = ref('')
+const shoesErrorMessage = ref('')
 
 
 onMounted(async () =>
@@ -69,128 +88,46 @@ onMounted(async () =>
 })
 
 
+
 const selectTopPostHandler = (index) =>
 {
-    const post = topPosts.value[ index ]
-
-    if (selectedPost.top.id === post?.id) {
-        // Si el mismo post se selecciona nuevamente, deseleccionarlo
-        selectPost(null, null, 'top')
-    } else {
-        selectPost(index, topPosts.value, 'top')
-    }
+    selectPostHandler(index, topPosts.value, 'top')
 }
 
 const selectBottomPostHandler = (index) =>
 {
-    const post = bottomPosts.value[ index ]
+    selectPostHandler(index, bottomPosts.value, 'bottom')
+}
 
-    if (selectedPost.bottom.id === post?.id) {
 
-        selectPost(null, null, 'bottom')
-    } else {
-        selectPost(index, bottomPosts.value, 'bottom')
-    }
+const selectShoesPostHandler = (index) =>
+{
+    selectPostHandler(index, shoesPosts.value, 'shoes')
 }
 
 
 
-const filterTopPosts = ({ color, style }) =>
+const filterTopPosts = (filters) =>
 {
-    let filtered = topPosts.value
+    filterPosts(topPosts, setFilteredTopPosts, topErrorMessage, filters)
+}
 
-    if (color) {
-        filtered = filtered.filter(post =>
-        {
-            const postColor = post.color ? post.color.trim().toLowerCase() : ''
-            return postColor.includes(color.trim().toLowerCase())
-        })
-
-    }
-
-    if (style && style !== 'all') {
-        filtered = filtered.filter(post => post.style === style)
-    }
-
-    if (style === 'all') {
-        topErrorMessage.value = ''
-        setFilteredTopPosts(filtered)
-        return
-    }
-
-
-    if ((color || style) && filtered.length === 0) {
-        topErrorMessage.value = 'No matching posts found.'
-
-    } else {
-        topErrorMessage.value = ''
-    }
-
-    setFilteredTopPosts(filtered)
+const filterBottomPosts = (filters) =>
+{
+    filterPosts(bottomPosts, setFilteredBottomPosts, bottomErrorMessage, filters)
 }
 
 
-const filterBottomPosts = ({ color, style }) =>
+const filterShoesPosts = (filters) =>
 {
-    let filtered = bottomPosts.value
-
-    if (color) {
-        filtered = filtered.filter(post =>
-        {
-            const postColor = post.color ? post.color.trim().toLowerCase() : ''
-            return postColor.includes(color.trim().toLowerCase())
-        })
-
-    }
-
-    if (style && style !== 'all') {
-        filtered = filtered.filter(post => post.style === style)
-    }
-
-    if (style === 'all') {
-        bottomErrorMessage.value = ''
-        setFilteredBottomPosts(filtered)
-        return
-    }
-
-
-    if ((color || style) && filtered.length === 0) {
-        bottomErrorMessage.value = 'No matching posts found.'
-
-    } else {
-        bottomErrorMessage.value = ''
-    }
-
-    setFilteredBottomPosts(filtered)
+    filterPosts(shoesPosts, setFilteredShoesPosts, shoesErrorMessage, filters)
 }
 
+const showTopPosts = showPosts(topPosts, filteredTopPosts, topErrorMessage)
+const showBottomPosts = showPosts(bottomPosts, filteredBottomPosts, bottomErrorMessage)
+const showShoesPosts = showPosts(shoesPosts, filteredShoesPosts, shoesErrorMessage)
 
 
-const showTopPosts = computed(() =>
-{
-    if (filteredTopPosts.value.length === 0) {
-        if (topErrorMessage.value !== '') {
-            return []
-        } else {
-            return topPosts.value
-        }
-    } else {
-        return filteredTopPosts.value
-    }
-})
-
-const showBottomPosts = computed(() =>
-{
-    if (filteredBottomPosts.value.length === 0) {
-        if (bottomErrorMessage.value !== '') {
-            return []
-        } else {
-            return bottomPosts.value
-        }
-    } else {
-        return filteredBottomPosts.value
-    }
-})
 
 
 
