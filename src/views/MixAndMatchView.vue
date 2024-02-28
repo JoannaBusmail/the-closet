@@ -6,66 +6,76 @@
         <div class="content-container">
             <h1>MIX & MATCH</h1>
 
-            <div class="inputs-container">
-                <p>1. Name your outfit</p>
-                <InputText
-                    class="secondary"
-                    type="text"
-                    placeholder="Outfit Name"
-                    v-model="outfitName"
+            <p class="mixMatchForm-instruction">1. Select post to combine Top,
+                Bottom and Shoes. You can filter by
+                color and style</p>
+            <form @submit.prevent="handleFormSubmit">
+                <MixAndMatchForm
+                    formName="TOP"
+                    :isLoadingPosts="loadingPosts"
+                    :posts="showTopPosts"
+                    @selectImage="selectTopPostHandler"
+                    @updateBoth="filterTopPosts"
+                    :errorMessage="topErrorMessage"
                 />
-                <p>2. Choose closet to save your outfit</p>
-                <div class="radio-input">
-                    <InputRadio
-                        v-for="(option, index) in radioOptions"
-                        v-model="style"
-                        :key="index"
-                        :id="option.id"
-                        :label="option.label"
-                        :value="option.value"
-                        @update:modelValue="updateStyle"
-                    >
-                    </InputRadio>
+
+                <MixAndMatchForm
+                    formName="BOTTOM"
+                    :isLoadingPosts="loadingBottomPosts"
+                    :posts="showBottomPosts"
+                    @selectImage="selectBottomPostHandler"
+                    @updateBoth="filterBottomPosts"
+                    :errorMessage="bottomErrorMessage"
+                />
+
+
+                <MixAndMatchForm
+                    formName="SHOES"
+                    :isLoadingPosts="loadingShoesPosts"
+                    :posts="showShoesPosts"
+                    @selectImage="selectShoesPostHandler"
+                    @updateBoth="filterShoesPosts"
+                    :errorMessage="shoesErrorMessage"
+                />
+
+                <div class="inputs-container">
+                    <p>2. Name your outfit</p>
+                    <InputText
+                        class="secondary"
+                        type="text"
+                        placeholder="Outfit Name"
+                        v-model="outfitName"
+                    />
+                    <p>3. Choose closet to save your outfit</p>
+                    <div class="radio-input">
+                        <InputRadio
+                            v-for="(option, index) in radioOptions"
+                            v-model="style"
+                            :key="index"
+                            :id="option.id"
+                            :label="option.label"
+                            :value="option.value"
+                            @update:modelValue="updateStyle"
+                        >
+                        </InputRadio>
+                    </div>
+
                 </div>
-                <p class="mixMatchForm-instruction">3. Select post to combine Top,
-                    Bottom and Shoes. You can filter by
-                    color and style</p>
-            </div>
+                <div class="button-container">
+                    <Button
+                        @btnClick="handleCancel"
+                        btnName="Cancel"
+                        btnType="secondary"
+                    ></Button>
 
-            <MixAndMatchForm
-                formName="TOP"
-                :isLoadingPosts="loadingPosts"
-                :posts="showTopPosts"
-                @selectImage="selectTopPostHandler"
-                @updateBoth="filterTopPosts"
-                :errorMessage="topErrorMessage"
-            />
+                    <Button
+                        btnName="Submit"
+                        btnType="secondary"
+                        :disabled="loadingClosetPost"
+                    ></Button>
+                </div>
 
-            <MixAndMatchForm
-                formName="BOTTOM"
-                :isLoadingPosts="loadingBottomPosts"
-                :posts="showBottomPosts"
-                @selectImage="selectBottomPostHandler"
-                @updateBoth="filterBottomPosts"
-                :errorMessage="bottomErrorMessage"
-            />
-
-
-            <MixAndMatchForm
-                formName="SHOES"
-                :isLoadingPosts="loadingShoesPosts"
-                :posts="showShoesPosts"
-                @selectImage="selectShoesPostHandler"
-                @updateBoth="filterShoesPosts"
-                :errorMessage="shoesErrorMessage"
-            />
-
-
-
-
-            <p>Selected Top Image: {{ selectedPost.top.url }}</p>
-            <p>Selected Bottom Image: {{ selectedPost.bottom.url }}</p>
-            <p>Selected Bottom Image: {{ selectedPost.shoes.url }}</p>
+            </form>
 
         </div>
     </div>
@@ -75,36 +85,41 @@
 import MixAndMatchForm from '@/components/MixAndMatchForm.vue'
 import InputText from '@/components/InputText.vue'
 import InputRadio from '@/components/InputRadio.vue'
+import Button from '@/components/Button.vue'
 import { ref, computed, onMounted, reactive } from 'vue'
+import { supabase } from '../../supabase'
 import { useFetchTopDataStore } from '@/stores/fetchTopData'
 import { useFetchBottomDataStore } from '@/stores/fetchBottomData'
 import { useFetchShoesDataStore } from '@/stores/fetchShoesData'
 import { storeToRefs } from 'pinia'
 import { usePostActions } from '@/composables/usePostActions.js'
 import { useUIActions } from '@/composables/useUIActions.js'
+import { useUserStore } from '@/stores/users'
 
 
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
 
 
 // FETCH TOP DATA STORE
 const fetchTopDataStore = useFetchTopDataStore()
-const { fetchTopPosts, setFilteredTopPosts } = fetchTopDataStore
+const { fetchTopPosts, setFilteredTopPosts, fetchAllTopPosts } = fetchTopDataStore
 const { topPosts, loadingPosts, filteredTopPosts } = storeToRefs(fetchTopDataStore)
 
 // FETCH BOTTOM DATA STORE
 const fetchBottomDataStore = useFetchBottomDataStore()
-const { fetchBottomPosts, setFilteredBottomPosts } = fetchBottomDataStore
+const { fetchAllBottomPosts, setFilteredBottomPosts } = fetchBottomDataStore
 const { bottomPosts, loadingBottomPosts, filteredBottomPosts } = storeToRefs(fetchBottomDataStore)
 
 
 // FETCH SHOES DATA STORE
 const fetchShoesDataStore = useFetchShoesDataStore()
-const { fetchShoesPosts, setFilteredShoesPosts } = fetchShoesDataStore
+const { fetchAllShoesPosts, setFilteredShoesPosts } = fetchShoesDataStore
 const { shoesPosts, loadingShoesPosts, filteredShoesPosts } = storeToRefs(fetchShoesDataStore)
 
 
 // UI AND POSTS ACTIONS
-const { selectedPost, selectPost, filterPosts, selectPostHandler, showPosts } = usePostActions()
+const { selectedPost, selectPost, filterPosts, selectPostHandler, showPosts, handleUploadClosetPost, loadingClosetPost } = usePostActions()
 
 
 const topErrorMessage = ref('')
@@ -133,9 +148,9 @@ const updateStyle = () =>
 
 onMounted(async () =>
 {
-    await fetchTopPosts()
-    await fetchBottomPosts()
-    await fetchShoesPosts()
+    await fetchAllTopPosts()
+    await fetchAllBottomPosts()
+    await fetchAllShoesPosts()
 
 })
 
@@ -192,6 +207,25 @@ const showShoesPosts = showPosts(shoesPosts, filteredShoesPosts, shoesErrorMessa
 const { contentStyles } = useUIActions()
 
 
+
+
+const handleFormSubmit = async () =>
+{
+    await handleUploadClosetPost(outfitName.value, 'casual', user.value.id, style.value)
+    await handleUploadClosetPost(outfitName.value, 'elegant', user.value.id, style.value)
+    outfitName.value = ''
+    style.value = ''
+
+}
+
+const handleCancel = (e) =>
+{
+    e.preventDefault()
+    outfitName.value = ''
+    style.value = ''
+}
+
+
 </script>
   
 <style scoped>
@@ -223,7 +257,7 @@ h1 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 20px;
+
 }
 
 p,
@@ -239,6 +273,8 @@ p,
 
 .mixMatchForm-instruction {
     margin-bottom: -10px;
+    text-align: center;
+
 
 }
 
@@ -249,6 +285,16 @@ p,
     justify-content: center;
     align-items: center;
     margin-bottom: 10px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 40px;
+    margin: 25px 0;
+    padding-bottom: 35px;
+
 }
 </style>
   

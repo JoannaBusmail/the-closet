@@ -1,8 +1,9 @@
-import { reactive, computed } from 'vue';
+import { reactive, computed, ref } from 'vue';
+import { supabase } from '../../supabase'
 
 
 const selectedPost = reactive({ top: { id: null, url: null }, bottom: { id: null, url: null }, shoes: { id: null, url: null }})
-
+const loadingClosetPost= ref(false)
 export function usePostActions () {
 
     const { VITE_BASE_PHOTO_URL } = import.meta.env
@@ -12,9 +13,10 @@ export function usePostActions () {
             // If post exists and index is not null, select the post
             selectedPost[postType] = {
                 id: post[index].id,
-                url: `${VITE_BASE_PHOTO_URL}${post[index].url}`
+                url: `${post[index].url}`
             };
             console.log('Selected id:', selectedPost[postType].id)
+            console.log('url:', selectedPost[postType].url)
            
         } else {
             // If index is null or post is not found, deselect the post
@@ -83,10 +85,37 @@ export function usePostActions () {
         setFilteredPosts(filtered);
     };
 
+const handleUploadClosetPost = async(name, closet, user, style) => {
+    const newClosetPost = {
+        top_id: selectedPost.top.id,
+        top_url: selectedPost.top.url,
+        bottom_id: selectedPost.bottom.id,
+        bottom_url: selectedPost.bottom.url,
+        shoes_id: selectedPost.shoes.id,
+        shoes_url: selectedPost.shoes.url,
+        outfit_name: name,
+        owner_id: user
+    }
 
-
+    try {
+        if (style === closet && selectedPost.top.id && selectedPost.bottom.id && selectedPost.shoes.id ) {
+            // If both top and bottom posts are selected, upload the casual post
+            loadingClosetPost.value = true
+            await supabase.from(closet).insert(newClosetPost)
+            console.log('add to closet db')
     
-    return { selectedPost, selectPost, filterPosts, selectPostHandler, showPosts }
+        }
+        
+    } catch (error) {
+        console.error('Error uploading post:', error.message)
+        
+    }
+    loadingClosetPost.value = false
+
+}
+  
+    
+    return { selectedPost, loadingClosetPost, selectPost, filterPosts, selectPostHandler, showPosts, handleUploadClosetPost }
 }
 
 /*import { reactive} from 'vue';

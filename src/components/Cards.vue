@@ -8,11 +8,12 @@
             :loadingPosts="loadingPosts"
             @btnClick="$emit('btnClick', post)"
         />
-        <Observer
-            v-if="postData && postData.length"
-            @intersect="emitIntersectEvent"
-        />
+
     </div>
+    <Observer
+        v-if="postData && postData.length"
+        @intersect="emitIntersectEvent"
+    />
 </template>
 
 <script setup>

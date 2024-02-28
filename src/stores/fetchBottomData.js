@@ -42,6 +42,25 @@ export const useFetchBottomDataStore = defineStore('fetchBottomData', () => {
       };
       
     }
+
+    const fetchAllBottomPosts = async () => {
+        if (user.value && user.value.id) {
+            loadingBottomPosts.value = true
+         
+            const { data: fetchBottomPosts } = await supabase
+            .from('bottom')
+            .select()
+            .eq('owner_id', user.value.id)
+            .order('created_at', { ascending: false })
+
+
+            bottomPosts.value = fetchBottomPosts
+            console.log(bottomPosts.value)
+            loadingBottomPosts.value = false
+            
+      };
+      
+    }
     
     const addNewPost = (newPost) => {
         bottomPosts.value = [newPost, ...bottomPosts.value]
@@ -111,7 +130,7 @@ export const useFetchBottomDataStore = defineStore('fetchBottomData', () => {
     }
 
 
-    return { fetchBottomPosts, bottomPosts, loadingBottomPosts, filteredBottomPosts, addNewPost, deleteBottomPost, fetchNextBottomPosts, setFilteredBottomPosts }
+    return { fetchBottomPosts, fetchAllBottomPosts, bottomPosts, loadingBottomPosts, filteredBottomPosts, addNewPost, deleteBottomPost, fetchNextBottomPosts, setFilteredBottomPosts }
 })
 
 

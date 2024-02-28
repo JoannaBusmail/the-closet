@@ -42,6 +42,25 @@ export const useFetchShoesDataStore = defineStore('fetchShoesData', () => {
       };
       
     }
+
+    const fetchAllShoesPosts = async () => {
+        if (user.value && user.value.id) {
+            loadingShoesPosts.value = true
+         
+            const { data: fetchShoesPosts } = await supabase
+            .from('shoes')
+            .select()
+            .eq('owner_id', user.value.id)
+            .order('created_at', { ascending: false })
+
+
+            shoesPosts.value = fetchShoesPosts
+            console.log(shoesPosts.value)
+            loadingShoesPosts.value = false
+            
+      };
+      
+    }
     
     const addNewPost = (newPost) => {
         shoesPosts.value = [newPost, ...shoesPosts.value]
@@ -111,6 +130,6 @@ export const useFetchShoesDataStore = defineStore('fetchShoesData', () => {
     }
 
 
-    return { fetchShoesPosts, shoesPosts, loadingShoesPosts,filteredShoesPosts, addNewPost, deleteShoesPost, fetchNextShoesPosts, setFilteredShoesPosts }
+    return { fetchShoesPosts, fetchAllShoesPosts,  shoesPosts, loadingShoesPosts,filteredShoesPosts, addNewPost, deleteShoesPost, fetchNextShoesPosts, setFilteredShoesPosts }
 })
 

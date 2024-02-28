@@ -18,6 +18,8 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
     const loadingPosts = ref(false)
 
 
+
+    // fetch only the 2 first posts - this fetch is for loading post while scrolling down
     const fetchTopPosts = async () => {
         if (user.value && user.value.id) {
             loadingPosts.value = true
@@ -27,6 +29,27 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
             .select()
             .eq('owner_id', user.value.id)
             .range(0, lastCardIndex.value)
+            .order('created_at', { ascending: false })
+
+
+            topPosts.value = fetchTopPosts
+            console.log(topPosts.value)
+            loadingPosts.value = false
+            
+      };
+      
+    }
+
+    // this fetch is for carousel
+
+    const fetchAllTopPosts = async () => {
+        if (user.value && user.value.id) {
+            loadingPosts.value = true
+         
+            const { data: fetchTopPosts } = await supabase
+            .from('top')
+            .select()
+            .eq('owner_id', user.value.id)
             .order('created_at', { ascending: false })
 
 
@@ -110,7 +133,7 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
 
    
 
-    return { fetchTopPosts, topPosts, loadingPosts, filteredTopPosts, addNewPost, deleteTopPost, fetchNextTopPosts , setTopPosts, setFilteredTopPosts}
+    return { fetchTopPosts, fetchAllTopPosts,  topPosts, loadingPosts, filteredTopPosts, addNewPost, deleteTopPost, fetchNextTopPosts , setTopPosts, setFilteredTopPosts}
 })
 
 
