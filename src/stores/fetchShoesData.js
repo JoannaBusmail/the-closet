@@ -49,15 +49,37 @@ export const useFetchShoesDataStore = defineStore('fetchShoesData', () => {
  
     const deleteShoesPostFromDB = async (id) => {
         await supabase
-        .from('top')
+        .from('shoes')
         .delete()
         .eq('id', id)
     }
 
-    const deleteShoesPost = async (id) => {
+    /*const deleteShoesPost = async (id) => {
         shoesPosts.value = shoesPosts.value.filter(post => post.id !== id)
         await deleteShoesPostFromDB(id)
+    }*/
+
+
+    
+    const deleteShoesPost = async (id) => {
+        // Find the post to be deleted
+        const postToDelete = shoesPosts.value.find(post => post.id === id);
+        if (!postToDelete) {
+            // Post not found, handle error or return
+            return;
+        }
+    
+        // Delete the post from the database
+        await deleteShoesPostFromDB(id);
+    
+        // Remove the post from the local array
+        shoesPosts.value = shoesPosts.value.filter(post => post.id !== id);
+    
+        // Delete the corresponding image from the bucket
+        const fileName = postToDelete.url.split('/').pop(); // Extract the file name from the URL
+        await supabase.storage.from('photos').remove([`public/${fileName}`]);
     }
+    
     
 
     const fetchNextShoesPosts = async () => {

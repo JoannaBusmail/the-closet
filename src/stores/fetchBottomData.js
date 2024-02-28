@@ -54,10 +54,30 @@ export const useFetchBottomDataStore = defineStore('fetchBottomData', () => {
         .eq('id', id)
     }
 
-    const deleteBottomPost = async (id) => {
+    /*const deleteBottomPost = async (id) => {
         bottomPosts.value = bottomPosts.value.filter(post => post.id !== id)
         await deleteBottomPostFromDB(id)
+    }*/
+
+    const deleteBottomPost = async (id) => {
+        // Find the post to be deleted
+        const postToDelete = bottomPosts.value.find(post => post.id === id);
+        if (!postToDelete) {
+            // Post not found, handle error or return
+            return;
+        }
+    
+        // Delete the post from the database
+        await deleteBottomPostFromDB(id);
+    
+        // Remove the post from the local array
+        bottomPosts.value = bottomPosts.value.filter(post => post.id !== id);
+    
+        // Delete the corresponding image from the bucket
+        const fileName = postToDelete.url.split('/').pop(); // Extract the file name from the URL
+        await supabase.storage.from('photos').remove([`public/${fileName}`]);
     }
+    
     
 
     const fetchNextBottomPosts = async () => {

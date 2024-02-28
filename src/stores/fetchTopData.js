@@ -49,9 +49,25 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
         .eq('id', id)
     }
 
+
+
     const deleteTopPost = async (id) => {
-        topPosts.value = topPosts.value.filter(post => post.id !== id)
-        await deleteTopPostFromDB(id)
+        // Find the post to be deleted
+        const postToDelete = topPosts.value.find(post => post.id === id);
+        if (!postToDelete) {
+            // Post not found, handle error or return
+            return;
+        }
+    
+        // Delete the post from the database
+        await deleteTopPostFromDB(id);
+    
+        // Remove the post from the local array
+        topPosts.value = topPosts.value.filter(post => post.id !== id);
+    
+        // Delete the corresponding image from the bucket
+        const fileName = postToDelete.url.split('/').pop(); // Extract the file name from the URL
+        await supabase.storage.from('photos').remove([`public/${fileName}`]);
     }
     
 

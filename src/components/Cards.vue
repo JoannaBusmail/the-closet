@@ -20,7 +20,7 @@ import Card from './Card.vue'
 import Observer from './Observer.vue'
 
 
-const emit = defineEmits([ 'intersect' ])
+const emit = defineEmits([ 'intersect', 'btnClick' ])
 
 const emitIntersectEvent = () =>
 {
