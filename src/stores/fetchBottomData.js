@@ -31,6 +31,7 @@ export const useFetchBottomDataStore = defineStore('fetchBottomData', () => {
             .from('bottom')
             .select()
             .eq('owner_id', user.value.id)
+            .range(0, lastCardIndex.value)
             .order('created_at', { ascending: false })
 
 
@@ -83,23 +84,25 @@ export const useFetchBottomDataStore = defineStore('fetchBottomData', () => {
     const fetchNextBottomPosts = async () => {
 
         if (!reachEndOfPosts.value) {
+      
           
             const { data: fetchbottomPosts } = await supabase
                 .from('bottom')
                 .select()
                 .in('owner_id', [user.value.id])
-                .range(lastCardIndex.value + 1, lastCardIndex.value + 3)
+                .range(lastCardIndex.value + 1, lastCardIndex.value + 2)
                 .order('created_at', { ascending: false })
     
           
             bottomPosts.value = [ ...bottomPosts.value, ...fetchbottomPosts ]
     
        
-            lastCardIndex.value = lastCardIndex.value + 3
+            lastCardIndex.value = lastCardIndex.value + 2
     
             if (!fetchbottomPosts.length) {
                 reachEndOfPosts.value = true
             }
+       
         }
     }
 

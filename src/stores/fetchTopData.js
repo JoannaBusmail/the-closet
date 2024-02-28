@@ -26,6 +26,7 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
             .from('top')
             .select()
             .eq('owner_id', user.value.id)
+            .range(0, lastCardIndex.value)
             .order('created_at', { ascending: false })
 
 
@@ -74,25 +75,30 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
     const fetchNextTopPosts = async () => {
 
         if (!reachEndOfPosts.value) {
+       
           
             const { data: fetchTopPosts } = await supabase
                 .from('top')
                 .select()
                 .in('owner_id', [user.value.id])
-                .range(lastCardIndex.value + 1, lastCardIndex.value + 3)
+                .range(lastCardIndex.value + 1, lastCardIndex.value + 2)
                 .order('created_at', { ascending: false })
     
           
             topPosts.value = [ ...topPosts.value, ...fetchTopPosts ]
     
        
-            lastCardIndex.value = lastCardIndex.value + 3
+            lastCardIndex.value = lastCardIndex.value + 2
     
             if (!fetchTopPosts.length) {
                 reachEndOfPosts.value = true
             }
+          
         }
     }
+
+
+    
 
     const setTopPosts = (posts) => {
         topPosts.value = posts

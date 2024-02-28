@@ -31,6 +31,7 @@ export const useFetchShoesDataStore = defineStore('fetchShoesData', () => {
             .from('shoes')
             .select()
             .eq('owner_id', user.value.id)
+            .range(0, lastCardIndex.value)
             .order('created_at', { ascending: false })
 
 
@@ -87,17 +88,17 @@ export const useFetchShoesDataStore = defineStore('fetchShoesData', () => {
         if (!reachEndOfPosts.value) {
           
             const { data: fetchShoesPosts } = await supabase
-                .from('top')
+                .from('shoes')
                 .select()
                 .in('owner_id', [user.value.id])
-                .range(lastCardIndex.value + 1, lastCardIndex.value + 3)
+                .range(lastCardIndex.value + 1, lastCardIndex.value + 2)
                 .order('created_at', { ascending: false })
     
           
             shoesPosts.value = [ ...shoesPosts.value, ...fetchShoesPosts ]
     
        
-            lastCardIndex.value = lastCardIndex.value + 3
+            lastCardIndex.value = lastCardIndex.value + 2
     
             if (!fetchShoesPosts.length) {
                 reachEndOfPosts.value = true
