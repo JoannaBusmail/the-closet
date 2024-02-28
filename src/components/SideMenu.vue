@@ -21,7 +21,10 @@
             v-if="showMixMatchMenu"
             class="mixMatch-menu"
         >
-            <h4 class="casual">CASUAL</h4>
+            <h4
+                class="casual"
+                @click="goToCasual"
+            >CASUAL</h4>
             <h4>FORMAL</h4>
         </div>
 
@@ -71,6 +74,12 @@ const goToMixAndMatch = () =>
 {
     router.push(`/closet/mixandmatch/${loggedUser?.value.username}`)
 }
+
+const goToCasual = () =>
+{
+    router.push(`/closet/mixandmatch/casualcloset/${loggedUser?.value.username}`)
+}
+
 </script>
 
 <style scoped>
