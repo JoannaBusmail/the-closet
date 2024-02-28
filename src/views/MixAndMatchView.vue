@@ -6,6 +6,32 @@
         <div class="content-container">
             <h1>MIX & MATCH</h1>
 
+            <div class="inputs-container">
+                <p>1. Name your outfit</p>
+                <InputText
+                    class="secondary"
+                    type="text"
+                    placeholder="Outfit Name"
+                    v-model="outfitName"
+                />
+                <p>2. Choose closet to save your outfit</p>
+                <div class="radio-input">
+                    <InputRadio
+                        v-for="(option, index) in radioOptions"
+                        v-model="style"
+                        :key="index"
+                        :id="option.id"
+                        :label="option.label"
+                        :value="option.value"
+                        @update:modelValue="updateStyle"
+                    >
+                    </InputRadio>
+                </div>
+                <p class="mixMatchForm-instruction">3. Select post to combine Top,
+                    Bottom and Shoes. You can filter by
+                    color and style</p>
+            </div>
+
             <MixAndMatchForm
                 formName="TOP"
                 :isLoadingPosts="loadingPosts"
@@ -34,9 +60,12 @@
                 :errorMessage="shoesErrorMessage"
             />
 
-            <p>Selected Top Image: {{ selectedPost.top.id }}</p>
-            <p>Selected Bottom Image: {{ selectedPost.bottom.id }}</p>
-            <p>Selected Bottom Image: {{ selectedPost.shoes.id }}</p>
+
+
+
+            <p>Selected Top Image: {{ selectedPost.top.url }}</p>
+            <p>Selected Bottom Image: {{ selectedPost.bottom.url }}</p>
+            <p>Selected Bottom Image: {{ selectedPost.shoes.url }}</p>
 
         </div>
     </div>
@@ -44,6 +73,8 @@
   
 <script setup>
 import MixAndMatchForm from '@/components/MixAndMatchForm.vue'
+import InputText from '@/components/InputText.vue'
+import InputRadio from '@/components/InputRadio.vue'
 import { ref, computed, onMounted, reactive } from 'vue'
 import { useFetchTopDataStore } from '@/stores/fetchTopData'
 import { useFetchBottomDataStore } from '@/stores/fetchBottomData'
@@ -79,6 +110,25 @@ const { selectedPost, selectPost, filterPosts, selectPostHandler, showPosts } = 
 const topErrorMessage = ref('')
 const bottomErrorMessage = ref('')
 const shoesErrorMessage = ref('')
+const outfitName = ref('')
+const style = ref('')
+
+const radioOptions = ref([
+    { id: 'casual', label: 'Casual', value: 'casual' },
+    { id: 'elegant', label: 'Elegant', value: 'elegant' },
+
+])
+
+
+const emit = defineEmits([ 'updateStyle' ])
+
+
+const updateStyle = () =>
+{
+    emit('updateStyle', { style: style })
+
+}
+
 
 
 onMounted(async () =>
@@ -91,6 +141,8 @@ onMounted(async () =>
 
 
 
+
+//select post handlers
 const selectTopPostHandler = (index) =>
 {
     selectPostHandler(index, topPosts.value, 'top')
@@ -108,6 +160,7 @@ const selectShoesPostHandler = (index) =>
 }
 
 
+//filter posts
 
 const filterTopPosts = (filters) =>
 {
@@ -125,6 +178,8 @@ const filterShoesPosts = (filters) =>
     filterPosts(shoesPosts, setFilteredShoesPosts, shoesErrorMessage, filters)
 }
 
+
+//show posts
 const showTopPosts = showPosts(topPosts, filteredTopPosts, topErrorMessage)
 const showBottomPosts = showPosts(bottomPosts, filteredBottomPosts, bottomErrorMessage)
 const showShoesPosts = showPosts(shoesPosts, filteredShoesPosts, shoesErrorMessage)
@@ -132,9 +187,6 @@ const showShoesPosts = showPosts(shoesPosts, filteredShoesPosts, shoesErrorMessa
 
 
 
-
-const selectedPostUrl = computed(() => selectedPost.value ? selectedPost.value.url : null)
-const selectedPostID = computed(() => selectedPost.value ? selectedPost.value.id : null)
 
 // UI AND POSTS ACTIONS
 const { contentStyles } = useUIActions()
@@ -158,9 +210,45 @@ const { contentStyles } = useUIActions()
     background-color: #fff;
 }
 
+
+
 h1 {
     padding-top: 20px;
     margin-left: 20px;
+}
+
+
+.inputs-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+p,
+.mixMatchForm-instruction {
+    margin-top: 50px;
+    margin-bottom: 10px;
+    color: rgb(248, 57, 120);
+    font-size: 14px;
+    font-weight: 600;
+
+
+}
+
+.mixMatchForm-instruction {
+    margin-bottom: -10px;
+
+}
+
+
+.radio-input {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
 }
 </style>
   
