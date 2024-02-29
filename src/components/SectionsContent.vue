@@ -78,4 +78,23 @@ h1 {
     padding-top: 20px;
     margin-left: 20px;
 }
+
+
+
+@media screen and (max-width: 768px) {
+    .content-container {
+        width: 95vw;
+        height: 95vh;
+    }
+
+}
+
+
+@media screen and (max-width: 420px) {
+    .content-container {
+        width: 85vw;
+
+    }
+
+}
 </style>

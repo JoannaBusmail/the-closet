@@ -99,4 +99,43 @@ p {
     top: 10px;
     right: 5px;
 }
+
+
+
+@media screen and (max-width: 820px) {
+    .card-container {
+        width: 500px;
+    }
+
+    .images-container {
+        gap: 5px;
+    }
+
+    .image {
+        width: 150px;
+        height: 200px;
+        object-fit: cover;
+        margin: 3px 0px;
+    }
+}
+
+
+@media screen and (max-width: 420px) {
+
+    .card-container {
+        width: 300px;
+    }
+
+    .images-container {
+        gap: 5px;
+    }
+
+    .image {
+        width: 90px;
+        height: 140px;
+        object-fit: cover;
+        margin: 2px 0px;
+    }
+
+}
 </style>

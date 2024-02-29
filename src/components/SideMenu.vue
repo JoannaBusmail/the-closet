@@ -25,7 +25,10 @@
                 class="casual"
                 @click="goToCasual"
             >CASUAL</h4>
-            <h4 @click="goToElegant">FORMAL</h4>
+            <h4
+                class="elegant"
+                @click="goToElegant"
+            >ELEGANT</h4>
         </div>
 
     </div>
@@ -107,6 +110,7 @@ const goToElegant = () =>
     .side-menu-container {
         flex-direction: row;
         width: 100%;
+        height: 8vh;
         justify-content: space-between;
         padding: 20px 15px;
         min-height: 0vh;
@@ -155,21 +159,36 @@ h3:hover {
     width: 6vw;
 }
 
-@media screen and (max-width: 768px) {
-    .mixMatch-menu {
-        flex-direction: row;
-        margin-left: 10px;
-        align-items: flex-start;
-        margin-top: 5px;
-        width: 6vw;
-    }
-}
-
 h4 {
     cursor: pointer;
 }
 
 .casual {
     margin-right: 4px;
+}
+
+@media screen and (max-width: 768px) {
+    .mixMatch-menu {
+        flex-direction: row;
+        margin-left: -80px;
+
+
+    }
+
+    .casual,
+    .elegant {
+        font-size: 12px;
+        margin-top: 12px;
+        text-align: center;
+        padding-bottom: 10px;
+    }
+
+    .casual {
+        margin-left: -100px;
+    }
+
+    .elegant {
+        margin-left: 10px;
+    }
 }
 </style>

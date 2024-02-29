@@ -28,7 +28,7 @@ export function useUIActions () {
           return {
               width: '100%',
               left: '0',
-              top:showSideMenu.value ? '12vh' : '0'
+              top:showSideMenu.value ? '5vh' : '0'
           };
       } else {
           return {
