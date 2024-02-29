@@ -45,6 +45,7 @@ export const useUserStore = defineStore('users', () => {
     if(error) {
       loading.value = false
       errorMessage.value = error.message
+      return
     }
 
     // if user exists, set user

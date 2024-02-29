@@ -107,7 +107,10 @@ const handleSubmit = async () =>
 
         clearCredentialsInput()
     }
-    toggleModal()
+    if (!errorMessage.value) {
+        toggleModal()
+    }
+
 
 }
 
