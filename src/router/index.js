@@ -5,6 +5,7 @@ import BottomView from '../views/BottomView.vue'
 import ShoesView from '../views/ShoesView.vue'
 import MixAndMatchView from '../views/MixAndMatchView.vue'
 import CasualClosetView from '../views/CasualClosetView.vue'
+import ElegantClosetView from '../views/ElegantClosetView.vue'
 import { useUserStore } from '@/stores/users'
 import { storeToRefs } from 'pinia'
 
@@ -61,6 +62,13 @@ const router = createRouter({
         component: CasualClosetView,
         beforeEnter: requireAuth
       },
+      {
+        path: '/closet/mixandmatch/elegantcloset/:username',
+        name: 'ElegantClosetView',
+        component: ElegantClosetView,
+        beforeEnter: requireAuth
+      },
+    
     
   ]
 })

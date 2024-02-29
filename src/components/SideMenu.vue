@@ -25,7 +25,7 @@
                 class="casual"
                 @click="goToCasual"
             >CASUAL</h4>
-            <h4>FORMAL</h4>
+            <h4 @click="goToElegant">FORMAL</h4>
         </div>
 
     </div>
@@ -78,6 +78,12 @@ const goToMixAndMatch = () =>
 const goToCasual = () =>
 {
     router.push(`/closet/mixandmatch/casualcloset/${loggedUser?.value.username}`)
+}
+
+
+const goToElegant = () =>
+{
+    router.push(`/closet/mixandmatch/elegantcloset/${loggedUser?.value.username}`)
 }
 
 </script>
