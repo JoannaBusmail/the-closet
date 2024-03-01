@@ -10,7 +10,6 @@
                 v-else
                 class="input-container"
             >
-                {{ color }}
                 <div class="file-text-input">
                     <label
                         for="inputFile"
