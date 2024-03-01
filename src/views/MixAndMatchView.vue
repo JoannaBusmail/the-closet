@@ -55,7 +55,6 @@
                             :id="option.id"
                             :label="option.label"
                             :value="option.value"
-                            @update:modelValue="updateStyle"
                         >
                         </InputRadio>
                     </div>
@@ -75,6 +74,15 @@
                     ></Button>
                 </div>
 
+                <ErrorMessageComp
+                    class="submit-message"
+                    v-if="errorMsgUploadClosetPost || successMsgUploadClosetPost"
+                    :message="errorMsgUploadClosetPost ? errorMsgUploadClosetPost : successMsgUploadClosetPost"
+                    v-show="showErrorMessage"
+                />
+
+
+
             </form>
 
         </div>
@@ -86,8 +94,8 @@ import MixAndMatchForm from '@/components/MixAndMatchForm.vue'
 import InputText from '@/components/InputText.vue'
 import InputRadio from '@/components/InputRadio.vue'
 import Button from '@/components/Button.vue'
-import { ref, computed, onMounted, reactive } from 'vue'
-import { supabase } from '../../supabase'
+import ErrorMessageComp from '@/components/ErrorMessageComp.vue'
+import { ref, onMounted } from 'vue'
 import { useFetchTopDataStore } from '@/stores/fetchTopData'
 import { useFetchBottomDataStore } from '@/stores/fetchBottomData'
 import { useFetchShoesDataStore } from '@/stores/fetchShoesData'
@@ -101,9 +109,22 @@ const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 
 
+const showErrorMessage = ref(false)
+
+// Función para mostrar el mensaje de error durante 5 segundos
+const showErrorMessageFor5Seconds = () =>
+{
+    showErrorMessage.value = true
+    setTimeout(() =>
+    {
+        showErrorMessage.value = false
+    }, 5000) // 5000 milisegundos = 5 segundos
+}
+
+
 // FETCH TOP DATA STORE
 const fetchTopDataStore = useFetchTopDataStore()
-const { fetchTopPosts, setFilteredTopPosts, fetchAllTopPosts } = fetchTopDataStore
+const { setFilteredTopPosts, fetchAllTopPosts } = fetchTopDataStore
 const { topPosts, loadingPosts, filteredTopPosts } = storeToRefs(fetchTopDataStore)
 
 // FETCH BOTTOM DATA STORE
@@ -119,7 +140,13 @@ const { shoesPosts, loadingShoesPosts, filteredShoesPosts } = storeToRefs(fetchS
 
 
 // UI AND POSTS ACTIONS
-const { selectedPost, selectPost, filterPosts, selectPostHandler, showPosts, handleUploadClosetPost, loadingClosetPost } = usePostActions()
+const { filterPosts, selectPostHandler, showPosts, handleUploadClosetPost, loadingClosetPost, errorMsgUploadClosetPost, successMsgUploadClosetPost } = usePostActions()
+
+
+
+// UI AND POSTS ACTIONS
+const { contentStyles } = useUIActions()
+
 
 
 const topErrorMessage = ref('')
@@ -133,16 +160,6 @@ const radioOptions = ref([
     { id: 'elegant', label: 'Elegant', value: 'elegant' },
 
 ])
-
-
-const emit = defineEmits([ 'updateStyle' ])
-
-
-const updateStyle = () =>
-{
-    emit('updateStyle', { style: style })
-
-}
 
 
 
@@ -200,19 +217,11 @@ const showBottomPosts = showPosts(bottomPosts, filteredBottomPosts, bottomErrorM
 const showShoesPosts = showPosts(shoesPosts, filteredShoesPosts, shoesErrorMessage)
 
 
-
-
-
-// UI AND POSTS ACTIONS
-const { contentStyles } = useUIActions()
-
-
-
-
 const handleFormSubmit = async () =>
 {
     await handleUploadClosetPost(outfitName.value, 'casual', user.value.id, style.value)
     await handleUploadClosetPost(outfitName.value, 'elegant', user.value.id, style.value)
+    showErrorMessageFor5Seconds()
     outfitName.value = ''
     style.value = ''
 
@@ -295,6 +304,13 @@ p,
     margin: 25px 0;
     padding-bottom: 35px;
 
+}
+
+
+.submit-message {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 20px;
 }
 </style>
   

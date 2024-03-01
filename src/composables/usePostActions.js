@@ -2,9 +2,22 @@ import { reactive, computed, ref } from 'vue';
 import { supabase } from '../../supabase'
 
 
+
+
 const selectedPost = reactive({ top: { id: null, url: null }, bottom: { id: null, url: null }, shoes: { id: null, url: null }})
 const loadingClosetPost= ref(false)
+const errorMsgUploadClosetPost = ref('')
+const successMsgUploadClosetPost = ref('')
+const uploadedClosetPost = ref(false)
+
+
+
+
+
 export function usePostActions () {
+
+    
+ 
 
     const { VITE_BASE_PHOTO_URL } = import.meta.env
 
@@ -85,38 +98,61 @@ export function usePostActions () {
         setFilteredPosts(filtered);
     };
 
-const handleUploadClosetPost = async(name, closet, user, style) => {
-    const newClosetPost = {
-        top_id: selectedPost.top.id,
-        top_url: selectedPost.top.url,
-        bottom_id: selectedPost.bottom.id,
-        bottom_url: selectedPost.bottom.url,
-        shoes_id: selectedPost.shoes.id,
-        shoes_url: selectedPost.shoes.url,
-        outfit_name: name,
-        owner_id: user
-    }
 
-    try {
-        if (style === closet && selectedPost.top.id && selectedPost.bottom.id && selectedPost.shoes.id ) {
+
+
+    const handleUploadClosetPost = async(name, closet, user, style) => {
+        const newClosetPost = {
+            top_id: selectedPost.top.id,
+            top_url: selectedPost.top.url,
+            bottom_id: selectedPost.bottom.id,
+            bottom_url: selectedPost.bottom.url,
+            shoes_id: selectedPost.shoes.id,
+            shoes_url: selectedPost.shoes.url,
+            outfit_name: name,
+            owner_id: user
+        }
+
+        try {
+            if (style === closet && selectedPost.top.id && selectedPost.bottom.id && selectedPost.shoes.id ) {
             // If both top and bottom posts are selected, upload the casual post
-            loadingClosetPost.value = true
-            await supabase.from(closet).insert(newClosetPost)
-            console.log('add to closet db')
-    
+                loadingClosetPost.value = true
+                await supabase.from(closet).insert(newClosetPost)
+                successMsgUploadClosetPost.value = 'Outfit uploaded successfully into closet!'
+                uploadedClosetPost.value = true
+           
+                 console.log('add to closet db')
         }
         
-    } catch (error) {
-        console.error('Error uploading post:', error.message)
+        } catch (error) {
+                console.error('Error uploading post:', error.message)
+                errorMsgUploadClosetPost.value = 'Error uploading outfit into closet. Please try again.'
+       
         
-    }
-    loadingClosetPost.value = false
+        }
 
-}
+            loadingClosetPost.value = false
+
+    }
   
     
-    return { selectedPost, loadingClosetPost, selectPost, filterPosts, selectPostHandler, showPosts, handleUploadClosetPost }
+    return { selectedPost, loadingClosetPost, selectPost, filterPosts, selectPostHandler, showPosts, handleUploadClosetPost, errorMsgUploadClosetPost, successMsgUploadClosetPost, uploadedClosetPost}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*import { reactive} from 'vue';
 
