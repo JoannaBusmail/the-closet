@@ -52,9 +52,9 @@ const props = defineProps({
 
 const emit = defineEmits([ 'selectImage', 'update', 'updateStyle', 'updateBoth' ])
 
-const selectImage = (index) =>
+const selectImage = (postId) =>
 {
-    emit('selectImage', index)
+    emit('selectImage', postId)
 
 }
 

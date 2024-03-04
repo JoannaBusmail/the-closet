@@ -24,15 +24,15 @@
             >
                 <div
                     class="carousel-item"
-                    :class="{ selected: index === selectedIndex }"
-                    v-for="(  post, index  ) in   posts  "
-                    :key="index"
-                    @click="selectImage(index)"
+                    :class="{ selected: post.id === selectedIndex }"
+                    v-for="(  post ) in   posts  "
+                    :key="post.id"
+                    @click="selectImage(post.id)"
                 >
                     <img
                         class="carousel-image"
                         :src="`${VITE_BASE_PHOTO_URL}${post.url}`"
-                        :alt="'Image ' + (index + 1)"
+                        :alt="'Image ' + (post.id + 1)"
                     />
                 </div>
 
@@ -65,16 +65,17 @@ const selectedIndex = ref(null)
 
 const emit = defineEmits([ 'selectImage' ])
 
-const selectImage = (index) =>
+const selectImage = (postId) =>
 {
-    if (selectedIndex.value === index) {
+    console.log('postId in  carusel selectImage:', postId)
+    if (selectedIndex.value === postId) {
 
         selectedIndex.value = null
     } else {
 
-        selectedIndex.value = index
+        selectedIndex.value = postId
     }
-    emit('selectImage', index)
+    emit('selectImage', postId)
 }
 
 const currentIndex = ref(0)

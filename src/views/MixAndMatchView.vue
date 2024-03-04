@@ -174,22 +174,29 @@ onMounted(async () =>
 
 
 
-//select post handlers
-const selectTopPostHandler = (index) =>
+//select posts
+
+const selectTopPostHandler = (postId) =>
 {
-    selectPostHandler(index, topPosts.value, 'top')
+    const selectedPost = topPosts.value.find(post => post.id === postId)
+    console.log('selected TOP Post:', selectedPost)
+    selectPostHandler(postId, selectedPost, 'top')
 }
 
-const selectBottomPostHandler = (index) =>
+const selectBottomPostHandler = (postId) =>
 {
-    selectPostHandler(index, bottomPosts.value, 'bottom')
+    const selectedPost = bottomPosts.value.find(post => post.id === postId)
+    console.log('selected BOTTOM Post:', selectedPost)
+    selectPostHandler(postId, selectedPost, 'bottom')
 }
 
-
-const selectShoesPostHandler = (index) =>
+const selectShoesPostHandler = (postId) =>
 {
-    selectPostHandler(index, shoesPosts.value, 'shoes')
+    const selectedPost = shoesPosts.value.find(post => post.id === postId)
+    console.log('selected SHOES Post:', selectedPost)
+    selectPostHandler(postId, selectedPost, 'shoes')
 }
+
 
 
 //filter posts

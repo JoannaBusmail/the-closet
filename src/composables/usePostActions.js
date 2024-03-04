@@ -21,34 +21,37 @@ export function usePostActions () {
 
     const { VITE_BASE_PHOTO_URL } = import.meta.env
 
-    const selectPost = (index, post, postType) => {
-        if (post && post[index]) {
-            // If post exists and index is not null, select the post
+    const selectPost = (postId, post, postType) => {
+        console.log('postId:', postId);
+        console.log('post:', post);
+        console.log('postType:', postType);
+        if (post && postId) {
+       
             selectedPost[postType] = {
-                id: post[index].id,
-                url: `${post[index].url}`
+                id: post.id,
+                url: `${post.url}`
             };
             console.log('Selected id:', selectedPost[postType].id)
             console.log('url:', selectedPost[postType].url)
            
         } else {
-            // If index is null or post is not found, deselect the post
+  
             selectedPost[postType] = { id: null, url: null };
-            console.log(`${postType.toUpperCase()} POST DESELECTED`);
+            console.log(`${postType} POST DESELECTED`);
             console.log('Selected id:', selectedPost[postType].id)
         }
     };
 
 
 
-    const selectPostHandler = (index, post, postType) => {
+    const selectPostHandler = (postId, post, postType) => {
         const currentPost = selectedPost[postType];
-        const postID = post?.[index]?.id;
+        const postID = post ? post.id : null;
         
         if (currentPost.id === postID) {
             selectPost(null, null, postType);
         } else {
-            selectPost(index, post, postType);
+            selectPost(postId, post, postType);
         }
     };
 
