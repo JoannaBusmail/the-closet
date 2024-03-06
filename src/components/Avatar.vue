@@ -25,7 +25,7 @@ const style = computed(() =>
     return props.size === 'small' ? 'avatar-small' : 'avatar-big'
 })
 
-const defaultImage = "src/assets/images/no-profile.png"
+const defaultImage = "dist/assets/images/no-profile.jpg"
 
 const src = computed(() =>
 {
