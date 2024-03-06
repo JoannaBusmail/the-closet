@@ -58,21 +58,29 @@
                 v-if="!user"
                 class="auth-mobile-btns"
             >
-                <ph-user-circle
-                    class="mobile-btn"
-                    :size="24"
-                />
+
                 <ph-password
+                    @click="() => handleAuth('signUp')"
                     class="mobile-btn"
                     :size="24"
                 />
                 <ph-sign-in
+                    @click="() => handleAuth('login')"
                     class="mobile-btn"
                     :size="24"
                 />
             </div>
             <div v-else>
-                <ph-password :size="24" />
+                <ph-user-circle
+                    @click="handleProfile"
+                    class="mobile-btn"
+                    :size="24"
+                />
+                <ph-sign-out
+                    class="mobile-btn"
+                    :size="24"
+                    @click="handleLogout"
+                />
             </div>
 
         </div>
