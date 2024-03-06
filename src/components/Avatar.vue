@@ -11,6 +11,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import defaultImage from '@/assets/images/no-profile.jpg'
 
 
 const { VITE_BASE_PROFILE_PHOTO_URL } = import.meta.env
@@ -25,7 +26,7 @@ const style = computed(() =>
     return props.size === 'small' ? 'avatar-small' : 'avatar-big'
 })
 
-const defaultImage = "dist/assets/images/no-profile.jpg"
+
 
 const src = computed(() =>
 {
