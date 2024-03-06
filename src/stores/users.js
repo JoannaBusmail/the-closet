@@ -14,6 +14,15 @@ export const useUserStore = defineStore('users', () => {
   const loadingUser = ref(false)
 
 
+  //STATES UPDATE PROFILE
+  const fileProfile = ref(null)
+  const errorUpdateMessage = ref('')
+  const uploadingUpdateInfo = ref(false)
+  const uploadingImageProfile = ref(false)
+  const selectedFileProfileName = ref(null)
+  const successUpdateMessage = ref('')
+
+
   //validate email
   const validateEmail = (email) => {
     return String(email)
@@ -153,7 +162,6 @@ export const useUserStore = defineStore('users', () => {
   }
   
 
-
   // --------LOGOUT -----------
   const handleLogout = async() => {
     // sign out from supabase
@@ -163,8 +171,6 @@ export const useUserStore = defineStore('users', () => {
     // redirect to home page
     router.push('/')
  }
-
-
 
 
  // --------GET USER -----------
@@ -190,21 +196,162 @@ export const useUserStore = defineStore('users', () => {
    user.value = {
      id: userWithEmail.id,
      email: userWithEmail.email,
-     username: userWithEmail.username
+     username: userWithEmail.username,
+     profile_url: userWithEmail.profile_url
    }
 
    loadingUser.value = false
 }
 
 //need to clear error message after every action, used in AuthModal
-const clearErrorMessage = () => {
+  const clearErrorMessage = () => {
   errorMessage.value = ''}
 
 
 
 
-  return { user, errorMessage, loading, loadingUser, handleLogin, handleSignup, handleLogout, getUser, clearErrorMessage}
+  //----------EDIT USER------------
+
+  const handleUpdateProfile = async (newUsername) => {
+
+    uploadingUpdateInfo.value = true
+    const fileProfileName = Math.floor(Math.random() * 1000000000000000000000000)
+    let filePathProfile
+
+
+    if (fileProfile.value) {
+        const { data, error } = await supabase.storage.from('user_profile').upload('public/' + fileProfileName, fileProfile.value);
+        if (error) {
+            console.error('Error uploading file:', error)
+            uploadingUpdateInfo.value = false
+            errorUpdateMessage.value = 'Something went wrong'
+            return;
+        }
+        filePathProfile = data.path
+    }
+
+
+    if (newUsername && filePathProfile) {
+        const newProfile = {
+            profile_url: filePathProfile,
+            username: newUsername,
+        };
+        await editUser(newProfile)
+    
+    } else if (newUsername) { 
+        await editUser({ username: newUsername })
+    } else if (filePathProfile) { 
+        await editUser({ profile_url: filePathProfile })
+    } else {
+      
+        uploadingUpdateInfo.value = false;
+        errorMessage.value = 'Please fill at least one field'
+        return
+    }
+};
+
+
+const editUser = async (newProfile) => {
+    const { data, error } = await supabase
+        .from('users')
+        .update(newProfile)
+        .eq('id', user.value.id);
+
+        uploadingUpdateInfo.value = false;
+    
+
+    if (error) {
+        console.error('Error updating user:', error);
+        uploadingUpdateInfo.value = false;
+        errorUpdateMessage.value = 'Something went wrong';
+        return;
+    }
+
+ 
+    user.value = { ...user.value, ...newProfile };
+};
+
+
+ 
+
+   const handleUploadImageProfile = async(e)=> {
+    uploadingImageProfile.value = true
+     if(e.target.files[0]) {
+       fileProfile.value = e.target.files[0]
+       selectedFileProfileName.value = e.target.files[0].name
+       await new Promise (resolve => setTimeout(resolve, 1000))
+
+       uploadingImageProfile.value = false
+     }
+   }
+
+
+  return { user, errorMessage, successUpdateMessage, loading, loadingUser,uploadingImageProfile, selectedFileProfileName, fileProfile, errorUpdateMessage, uploadingUpdateInfo,handleLogin, handleSignup, handleLogout, getUser, clearErrorMessage, editUser, handleUpdateProfile, handleUploadImageProfile}
 
 
 })
  
+
+//edit user
+
+ /*const handleUpdateProfile = async (newUsername) => {
+    uploadingUpdateInfo.value = true
+    const fileProfileName = Math.floor(Math.random() * 1000000000000000000000000)
+
+    let filePathProfile
+
+    if(fileProfile.value) {
+      const {data, error} = await supabase.storage.from('user_profile').upload('public/' + fileProfileName, fileProfile.value)
+
+      if(error) {
+        console.error('Error uploading file:', error);
+        uploadingUpdateInfo.value = false
+        errorUpdateMessage.value = 'Something went wrong'
+        return
+      }
+      filePathProfile = data.path
+      
+   
+      if(!filePathProfile || !newUsername) {
+        uploadingUpdateInfo.value = false
+        errorMessage.value = 'Please fill at least one field'
+        return 
+      }
+
+      if(data) {
+        const newProfile = {
+          profile_url: filePathProfile,
+          username:newUsername,
+        }
+
+        editUser(newProfile)
+      }
+   
+    }
+
+
+  }
+
+
+   const editUser = async (newProfile) => {
+
+    const {data, error} = await supabase
+    
+    .from('users')
+    .update({username: newProfile.username, profile_url: newProfile.profile_url})
+    .eq('id', user.value.id)
+   
+
+    if(error) {
+      console.log(error)
+    }
+
+    user.value = {
+      id: user.value.id,
+      email: user.value.email,
+      username: newProfile.username,
+      profile_url: newProfile.profile_url
+    }
+  
+   }
+*/
