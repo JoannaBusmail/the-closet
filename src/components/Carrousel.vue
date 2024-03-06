@@ -85,7 +85,7 @@ const currentIndex = ref(0)
 const moveCarousel = (direction) =>
 {
     const container = document.querySelector(`.carousel-id-${props.carouselId}`)
-    console.log(container)
+
     const itemWidth = container?.clientWidth / props.posts.length
 
     currentIndex.value += direction

@@ -1,20 +1,60 @@
 <template>
     <div class="avatar">
         <img
-            src="https://picsum.photos/800/600?random=1"
+            :class="style"
+            :src="src"
             alt="Random Avatar"
-            :style="{ objectFit: 'cover', width: '100%', height: '100%' }"
         />
     </div>
 </template>
 
+
+<script setup>
+import { computed } from 'vue'
+
+
+const { VITE_BASE_PROFILE_PHOTO_URL } = import.meta.env
+
+const props = defineProps({
+    src: String,
+    size: 'small' | 'big'
+})
+
+const style = computed(() =>
+{
+    return props.size === 'small' ? 'avatar-small' : 'avatar-big'
+})
+
+const defaultImage = "src/assets/images/no-profile.png"
+
+const src = computed(() =>
+{
+    if (!props.src) {
+        return defaultImage
+    } else {
+        return `${VITE_BASE_PROFILE_PHOTO_URL}${props.src}`
+    }
+
+});
+
+
+</script>
+
 <style scoped>
-.avatar {
+.avatar-small {
+    object-fit: cover;
     width: 50px;
     height: 50px;
     border-radius: 50%;
     overflow: hidden;
-    margin-right: 50px;
+    border: 1px solid rgb(248, 57, 120);
+}
 
+.avatar-big {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    overflow: hidden;
 }
 </style>

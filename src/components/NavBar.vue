@@ -19,10 +19,7 @@
                 v-if="!user"
                 class="auth-buttons"
             >
-                <Button
-                    btnName="PROFILE"
-                    btnType="principal"
-                />
+
                 <Button
                     @btnClick="() => handleAuth('signUp')"
                     btnName="SIGN UP"
@@ -38,7 +35,16 @@
                 v-else
                 class="auth-buttons"
             >
-                <Avatar />
+                <Avatar
+                    size="small"
+                    :src="user.profile_url"
+                />
+
+                <Button
+                    :btnName=user.username.toUpperCase()
+                    btnType="principal"
+                    @btnClick="handleProfile"
+                />
                 <Button
                     btnName="LOGOUT"
                     btnType="principal"
@@ -91,14 +97,14 @@ const { handleLogout } = userStore
 const { user } = storeToRefs(userStore)
 
 
-
+console.log('user:', user.value)
 
 const { isSmallScreen } = useUIActions()
 
 const caretUp = ref(false)
 
 
-const emit = defineEmits([ 'chevronClick', 'loginClick', 'signUpClick' ])
+const emit = defineEmits([ 'chevronClick', 'loginClick', 'signUpClick', 'profileClick' ])
 
 const handleLogoClick = () =>
 {
@@ -113,6 +119,11 @@ const handleAuth = (action) =>
     } else if (action === 'signUp') {
         emit('signUpClick')
     }
+}
+
+const handleProfile = () =>
+{
+    emit('profileClick')
 }
 
 </script>

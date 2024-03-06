@@ -101,7 +101,7 @@ const handleSubmit = async () =>
         await handleLogin({ email: userCredentials.email, password: userCredentials.password })
     } else {
         await handleSignup(userCredentials)
-        console.log('userCredentials', userCredentials)
+
     }
     if (user.value) {
 

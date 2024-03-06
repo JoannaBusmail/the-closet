@@ -1,14 +1,20 @@
 <template>
     <main>
+        <ProfileForm v-if="isProfile" />
 
-        <AuthModal :isLogin="isLogin">
+        <AuthModal
+            v-else
+            :isLogin="isLogin"
+        >
         </AuthModal>
+
 
 
         <NavBar
             @chevronClick="handleChevronClick"
             @loginClick="() => handleAuthModal('login')"
             @signUpClick="() => handleAuthModal('signUp')"
+            @profileClick="handleProfile"
             :caretUp="showSideMenu"
         />
         <div class="layout-container">
@@ -30,14 +36,17 @@ import NavBar from '@/components/NavBar.vue'
 import SideMenu from '@/components/SideMenu.vue'
 import ModalContainer from '@/components/ModalContainer.vue'
 import AuthModal from '@/components/AuthModal.vue'
+import ProfileForm from '@/components/ProfileForm.vue'
 import ContentContainer from './ContentContainer.vue'
 import { ref } from 'vue'
 import { useUIActions } from '@/composables/useUIActions.js'
+
 
 const { showSideMenu, toggleSideMenu, toggleModal } = useUIActions()
 
 
 const isLogin = ref(false)
+const isProfile = ref(false)
 
 
 const handleChevronClick = () =>
@@ -49,6 +58,14 @@ const handleAuthModal = (action) =>
 {
     toggleModal()
     isLogin.value = action === 'login'
+    isProfile.value = false
+}
+
+const handleProfile = () =>
+{
+    toggleModal()
+    isProfile.value = true
+
 }
 
 

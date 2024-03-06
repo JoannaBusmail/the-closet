@@ -179,21 +179,18 @@ onMounted(async () =>
 const selectTopPostHandler = (postId) =>
 {
     const selectedPost = topPosts.value.find(post => post.id === postId)
-    console.log('selected TOP Post:', selectedPost)
     selectPostHandler(postId, selectedPost, 'top')
 }
 
 const selectBottomPostHandler = (postId) =>
 {
     const selectedPost = bottomPosts.value.find(post => post.id === postId)
-    console.log('selected BOTTOM Post:', selectedPost)
     selectPostHandler(postId, selectedPost, 'bottom')
 }
 
 const selectShoesPostHandler = (postId) =>
 {
     const selectedPost = shoesPosts.value.find(post => post.id === postId)
-    console.log('selected SHOES Post:', selectedPost)
     selectPostHandler(postId, selectedPost, 'shoes')
 }
 
