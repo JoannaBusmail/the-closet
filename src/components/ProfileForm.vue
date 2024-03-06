@@ -137,6 +137,7 @@ const handleSubmit = async () =>
 
     selectedFileProfileName.value = ''
     newUsername.value = ''
+    toggleModal()
 
 
 }
