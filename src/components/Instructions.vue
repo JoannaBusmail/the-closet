@@ -8,13 +8,15 @@
         <p>{{ instruction }}</p>
     </div>
 </template>
-  
+
 <script setup>
 
 const instructions = [
+    "Register to create and save your outfits",
     "Upload images for TOP, BOTTOM and SHOES",
     "MIX & MATCH selected items to create outfits",
-    "No need to register, unless you want to save your outfits",
+    "Check your saved outfits in the closets"
+
 ]
 
 </script>
