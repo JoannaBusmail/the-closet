@@ -10,6 +10,11 @@
             btnType="close"
             @btnClick="$emit('btnClick', post)"
         ></Button>
+        <Tag
+            class="card-tag"
+            v-if="post.seen_at"
+            :tag="post.seen_at"
+        ></Tag>
         <img
             class="image"
             :src="`${VITE_BASE_PHOTO_URL}${post.url}`"
@@ -19,11 +24,15 @@
             <p>{{ post.color }}</p>
             <p>{{ post.style }}</p>
         </div>
+
+
     </div>
 </template>
+
 <script setup>
 import Spinner from './Spinner.vue'
 import Button from './Button.vue'
+import Tag from './Tag.vue'
 
 const { VITE_BASE_PHOTO_URL } = import.meta.env
 
@@ -70,5 +79,11 @@ const props = defineProps({
     position: absolute;
     top: 10px;
     right: 5px;
+}
+
+.card-tag {
+    position: absolute;
+    top: 15px;
+    left: 15px;
 }
 </style>

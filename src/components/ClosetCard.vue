@@ -10,22 +10,24 @@
             btnType="close"
             @btnClick="$emit('btnClick', post)"
         ></Button>
-        <div class="images-container">
-            <img
-                class="image"
-                :src="`${VITE_BASE_PHOTO_URL}${post.top_url}`"
-                alt="random image"
-            />
-            <img
-                class="image"
-                :src="`${VITE_BASE_PHOTO_URL}${post.bottom_url}`"
-                alt="random image"
-            />
-            <img
-                class="image"
-                :src="`${VITE_BASE_PHOTO_URL}${post.shoes_url}`"
-                alt="random image"
-            />
+
+        <div class="image-box-container">
+            <div
+                class="image-box"
+                v-for="(item, index) in postImagesAndTags"
+                :key="index"
+            >
+                <Tag
+                    v-if="item.tag"
+                    class="closet-card-tag"
+                    :tag="item.tag"
+                ></Tag>
+                <img
+                    class="image"
+                    :src="`${VITE_BASE_PHOTO_URL}${item.image}`"
+                    alt="random image"
+                />
+            </div>
         </div>
         <div class="image-info">
             <p>{{ post.outfit_name }}</p>
@@ -33,9 +35,11 @@
         </div>
     </div>
 </template>
+
 <script setup>
 import Spinner from './Spinner.vue'
 import Button from './Button.vue'
+import Tag from './Tag.vue'
 
 const { VITE_BASE_PHOTO_URL } = import.meta.env
 
@@ -44,7 +48,11 @@ const props = defineProps({
     loadingPosts: Boolean
 })
 
-
+const postImagesAndTags = [
+    { image: props.post.top_url, tag: props.post.top_seen_at },
+    { image: props.post.bottom_url, tag: props.post.bottom_seen_at },
+    { image: props.post.shoes_url, tag: props.post.shoes_seen_at }
+]
 
 
 </script>
@@ -63,18 +71,28 @@ const props = defineProps({
     border: 2px solid rgb(248, 57, 120);
 }
 
-.images-container {
+.image-box-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     gap: 10px;
 }
 
+.image-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+
 .image {
     width: 200px;
     height: 250px;
     object-fit: cover;
     margin: 8px 0px;
+
 }
 
 .image-info {
@@ -100,6 +118,12 @@ p {
     right: 5px;
 }
 
+
+.closet-card-tag {
+    position: absolute;
+    bottom: 75px;
+    left: auto;
+}
 
 
 @media screen and (max-width: 820px) {

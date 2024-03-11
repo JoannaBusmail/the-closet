@@ -33,6 +33,7 @@ export const useUploadDataStore = defineStore('uploadData', () => {
     const color = ref('')
     const style = ref('')
     const file = ref(null)
+    const seenAt = ref('')
     const errorMessage = ref('')
     const uploadingPost = ref(false)
     const uploadingImage = ref(false)
@@ -75,6 +76,7 @@ export const useUploadDataStore = defineStore('uploadData', () => {
                   url: filePath,
                   color: color.value,
                   style: style.value,
+                  seen_at: seenAt.value,
                   owner_id: user.value.id,
                 };
 
@@ -125,6 +127,7 @@ export const useUploadDataStore = defineStore('uploadData', () => {
         uploadingPost.value = false;
         color.value = '';
         style.value = '';
+        seenAt.value = '';
         file.value = null;
         selectedFileName.value = null;
         errorMessage.value = '';
@@ -132,7 +135,7 @@ export const useUploadDataStore = defineStore('uploadData', () => {
       };
 
 
-    return {onView, color, style, file, errorMessage, uploadingPost, selectedFileName, uploadingImage, handleUploadPhotoInfo, handleUploadImage, handlleCancelUpload}
+    return {onView, color, style, file, seenAt, errorMessage, uploadingPost, selectedFileName, uploadingImage, handleUploadPhotoInfo, handleUploadImage, handlleCancelUpload}
 })
 
 

@@ -50,7 +50,16 @@
                     </InputRadio>
                 </div>
 
+
+
             </div>
+            <InputText
+                v-if="!uploadingPost"
+                class="secondary"
+                type="text"
+                placeholder="Seen at: ex. Zara, H&M, etc."
+                v-model="seenAt"
+            />
             <ErrorMessageComp
                 v-if="errorMessage"
                 :message="errorMessage"
@@ -71,7 +80,7 @@
         </form>
     </div>
 </template>
-  
+
 <script setup>
 import Button from './Button.vue'
 import InputText from './InputText.vue'
@@ -91,7 +100,7 @@ const props = defineProps({
 const uploadDataStore = useUploadDataStore()
 console.log('onView:', props.onView)
 const { handleUploadImage, handleUploadPhotoInfo, handlleCancelUpload } = uploadDataStore
-const { onView, color, style, uploadingPost, uploadingImage, selectedFileName, errorMessage } = storeToRefs(uploadDataStore)
+const { onView, color, style, seenAt, uploadingPost, uploadingImage, selectedFileName, errorMessage } = storeToRefs(uploadDataStore)
 
 const emit = defineEmits([ 'update:colorInputValue' ])
 
@@ -105,7 +114,7 @@ const radioOptions = ref([
 
 
 </script>
-  
+
 <style scoped>
 .upload-container {
     display: flex;
@@ -170,7 +179,9 @@ const radioOptions = ref([
 
 }
 
-
+.button-container {
+    margin-top: 20px;
+}
 
 @media screen and (max-width: 768px) {
     .input-container {
