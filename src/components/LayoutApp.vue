@@ -15,6 +15,7 @@
             @loginClick="() => handleAuthModal('login')"
             @signUpClick="() => handleAuthModal('signUp')"
             @profileClick="handleProfile"
+            @getInspiredClick="handleGetInspired"
             :caretUp="showSideMenu"
         />
         <div class="layout-container">
@@ -40,7 +41,9 @@ import ProfileForm from '@/components/ProfileForm.vue'
 import ContentContainer from './ContentContainer.vue'
 import { ref } from 'vue'
 import { useUIActions } from '@/composables/useUIActions.js'
+import { RouterLink, useRouter } from 'vue-router'
 
+const router = useRouter()
 
 const { showSideMenu, toggleSideMenu, toggleModal } = useUIActions()
 
@@ -68,8 +71,16 @@ const handleProfile = () =>
 
 }
 
+const handleGetInspired = () =>
+{
+    router.push('/getInspired')
+}
 
-</script>   
+
+
+
+
+</script>
 
 <style scoped>
 .layout-container {

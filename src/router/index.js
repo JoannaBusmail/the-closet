@@ -6,6 +6,7 @@ import ShoesView from '../views/ShoesView.vue'
 import MixAndMatchView from '../views/MixAndMatchView.vue'
 import CasualClosetView from '../views/CasualClosetView.vue'
 import ElegantClosetView from '../views/ElegantClosetView.vue'
+import GetInspiredView from '../views/GetInspiredView.vue'
 import { useUserStore } from '@/stores/users'
 import { storeToRefs } from 'pinia'
 
@@ -31,7 +32,12 @@ const router = createRouter({
       name: 'home',
       component: HomeView
     },
- 
+    {
+      path: '/getInspired',
+      name: 'GetInspiredView',
+      component: GetInspiredView,
+      beforeEnter: requireAuth
+    },
       {
         path: '/closet/top/:username',
         name: 'TopView',

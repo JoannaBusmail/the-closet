@@ -45,6 +45,12 @@
                     btnType="principal"
                     @btnClick="handleProfile"
                 />
+
+                <Button
+                    btnName="GET INSPIRED"
+                    btnType="principal"
+                    @btnClick="handleGetInspired"
+                />
                 <Button
                     btnName="LOGOUT"
                     btnType="principal"
@@ -76,6 +82,12 @@
                     class="mobile-btn"
                     :size="24"
                 />
+                <ph-lightbulb
+                    class="mobile-btn"
+                    :size="24"
+                    @btnClick="handleGetInspired"
+                />
+
                 <ph-sign-out
                     class="mobile-btn"
                     :size="24"
@@ -92,7 +104,7 @@
 <script setup>
 import Button from './Button.vue'
 import Avatar from './Avatar.vue'
-import { PhCaretDown, PhUserCircle, PhSignIn, PhPassword, PhSignOut } from "@phosphor-icons/vue"
+import { PhCaretDown, PhUserCircle, PhSignIn, PhPassword, PhSignOut, PhLightbulb } from "@phosphor-icons/vue"
 import { PhCaretUp } from "@phosphor-icons/vue"
 import { ref } from 'vue'
 import { useUIActions } from '@/composables/useUIActions.js'
@@ -112,7 +124,7 @@ const { isSmallScreen } = useUIActions()
 const caretUp = ref(false)
 
 
-const emit = defineEmits([ 'chevronClick', 'loginClick', 'signUpClick', 'profileClick' ])
+const emit = defineEmits([ 'chevronClick', 'loginClick', 'signUpClick', 'profileClick', 'getInspiredClick' ])
 
 const handleLogoClick = () =>
 {
@@ -132,6 +144,11 @@ const handleAuth = (action) =>
 const handleProfile = () =>
 {
     emit('profileClick')
+}
+
+const handleGetInspired = () =>
+{
+    emit('getInspiredClick')
 }
 
 </script>
