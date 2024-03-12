@@ -5,13 +5,16 @@
     >
         <div class="content-container">
             <h1>GET INSPIRED</h1>
-
-            <GetInspiredCard
-                v-for="post in postsWithUserInfo"
-                :key="post.id"
-                :post="post"
-                :loadingPosts="loading"
-            />
+            <Spinner v-if="loading" />
+            <div class="cards-container">
+                <GetInspiredCard
+                    v-for="post in postsWithUserInfo"
+                    :key="post.id"
+                    :post="post"
+                    :loadingPosts="loading"
+                    @handleClick="goToUserProfile"
+                />
+            </div>
 
         </div>
     </div>
@@ -22,10 +25,12 @@
 
 // UI AND POSTS ACTIONS
 import GetInspiredCard from '@/components/GetInspiredCard.vue'
+import Spinner from '@/components/Spinner.vue'
 import { useUIActions } from '@/composables/useUIActions.js'
 import { useFetchGetInspiredDataStore } from '@/stores/fetchGetInspiredData'
 import { storeToRefs } from 'pinia'
 import { onMounted, watch, ref } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
 
 
 const fetchGetInspiredStore = useFetchGetInspiredDataStore()
@@ -47,6 +52,13 @@ onMounted(async () =>
 })
 
 
+const router = useRouter()
+
+const goToUserProfile = (post) =>
+{
+    console.log(post.username)
+    router.push(`/getInspired/${post.username}`)
+}
 
 
 </script>
@@ -70,5 +82,15 @@ onMounted(async () =>
 h1 {
     padding-top: 20px;
     margin-left: 20px;
+}
+
+.cards-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    padding: 20px 0px;
 }
 </style>

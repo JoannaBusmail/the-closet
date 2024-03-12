@@ -9,6 +9,7 @@
             <Spinner v-if="loadingClosetElegantPosts" />
             <ClosetCardsVue
                 v-else
+                isOwner
                 :postData="closetElegantPosts"
                 :loadingPosts="loadingClosetElegantPosts"
                 @btnClick="handleBtnClick"

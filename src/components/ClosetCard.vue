@@ -5,6 +5,7 @@
         v-else
         class="card-container"
     > <Button
+            v-if="isOwner"
             class="close-btn"
             btnName="X"
             btnType="close"
@@ -45,7 +46,8 @@ const { VITE_BASE_PHOTO_URL } = import.meta.env
 
 const props = defineProps({
     post: Object,
-    loadingPosts: Boolean
+    loadingPosts: Boolean,
+    isOwner: Boolean
 })
 
 const postImagesAndTags = [

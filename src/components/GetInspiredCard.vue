@@ -1,10 +1,7 @@
 <template>
-    <Spinner v-if="loadingPosts" />
 
-    <div
-        v-else
-        class="card-container"
-    >
+
+    <div class="card-container">
 
         <div class="image-box-container">
 
@@ -23,8 +20,9 @@
                 <Avatar
                     size="small"
                     :src="post.profile_url"
+                    @click="handleClick"
                 ></Avatar>
-                <p>{{ post.username }}</p>
+                <p @click="handleClick">{{ post.username }}</p>
             </div>
             <p class="outfit-name">{{ post.outfit_name }}</p>
 
@@ -34,7 +32,7 @@
 </template>
 
 <script setup>
-import Spinner from './Spinner.vue'
+
 import Avatar from './Avatar.vue'
 import { ref } from 'vue'
 
@@ -45,10 +43,16 @@ const { VITE_BASE_PHOTO_URL } = import.meta.env
 
 const props = defineProps({
     post: Object,
-    loadingPosts: Boolean
+    loadingPosts: Boolean,
+
 })
 
+const emit = defineEmits([ 'handleClick' ])
 
+const handleClick = () =>
+{
+    emit('handleClick', props.post)
+}
 
 </script>
 
@@ -89,7 +93,7 @@ const props = defineProps({
     width: 100%;
     padding: 15px 15px;
     border-top: 2px solid rgb(248, 57, 120);
-    ;
+
 }
 
 p {
@@ -106,6 +110,7 @@ p {
     flex-direction: row;
     align-items: center;
     gap: 10px;
+    cursor: pointer;
 
 }
 

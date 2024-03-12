@@ -6,6 +6,7 @@
             :key="post.id"
             :post="post"
             :loadingPosts="loadingPosts"
+            :isOwner="isOwner"
             @btnClick="$emit('btnClick', post)"
         />
 
@@ -30,7 +31,8 @@ const emitIntersectEvent = () =>
 
 const props = defineProps({
     postData: Array,
-    loadingPosts: Boolean
+    loadingPosts: Boolean,
+    isOwner: Boolean
 
 })
 
