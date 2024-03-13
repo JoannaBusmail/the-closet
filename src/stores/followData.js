@@ -6,6 +6,7 @@ import { useFetchUserParamsDataStore } from '@/stores/fetchUserParamsData'
 import { storeToRefs } from 'pinia'
 
 
+
 export const useFollowDataStore = defineStore('followData', () => { 
 
 
@@ -101,6 +102,7 @@ export const useFollowDataStore = defineStore('followData', () => {
 
     //check if logged user is following the user
         const fetchIsFollowing = async () => {
+            isFollowing.value = false
             if(loggedUser.value && (loggedUser.value.id !== paramUser.value.id)){
                 const { data, error } = await supabase
                 .from('follow')
