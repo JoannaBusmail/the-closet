@@ -15,8 +15,8 @@ const restOfUsers = ref([]);
 const postsWithUserInfo = ref([]);
 
 const fetchAllUsersPosts = async () => {
-    const { data: casualData, error: casualError } = await supabase.from('casual').select('*').not('owner_id', 'eq', loggedUser.value.id);
-    const { data: elegantData, error: elegantError } = await supabase.from('elegant').select('*').not('owner_id', 'eq', loggedUser.value.id);
+    const { data: casualData, error: casualError } = await supabase.from('casual').select('*').not('owner_id', 'eq', loggedUser.value.id).order('created_at', { ascending: false });
+    const { data: elegantData, error: elegantError } = await supabase.from('elegant').select('*').not('owner_id', 'eq', loggedUser.value.id).order('created_at', { ascending: false });
     
     if (casualError || elegantError) {
       console.error('Error fetching posts:', casualError || elegantError);
@@ -55,7 +55,7 @@ const mergeUserDataWithPosts = () => {
 
    
 
-    return { fetchAllUsersPosts, mergeUserDataWithPosts, fetchUsers, postsWithUserInfo, posts  }
+    return { fetchAllUsersPosts, mergeUserDataWithPosts, fetchUsers, postsWithUserInfo, posts,   }
 })
 
 

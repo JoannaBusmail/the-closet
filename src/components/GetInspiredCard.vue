@@ -4,7 +4,11 @@
     <div class="card-container">
 
         <div class="image-box-container">
-
+            <Tag
+                class="card-tag"
+                v-if="isFollowing"
+                tag="Following"
+            ></Tag>
 
             <img
                 v-for="(image, index) in [post.top_url, post.bottom_url, post.shoes_url] "
@@ -34,6 +38,7 @@
 <script setup>
 
 import Avatar from './Avatar.vue'
+import Tag from './Tag.vue'
 import { ref } from 'vue'
 
 
@@ -44,6 +49,7 @@ const { VITE_BASE_PHOTO_URL } = import.meta.env
 const props = defineProps({
     post: Object,
     loadingPosts: Boolean,
+    isFollowing: Boolean
 
 })
 
@@ -116,6 +122,12 @@ p {
 
 .outfit-name {
     padding-top: 15px;
+}
+
+.card-tag {
+    position: absolute;
+    top: 15px;
+    right: 15px;
 }
 
 @media screen and (max-width: 820px) {

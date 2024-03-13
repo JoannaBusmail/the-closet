@@ -12,7 +12,7 @@ import { computed } from 'vue'
 
 const props = defineProps({
     btnName: String,
-    btnType: 'principal' | 'secondary' | 'close',
+    btnType: 'principal' | 'secondary' | 'close' | 'extra',
     disabled: Boolean
 })
 
@@ -37,6 +37,9 @@ const btnClass = computed(() =>
     if (props.btnType === 'secondary') {
         return 'secondary-btn'
     }
+    if (props.btnType === 'extra') {
+        return 'extra-btn'
+    }
 
 })
 
@@ -60,6 +63,14 @@ const btnClass = computed(() =>
     background-color: #fff;
     border-radius: 18px;
 
+}
+
+.extra-btn {
+    border: 1px solid rgb(248, 57, 120);
+    background-color: rgb(248, 57, 120);
+    border-radius: 18px;
+    color: #fff;
+    font-weight: 600;
 }
 
 .close-btn {

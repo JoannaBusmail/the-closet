@@ -85,7 +85,7 @@
                 <ph-lightbulb
                     class="mobile-btn"
                     :size="24"
-                    @btnClick="handleGetInspired"
+                    @click="handleGetInspired"
                 />
 
                 <ph-sign-out

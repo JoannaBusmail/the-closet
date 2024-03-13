@@ -35,6 +35,7 @@ export const useFetchUserParamsDataStore = defineStore('fetchUserParams', () => 
             errorMessage.value = 'User not found'
         }
         loadingParamUser.value = false
+        await fetchParamUserPosts()
     }
     
     
