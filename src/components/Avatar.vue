@@ -30,7 +30,7 @@ const style = computed(() =>
 
 const src = computed(() =>
 {
-    if (!props.src) {
+    if (props.src === 'null' || !props.src) {
         return defaultImage
     } else {
         return `${VITE_BASE_PROFILE_PHOTO_URL}${props.src}`

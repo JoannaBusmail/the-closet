@@ -78,7 +78,6 @@ onMounted(async () =>
     await getParamUser(usernameParam)
     await fetchIsFollowing()
     await fetchParamUserFollowersCount()
-
 })
 
 
@@ -86,7 +85,7 @@ onMounted(async () =>
 
 const followBtnStyleChange = computed(() =>
 {
-    if (isFollowing.value) {
+    if (paramsUserFollowersCount.value > 0) {
         return 'extra'
     } else {
         return 'secondary'
@@ -95,11 +94,11 @@ const followBtnStyleChange = computed(() =>
 
 const followBtnTextChange = computed(() =>
 {
-    console.log('isfollowing', isFollowing.value)
-    if (isFollowing.value) {
+
+    if (paramsUserFollowersCount.value > 0) {
         return `Following ${paramUser.value.username}`
     } else {
-        console.log('isfollowing', isFollowing.value)
+
         return `Follow ${paramUser.value.username}`
 
     }
