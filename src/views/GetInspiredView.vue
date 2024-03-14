@@ -105,6 +105,7 @@ const filterPosts = async () =>
     loading.value = true
     await fetchAllUsersPosts()
     postsWithUserInfo.value = mergeUserDataWithPosts()
+    await fetchIsFollowinfForAllposts()
 
     // Filter posts based on searchUsername
     if (searchUsername.value.trim() !== '') {
@@ -115,7 +116,7 @@ const filterPosts = async () =>
 
     // Filter posts based on searchByFollow
     if (searchByFollow.value === 'following') {
-        await fetchIsFollowinfForAllposts()
+
         postsWithUserInfo.value = postsWithUserInfo.value.filter(post =>
             isFollowingMap.value[ post.username ]
         )
@@ -130,6 +131,7 @@ const fetchIsFollowinfForAllposts = async () =>
     for (const post of postsWithUserInfo.value) {
         const isFollowing = await fetchIsFollowingTag(post.username)
         isFollowingMap.value[ post.username ] = isFollowing
+        console.log(isFollowingMap.value)
     }
 }
 
@@ -145,6 +147,7 @@ onMounted(async () =>
     loading.value = true
     await fetchAllUsersPosts()
     await fetchUsers()
+
     await filterPosts()
     loading.value = false
 })
