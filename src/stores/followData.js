@@ -18,6 +18,7 @@ export const useFollowDataStore = defineStore('followData', () => {
 
     const isFollowing = ref(false)
 
+
     const loggedUserInfo = reactive({
         followers: null,
         following: null
@@ -30,8 +31,13 @@ export const useFollowDataStore = defineStore('followData', () => {
         const { data, error } = await supabase
             .from('follow')
             .insert([
-                { follower_id: loggedUser.value.id, following_id: paramUser.value.id }
+                { follower_id: loggedUser.value.id, 
+                  follower_username: loggedUser.value.username, 
+                  following_id: paramUser.value.id, 
+                  following_username: paramUser.value.username}
             ])
+            console.log('logged user:', loggedUser.value)
+            console.log('param user:', paramUser.value)
  
         isFollowing.value = true
         fetchParamUserFollowersCount()
@@ -123,7 +129,26 @@ export const useFollowDataStore = defineStore('followData', () => {
             }
         }
 
-    return {loggedUserInfo, paramsUserFollowersCount, fetchIsFollowing, followUser, unfollowUser, fetchLoggedUserFollowersCount, fetchLoggedUserFollowingCount, fetchParamUserFollowersCount, fetchLoggedUserFollowCount, isFollowing}
+        const fetchIsFollowingTag = async (cardUser) => {
+            if (loggedUser.value && (loggedUser.value.id !== cardUser)) {
+                const { data, error } = await supabase
+                    .from('follow')
+                    .select()
+                    .eq('follower_id', loggedUser.value.id)
+                    .eq('following_username', cardUser)
+                    .single()
+        
+                if (data) {
+                    return true;
+                } else {
+                    return false; 
+                }
+            }
+            return false; 
+        }
+        
+
+    return {loggedUserInfo, paramsUserFollowersCount, fetchIsFollowingTag, fetchIsFollowing, followUser, unfollowUser, fetchLoggedUserFollowersCount, fetchLoggedUserFollowingCount, fetchParamUserFollowersCount, fetchLoggedUserFollowCount, isFollowing}
 })
 
 

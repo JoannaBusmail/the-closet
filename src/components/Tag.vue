@@ -2,17 +2,24 @@
 
     <div class="tag-container">
 
-        <p class="tag">{{ tag }}</p>
+        <p :class="followTag">{{ tag }}</p>
 
     </div>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 
 const props = defineProps({
-    tag: String
+    tag: String,
+    isFollowingTag: Boolean
 })
 
+
+const followTag = computed(() =>
+{
+    return props.isFollowingTag ? 'follow-tag' : 'tag'
+})
 
 </script>
 
@@ -30,6 +37,17 @@ const props = defineProps({
     font-size: 12px;
     justify-content: center;
 
+}
+
+.follow-tag {
+    padding: 2px 12px;
+    border-radius: 9999px;
+    border: 1px solid rgb(248, 57, 120);
+    background-color: rgb(248, 57, 120);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    justify-content: center;
 
 }
 </style>

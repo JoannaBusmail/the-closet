@@ -13,6 +13,8 @@
                     :post="post"
                     :loadingPosts="loading"
                     @handleClick="goToUserProfile"
+                    :isFollowing="isFollowingMap[post.username]"
+                    :isFollowingTag="isFollowingMap[post.username]"
                 />
             </div>
 
@@ -31,6 +33,9 @@ import { useFetchGetInspiredDataStore } from '@/stores/fetchGetInspiredData'
 import { storeToRefs } from 'pinia'
 import { onMounted, watch, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
+import { useFollowDataStore } from '@/stores/followData'
+
+const { contentStyles } = useUIActions()
 
 
 const fetchGetInspiredStore = useFetchGetInspiredDataStore()
@@ -38,9 +43,15 @@ const { fetchAllUsersPosts, mergeUserDataWithPosts, fetchUsers } = fetchGetInspi
 const { postsWithUserInfo, posts, loadingGetInspiredCasualPosts } = storeToRefs(fetchGetInspiredStore)
 
 
-const { contentStyles } = useUIActions()
+//FOLLOW DATA STORE
+const followDataStore = useFollowDataStore()
+const { fetchIsFollowingTag } = followDataStore
+
+
 
 const loading = ref(false)
+
+const isFollowingMap = ref({})
 
 onMounted(async () =>
 {
@@ -48,9 +59,19 @@ onMounted(async () =>
     await fetchAllUsersPosts()
     await fetchUsers()
     postsWithUserInfo.value = mergeUserDataWithPosts()
+    await fetchIsFollowinfForAllposts()
     loading.value = false
 })
 
+
+const fetchIsFollowinfForAllposts = async () =>
+{
+    for (const post of postsWithUserInfo.value) {
+        const isFollowing = await fetchIsFollowingTag(post.username)
+        isFollowingMap.value[ post.username ] = isFollowing
+    }
+
+}
 
 const router = useRouter()
 
