@@ -5,26 +5,45 @@
     >
         <div class="content-container">
             <h1>ELEGANT CLOSET</h1>
-
-            <Spinner v-if="loadingClosetElegantPosts" />
-            <div v-else>
-                <div class="follow-class">
-                    <p>
-                        {{ `Followers ${loggedUserInfo.followers}` }}
-                    </p>
-                    <p>
-                        {{ `Following ${loggedUserInfo.following}` }}
-                    </p>
-                </div>
-                <ClosetCardsVue
-                    isOwner
-                    :postData="closetElegantPosts"
-                    :loadingPosts="loadingClosetElegantPosts"
-                    @btnClick="handleBtnClick"
-                    @intersect="fetchNextClosetElegantPosts"
-                />
-
+            <div class="btn-closet">
+                <Button
+                    :btnName="isPublicPosts ? 'Unpublish' : 'Publish'"
+                    :btnType="isPublicPosts ? 'extra' : 'secondary'"
+                    @btnClick="handlePublishBtn"
+                >
+                </Button>
             </div>
+
+            <PublishModal
+                class="publish-modal"
+                :showPublicModal="isPublicModalShown"
+                :isPublic="isPublicPosts"
+                @closeModal="handlePublishBtn"
+                @submit="handleMakePublic"
+            />
+
+
+            <div
+                v-if="isPublicPosts"
+                class="follow-class"
+            >
+                <p>
+                    {{ `Followers ${loggedUserInfo.followers}` }}
+                </p>
+                <p>
+                    {{ `Following ${loggedUserInfo.following}` }}
+                </p>
+            </div>
+            <Spinner v-if="loadingClosetElegantPosts" />
+            <ClosetCardsVue
+                isOwner
+                :postData="closetElegantPosts"
+                :loadingPosts="loadingClosetElegantPosts"
+                @btnClick="handleDeleteCard"
+                @intersect="fetchNextClosetElegantPosts"
+            />
+
+
         </div>
     </div>
 </template>
@@ -36,7 +55,9 @@
 import { useUIActions } from '@/composables/useUIActions.js'
 import ClosetCardsVue from '@/components/ClosetCards.vue'
 import Spinner from '@/components/Spinner.vue'
-import { onMounted, watch } from 'vue'
+import Button from '@/components/Button.vue'
+import PublishModal from '@/components/PublishModal.vue'
+import { onMounted, ref } from 'vue'
 import { useUserStore } from '@/stores/users'
 import { useFetchClosetElegantDataStore } from '@/stores/fetchClosetElegant'
 import { useFollowDataStore } from '@/stores/followData'
@@ -49,8 +70,8 @@ const { user: loggedUser } = storeToRefs(userStore)
 
 // FETCH DATA STORE
 const fetchClosetElegantStore = useFetchClosetElegantDataStore()
-const { fetchClosetElegantPosts, deleteClosetElegantPosts, fetchNextClosetElegantPosts } = fetchClosetElegantStore
-const { closetElegantPosts, loadingClosetElegantPosts } = storeToRefs(fetchClosetElegantStore)
+const { fetchClosetElegantPosts, deleteClosetElegantPosts, fetchNextClosetElegantPosts, publishElegantPosts, unPublishElegantPosts, fetchIsPublicPosts } = fetchClosetElegantStore
+const { closetElegantPosts, loadingClosetElegantPosts, isPublicPosts } = storeToRefs(fetchClosetElegantStore)
 
 
 // FOLLOW DATA STORE
@@ -58,10 +79,40 @@ const followDataStore = useFollowDataStore()
 const { fetchLoggedUserFollowCount } = followDataStore
 const { loggedUserInfo } = storeToRefs(followDataStore)
 
-const handleBtnClick = (post) =>
+const { contentStyles } = useUIActions()
+
+
+
+// REF
+
+const isPublicModalShown = ref(false)
+
+
+const handlePublishBtn = () =>
+{
+    isPublicModalShown.value = !isPublicModalShown.value
+}
+
+
+const handleMakePublic = () =>
+{
+    if (!isPublicPosts.value) {
+        publishElegantPosts()
+        isPublicModalShown.value = false
+    } else {
+        unPublishElegantPosts()
+        isPublicModalShown.value = false
+    }
+
+
+}
+
+
+
+
+const handleDeleteCard = (post) =>
 {
     if (post && post.id) {
-        console.log('Botón clickeado en TopView:', post)
         deleteClosetElegantPosts(post.id)
     }
 }
@@ -70,12 +121,13 @@ const handleBtnClick = (post) =>
 onMounted(async () =>
 {
     await fetchClosetElegantPosts()
+    await fetchIsPublicPosts()
     await fetchLoggedUserFollowCount()
 })
 
 
 
-const { contentStyles } = useUIActions()
+
 
 
 </script>
@@ -111,5 +163,16 @@ p {
     font-size: 16px;
     font-weight: bold;
     color: rgb(248, 57, 120);
+}
+
+.btn-closet {
+    margin-left: 90%;
+    margin-top: -40px;
+}
+
+.publish-modal {
+    position: absolute;
+    top: -1%;
+
 }
 </style>

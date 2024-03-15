@@ -16,6 +16,7 @@ export const useFetchClosetElegantDataStore = defineStore('fetchClosetElegant', 
     const lastCardIndex = ref(1)
     const reachEndOfPosts = ref(false)
     const loadingClosetElegantPosts = ref(false)
+    const isPublicPosts = ref(false)
 
 
 
@@ -118,10 +119,45 @@ export const useFetchClosetElegantDataStore = defineStore('fetchClosetElegant', 
     }
 
 
+    const publishElegantPosts = async () => {
+      
+        await supabase
+        .from('elegant')
+        .update({ public: true })
+        .eq('owner_id', user.value.id)
+        
+        isPublicPosts.value = true
 
+    }
+
+    const unPublishElegantPosts = async () => {
+      
+        await supabase
+        .from('elegant')
+        .update({ public: false })
+        .eq('owner_id', user.value.id)
+        
+        isPublicPosts.value = false
+
+    }
+
+    const fetchIsPublicPosts = async () => {
+        const { data, error } = await supabase
+            .from('elegant')
+            .select('public')
+            .eq('owner_id', user.value.id)
+            .eq('public', true)
+            .limit(1) 
+    
+        if (data && data.length > 0) {
+            isPublicPosts.value = true
+        } else {
+            isPublicPosts.value = false
+        }
+    }
    
 
-    return { fetchClosetElegantPosts, fetchAllClosetElegantPosts,  closetElegantPosts, loadingClosetElegantPosts, filteredClosetElegantPosts, deleteClosetElegantPosts, fetchNextClosetElegantPosts }
+    return {isPublicPosts, fetchIsPublicPosts, unPublishElegantPosts, publishElegantPosts, fetchClosetElegantPosts, fetchAllClosetElegantPosts,  closetElegantPosts, loadingClosetElegantPosts, filteredClosetElegantPosts, deleteClosetElegantPosts, fetchNextClosetElegantPosts }
 })
 
 

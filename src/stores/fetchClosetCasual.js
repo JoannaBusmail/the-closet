@@ -16,6 +16,7 @@ export const useFetchClosetCasualDataStore = defineStore('fetchClosetCasual', ()
     const lastCardIndex = ref(1)
     const reachEndOfPosts = ref(false)
     const loadingClosetCasualPosts = ref(false)
+    const isPublicPosts = ref(false)
 
 
 
@@ -118,10 +119,44 @@ export const useFetchClosetCasualDataStore = defineStore('fetchClosetCasual', ()
     }
 
 
+    const publishCasualPosts = async () => {
+      
+        await supabase
+        .from('casual')
+        .update({ public: true })
+        .eq('owner_id', user.value.id)
+        
+        isPublicPosts.value = true
 
-   
+    }
 
-    return { fetchClosetCasualPosts, fetchAllClosetCasualPosts,  closetCasualPosts, loadingClosetCasualPosts, filteredClosetCasualPosts, deleteClosetCasualPosts, fetchNextClosetCasualPosts }
+    const unPublishCasualPosts = async () => {
+      
+        await supabase
+        .from('casual')
+        .update({ public: false })
+        .eq('owner_id', user.value.id)
+        
+        isPublicPosts.value = false
+
+    }
+
+    const fetchIsPublicPosts = async () => {
+        const { data, error } = await supabase
+            .from('casual')
+            .select('public')
+            .eq('owner_id', user.value.id)
+            .eq('public', true)
+            .limit(1) 
+    
+        if (data && data.length > 0) {
+            isPublicPosts.value = true
+        } else {
+            isPublicPosts.value = false
+        }
+    }
+
+    return { isPublicPosts,fetchIsPublicPosts,  unPublishCasualPosts, publishCasualPosts, fetchClosetCasualPosts, fetchAllClosetCasualPosts,  closetCasualPosts, loadingClosetCasualPosts, filteredClosetCasualPosts, deleteClosetCasualPosts, fetchNextClosetCasualPosts }
 })
 
 

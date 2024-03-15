@@ -5,45 +5,52 @@
     >
         <div class="content-container">
             <h1>GET INSPIRED</h1>
+            <div v-if="posts.length === 0">
+                <p class="no-posts-msg">No public closets yet</p>
+            </div>
+            <div v-else>
+                <div class="inputs-container">
+                    <p>Filter by username or the closets you are following</p>
 
-            <div class="inputs-container">
-                <p>Filter by username or the closets you are following</p>
+                    <InputText
+                        class="secondary"
+                        type="text"
+                        placeholder="Search by username"
+                        v-model="searchUsername"
+                    />
+                    <div class="radio-input">
+                        <InputRadio
+                            v-for="(option, index) in radioOptions"
+                            v-model="searchByFollow"
+                            :key="index"
+                            :id="option.id"
+                            :label="option.label"
+                            :value="option.value"
+                        >
+                        </InputRadio>
+                    </div>
+                    <p v-if="postsWithUserInfo.length === 0">No matching closets
+                    </p>
+                    <p v-else>Click in the post username to check
+                        the user's
+                        closets and
+                        follow</p>
 
-                <InputText
-                    class="secondary"
-                    type="text"
-                    placeholder="Search by username"
-                    v-model="searchUsername"
-                />
-                <div class="radio-input">
-                    <InputRadio
-                        v-for="(option, index) in radioOptions"
-                        v-model="searchByFollow"
-                        :key="index"
-                        :id="option.id"
-                        :label="option.label"
-                        :value="option.value"
-                    >
-                    </InputRadio>
                 </div>
-                <p>Click in the post username to check the user's closets and
-                    follow</p>
 
+                <Spinner v-if="loading" />
+                <div class="cards-container">
+                    <GetInspiredCard
+                        v-for="post in postsWithUserInfo"
+                        :key="post.id"
+                        :post="post"
+                        :loadingPosts="loading"
+                        @handleClick="goToUserProfile"
+                        :isFollowing="isFollowingMap[post.username]"
+                        :isFollowingTag="isFollowingMap[post.username]"
+                    />
+                </div>
             </div>
-
-            <Spinner v-if="loading" />
-            <div class="cards-container">
-                <GetInspiredCard
-                    v-for="post in postsWithUserInfo"
-                    :key="post.id"
-                    :post="post"
-                    :loadingPosts="loading"
-                    @handleClick="goToUserProfile"
-                    :isFollowing="isFollowingMap[post.username]"
-                    :isFollowingTag="isFollowingMap[post.username]"
-                />
-            </div>
-
         </div>
     </div>
 </template>
@@ -69,7 +76,7 @@ const { contentStyles } = useUIActions()
 // GET INSPIRED DATA STORE
 const fetchGetInspiredStore = useFetchGetInspiredDataStore()
 const { fetchAllUsersPosts, mergeUserDataWithPosts, fetchUsers } = fetchGetInspiredStore
-const { postsWithUserInfo } = storeToRefs(fetchGetInspiredStore)
+const { postsWithUserInfo, posts } = storeToRefs(fetchGetInspiredStore)
 
 
 //FOLLOW DATA STORE
@@ -212,5 +219,9 @@ p {
     color: rgb(248, 57, 120);
     font-size: 14px;
     font-weight: 600;
+}
+
+.no-posts-msg {
+    text-align: center;
 }
 </style>
