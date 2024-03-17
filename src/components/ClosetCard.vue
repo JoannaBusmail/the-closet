@@ -1,10 +1,7 @@
 <template>
-    <Spinner v-if="loadingPosts" />
 
-    <div
-        v-else
-        class="card-container"
-    > <Button
+
+    <div class="card-container"> <Button
             v-if="isOwner"
             class="close-btn"
             btnName="X"

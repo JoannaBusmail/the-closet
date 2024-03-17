@@ -4,7 +4,8 @@
         :style="contentStyles"
     >
         <div class="content-container">
-            <Spinner v-if="loadingParamUser" />
+            <Spinner v-if="loadingParamUserPost" />
+
             <div v-if="paramUser">
                 <div class="user-info">
                     <Avatar
@@ -30,6 +31,7 @@
                 />
 
             </div>
+
             <ErrorMessageComp
                 v-else
                 :message="errorMessage"
