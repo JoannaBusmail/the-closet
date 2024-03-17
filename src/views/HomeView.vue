@@ -1,4 +1,3 @@
-
 <template #content>
     <div
         class="container"
@@ -65,5 +64,45 @@ h1 {
     color: rgb(248, 57, 120);
     border: 5px solid rgb(248, 57, 120);
     /* Fondo semitransparente */
+}
+
+
+@media screen and (max-width: 1024px) {
+    h1 {
+        font-size: 44px;
+        padding: 30px;
+    }
+
+}
+
+
+@media screen and (max-width: 560px) {
+    h1 {
+        font-size: 44px;
+        padding: 30px;
+    }
+
+    .overlay {
+        top: 60%;
+    }
+}
+
+
+@media screen and (max-width: 460px) {
+    h1 {
+        font-size: 34px;
+        padding: 30px;
+    }
+
+    .overlay {
+        top: 55%;
+    }
+}
+
+@media screen and (max-width: 320px) {
+
+    .overlay {
+        top: 75%;
+    }
 }
 </style>

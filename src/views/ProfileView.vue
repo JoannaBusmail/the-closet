@@ -147,4 +147,12 @@ p {
 .followers {
     margin-left: auto;
 }
+
+@media screen and (max-width: 768px) {
+    .user-info {
+        padding-top: 10%;
+    }
+
+
+}
 </style>

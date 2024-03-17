@@ -146,7 +146,7 @@ p {
 }
 
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 480px) {
 
     .card-container {
         width: 300px;

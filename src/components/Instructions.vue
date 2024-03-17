@@ -5,7 +5,7 @@
         class="step"
     >
         <p class="stepNum">{{ index + 1 }}</p>
-        <p>{{ instruction }}</p>
+        <p class="text-instructions">{{ instruction }}</p>
     </div>
 </template>
 
@@ -52,6 +52,23 @@ const instructions = [
         width: 1.5em;
         height: 1.5em;
         font-size: 16px;
+    }
+
+    .step {
+        font-size: 18px;
+        margin-top: 30px;
+        align-self: flex-start;
+
+    }
+
+
+}
+
+@media (max-width: 420px) {
+    .stepNum {
+        width: 1.3em;
+        height: 1.3em;
+        font-size: 14px;
     }
 }
 </style>
