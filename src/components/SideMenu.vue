@@ -1,15 +1,38 @@
 <template>
-    <div class="side-menu-container">
-        <h3 @click="goToTop">TOP</h3>
-        <h3 @click="goToBottom">BOTTOM</h3>
-        <h3 @click="goToShoes">SHOES</h3>
+
+
+    <div
+        v-if="isSmallScreen"
+        class="side-menu-container"
+    >
+        <ph-t-shirt
+            :size="24"
+            @click="goToTop"
+        />
+        <ph-pants
+            :size="24"
+            @click="goToBottom"
+        />
+        <ph-sneaker
+            :size="24"
+            @click="goToShoes"
+        />
+        <ph-intersect
+            :size="28"
+            @click="goToMixAndMatch"
+        />
+
         <div
-            @click="handleMixMatchClick"
-            class="mixMatch-container"
+            @click="handleClosetsClick"
+            class="closets-container"
         >
-            <h3 @click="goToMixAndMatch">MIX & MATCH</h3>
+            <ph-coat-hanger
+                :size="24"
+                @click="handleClosetsClick"
+            />
+
             <ph-caret-down
-                v-if="!showMixMatchMenu"
+                v-if="!showClosetsMenu"
                 :size="24"
             />
             <ph-caret-up
@@ -18,8 +41,46 @@
             />
         </div>
         <div
-            v-if="showMixMatchMenu"
-            class="mixMatch-menu"
+            v-if="showClosetsMenu"
+            class="closets-menu"
+        >
+            <h4
+                class="casual"
+                @click="goToCasual"
+            >CASUAL</h4>
+            <h4
+                class="elegant"
+                @click="goToElegant"
+            >ELEGANT</h4>
+        </div>
+
+    </div>
+
+    <div
+        v-else
+        class="side-menu-container"
+    >
+        <h3 @click="goToTop">TOP</h3>
+        <h3 @click="goToBottom">BOTTOM</h3>
+        <h3 @click="goToShoes">SHOES</h3>
+        <h3 @click="goToMixAndMatch">MIX & MATCH</h3>
+        <div
+            @click="handleClosetsClick"
+            class="closets-container"
+        >
+            <h3>CLOSETS</h3>
+            <ph-caret-down
+                v-if="!showClosetsMenu"
+                :size="24"
+            />
+            <ph-caret-up
+                v-else
+                :size="24"
+            />
+        </div>
+        <div
+            v-if="showClosetsMenu"
+            class="closets-menu"
         >
             <h4
                 class="casual"
@@ -35,9 +96,10 @@
 </template>
 
 <script setup>
-import { PhCaretDown, PhCaretUp } from "@phosphor-icons/vue"
-import { ref } from 'vue'
+import { PhCaretDown, PhCaretUp, PhTShirt, PhPants, PhSneaker, PhCoatHanger, PhIntersect } from "@phosphor-icons/vue"
+import { ref, watch, onMounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
+import { useUIActions } from '@/composables/useUIActions.js'
 
 import { useUserStore } from '@/stores/users'
 import { storeToRefs } from 'pinia'
@@ -48,45 +110,107 @@ const router = useRouter()
 const userStore = useUserStore()
 const { user: loggedUser } = storeToRefs(userStore)
 
+const { isSmallScreen } = useUIActions()
 
-const showMixMatchMenu = ref(false)
 
-const handleMixMatchClick = () =>
+const showClosetsMenu = ref(false)
+
+const handleClosetsClick = () =>
 {
-    showMixMatchMenu.value = !showMixMatchMenu.value
+    showClosetsMenu.value = !showClosetsMenu.value
 }
 
 
+watch(loggedUser, (newUser) =>
+{
+    if (newUser) {
+        redirectIfLoggedIn()
+    }
+})
+
+
+
+const redirectIfLoggedIn = () =>
+{
+    const currentPath = router.currentRoute.value.path
+
+    if (currentPath === '/notFound' && loggedUser.value) {
+        goHome()
+    }
+}
+
+onMounted(() =>
+{
+    redirectIfLoggedIn()
+})
+
+
+
+const goHome = () =>
+{
+    router.push('/')
+}
+
 const goToTop = () =>
 {
-    if (loggedUser.value)
+    console.log('Logged User:', loggedUser.value)
+    if (loggedUser.value) {
         router.push(`/closet/top/${loggedUser?.value.username}`)
+    } else {
+        router.push('/notFound')
+    }
+
 }
 
 const goToBottom = () =>
 {
-    router.push(`/closet/bottom/${loggedUser?.value.username}`)
+    if (loggedUser.value) {
+        router.push(`/closet/bottom/${loggedUser?.value.username}`)
+    } else {
+        router.push('/notFound')
+    }
 }
+
 
 const goToShoes = () =>
 {
-    router.push(`/closet/shoes/${loggedUser?.value.username}`)
+    if (loggedUser.value) {
+        router.push(`/closet/shoes/${loggedUser?.value.username}`)
+    } else {
+        router.push('/notFound')
+    }
+
 }
 
 const goToMixAndMatch = () =>
 {
-    router.push(`/closet/mixandmatch/${loggedUser?.value.username}`)
+    if (loggedUser.value) {
+        router.push(`/closet/mixandmatch/${loggedUser?.value.username}`)
+    } else {
+        router.push('/notFound')
+    }
+
 }
 
 const goToCasual = () =>
 {
-    router.push(`/closet/mixandmatch/casualcloset/${loggedUser?.value.username}`)
+    if (loggedUser.value) {
+        router.push(`/closet/mixandmatch/casualcloset/${loggedUser?.value.username}`)
+    } else {
+        router.push('/notFound')
+    }
+
 }
 
 
 const goToElegant = () =>
 {
-    router.push(`/closet/mixandmatch/elegantcloset/${loggedUser?.value.username}`)
+    if (loggedUser.value) {
+        router.push(`/closet/mixandmatch/elegantcloset/${loggedUser?.value.username}`)
+    } else {
+        router.push('/notFound')
+    }
+
 }
 
 </script>
@@ -110,7 +234,7 @@ const goToElegant = () =>
     .side-menu-container {
         flex-direction: row;
         width: 100%;
-        height: 8vh;
+        height: 11vh;
         justify-content: space-between;
         padding: 20px 15px;
         min-height: 0vh;
@@ -134,7 +258,7 @@ h3:hover {
     color: rgb(248, 57, 120);
 }
 
-.mixMatch-container {
+.closets-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -145,12 +269,12 @@ h3:hover {
 
 
 
-.mixMatch-container h3 {
+.closets-container h3 {
     margin-bottom: 0;
     margin-right: 15px;
 }
 
-.mixMatch-menu {
+.closets-menu {
     display: flex;
     flex-direction: column;
     margin-left: 100px;
@@ -168,27 +292,21 @@ h4 {
 }
 
 @media screen and (max-width: 768px) {
-    .mixMatch-menu {
+    .closets-menu {
+        position: absolute;
         flex-direction: row;
-        margin-left: -80px;
-
+        top: 50%;
+        right: 28%;
+        gap: 20px;
 
     }
 
     .casual,
     .elegant {
         font-size: 12px;
-        margin-top: 12px;
-        text-align: center;
-        padding-bottom: 10px;
+        font-weight: 600;
     }
 
-    .casual {
-        margin-left: -100px;
-    }
 
-    .elegant {
-        margin-left: 10px;
-    }
 }
 </style>

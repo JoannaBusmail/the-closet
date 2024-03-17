@@ -110,12 +110,14 @@ import { ref } from 'vue'
 import { useUIActions } from '@/composables/useUIActions.js'
 import { useUserStore } from '@/stores/users'
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
 
 
 const userStore = useUserStore()
 const { handleLogout } = userStore
 const { user } = storeToRefs(userStore)
 
+const router = useRouter()
 
 console.log('user:', user.value)
 
@@ -130,6 +132,10 @@ const handleLogoClick = () =>
 {
     emit('chevronClick')
     caretUp.value = !caretUp.value
+    if (!caretUp.value && !user.value) {
+        router.push('/')
+
+    }
 }
 
 const handleAuth = (action) =>  
