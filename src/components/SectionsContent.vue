@@ -1,4 +1,4 @@
-<template #content >
+<template #content>
     <div
         class="container"
         :style="contentStyles"
@@ -7,15 +7,17 @@
             <h1>{{ sectionName }}</h1>
 
             <UploadPhoto :onView="onView" />
-            <Spinner v-if="loadingPosts" />
-            <Cards
-                v-else
-                :postData="postData"
-                :loadingPosts="loadingPosts"
-                @btnClick="handleCardBtnClick"
-                @intersect="emitIntersectEvent"
-            />
-
+            <p v-if="!postData.length">No {{ sectionName }} yet</p>
+            <div v-else>
+                <Spinner v-if="loadingPosts" />
+                <Cards
+                    v-else
+                    :postData="postData"
+                    :loadingPosts="loadingPosts"
+                    @btnClick="handleCardBtnClick"
+                    @intersect="emitIntersectEvent"
+                />
+            </div>
 
         </div>
 
@@ -79,12 +81,24 @@ h1 {
     margin-left: 20px;
 }
 
-
+p {
+    margin-top: 30px;
+    text-align: center;
+    color: rgb(248, 57, 120);
+    font-size: 14px;
+    font-weight: 600;
+}
 
 @media screen and (max-width: 768px) {
     .content-container {
         width: 95vw;
         height: 95vh;
+    }
+
+    h1 {
+        font-size: 24px;
+        padding-top: 40px;
+        margin-left: 5px;
     }
 
 }

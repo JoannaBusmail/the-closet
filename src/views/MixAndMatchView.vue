@@ -38,7 +38,10 @@
                     :errorMessage="shoesErrorMessage"
                 />
 
-                <div class="inputs-container">
+                <div
+                    v-if="topPosts.length && bottomPosts.length && shoesPosts.length"
+                    class="inputs-container"
+                >
                     <p>2. Name your outfit</p>
                     <InputText
                         class="secondary"
@@ -60,7 +63,10 @@
                     </div>
 
                 </div>
-                <div class="button-container">
+                <div
+                    v-if="topPosts.length && bottomPosts.length && shoesPosts.length"
+                    class="button-container"
+                >
                     <Button
                         @btnClick="handleCancel"
                         btnName="Cancel"
@@ -73,6 +79,10 @@
                         :disabled="loadingClosetPost"
                     ></Button>
                 </div>
+                <p
+                    v-if="!topPosts.length && !bottomPosts.length && !shoesPosts.length"
+                    class="mixMatchForm-instruction"
+                >Need one selection of each, to submit outfit</p>
 
                 <ErrorMessageComp
                     class="submit-message"
@@ -88,7 +98,7 @@
         </div>
     </div>
 </template>
-  
+
 <script setup>
 import MixAndMatchForm from '@/components/MixAndMatchForm.vue'
 import InputText from '@/components/InputText.vue'
@@ -240,7 +250,7 @@ const handleCancel = (e) =>
 
 
 </script>
-  
+
 <style scoped>
 .container {
     position: relative;
@@ -316,5 +326,14 @@ p,
     font-size: 18px;
     margin-bottom: 20px;
 }
+
+@media screen and (max-width: 768px) {
+
+    h1 {
+        font-size: 24px;
+        padding-top: 40px;
+        margin-left: 5px;
+    }
+
+}
 </style>
-  

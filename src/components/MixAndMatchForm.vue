@@ -1,39 +1,50 @@
 <template>
     <div class="form-container">
-        <div class="inputs-container">
-            <h3>{{ formName }}</h3>
 
-            <InputText
-                class="secondary"
-                type="text"
-                placeholder="Color"
-                v-model="state.color"
-                @input="updateColor"
-            />
-            <div class="radio-input">
-                <InputRadio
-                    v-for="(option, index) in radioOptions"
-                    v-model="state.style"
-                    :key="index"
-                    :id="option.id"
-                    :label="option.label"
-                    :value="option.value"
-                    @update:modelValue="updateStyle"
-                >
-                </InputRadio>
-            </div>
+        <div
+            v-if="posts.length === 0"
+            class="inputs-container"
+        >
+            <h3>{{ formName }}</h3>
+            <p>No {{ formName }} yet to select</p>
         </div>
-        <Spinner v-if="isLoadingPosts" />
-        <Carrousel
-            v-else
-            :posts="posts"
-            @selectImage="selectImage"
-            :errorMessage="errorMessage"
-            :carouselId="formName"
-        />
+        <div v-else>
+            <div class="inputs-container">
+                <h3>{{ formName }}</h3>
+
+                <InputText
+                    class="secondary"
+                    type="text"
+                    placeholder="Color"
+                    v-model="state.color"
+                    @input="updateColor"
+                />
+                <div class="radio-input">
+                    <InputRadio
+                        v-for="(option, index) in radioOptions"
+                        v-model="state.style"
+                        :key="index"
+                        :id="option.id"
+                        :label="option.label"
+                        :value="option.value"
+                        @update:modelValue="updateStyle"
+                    >
+                    </InputRadio>
+                </div>
+            </div>
+            <Spinner v-if="isLoadingPosts" />
+            <Carrousel
+                v-else
+                :posts="posts"
+                @selectImage="selectImage"
+                :errorMessage="errorMessage"
+                :carouselId="formName"
+            />
+        </div>
     </div>
+
 </template>
-  
+
 <script setup>
 import Spinner from '@/components/Spinner.vue'
 import Carrousel from '@/components/Carrousel.vue'
@@ -84,7 +95,7 @@ const radioOptions = ref([
 
 
 </script>
-  
+
 <style scoped>
 h3 {
     padding-top: 20px;
@@ -111,5 +122,11 @@ h3 {
     align-items: center;
     margin-bottom: 10px;
 }
+
+p {
+    text-align: center;
+    color: rgb(248, 57, 120);
+    font-size: 14px;
+    font-weight: 600;
+}
 </style>
-  

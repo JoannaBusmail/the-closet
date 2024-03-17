@@ -4,15 +4,23 @@
         :style="contentStyles"
     >
         <div class="content-container">
-            <h1>ELEGANT CLOSET</h1>
-            <div class="btn-closet">
-                <Button
-                    :btnName="isPublicPosts ? 'Unpublish' : 'Publish'"
-                    :btnType="isPublicPosts ? 'extra' : 'secondary'"
-                    @btnClick="handlePublishBtn"
-                >
-                </Button>
+            <div class="title-btn-container">
+                <h1>ELEGANT CLOSET</h1>
+
+                <div class="btn-closet">
+                    <Button
+                        v-if="closetElegantPosts.length"
+                        :btnName="isPublicPosts ? 'Unpublish' : 'Publish'"
+                        :btnType="isPublicPosts ? 'extra' : 'secondary'"
+                        @btnClick="handlePublishBtn"
+                    >
+                    </Button>
+                </div>
             </div>
+            <p
+                class="no-posts"
+                v-if="!closetElegantPosts.length"
+            >No outfit's created yet</p>
 
             <PublishModal
                 class="publish-modal"
@@ -148,10 +156,14 @@ onMounted(async () =>
     background-color: #fff;
 }
 
-h1 {
-    padding-top: 20px;
-    margin-left: 20px;
+
+.title-btn-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
+
 
 .follow-class {
     display: flex;
@@ -165,14 +177,29 @@ p {
     color: rgb(248, 57, 120);
 }
 
-.btn-closet {
-    margin-left: 90%;
-    margin-top: -40px;
-}
 
 .publish-modal {
     position: absolute;
     top: -1%;
+
+}
+
+.no-posts {
+    text-align: center;
+    margin-top: 30px;
+    color: rgb(248, 57, 120);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 768px) {
+    .title-btn-container {
+        padding-top: 10%;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
 
 }
 </style>
