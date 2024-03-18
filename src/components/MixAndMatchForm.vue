@@ -1,14 +1,8 @@
 <template>
     <div class="form-container">
 
-        <div
-            v-if="posts.length === 0"
-            class="inputs-container"
-        >
-            <h3>{{ formName }}</h3>
-            <p>No {{ formName }} yet to select</p>
-        </div>
-        <div v-else>
+
+        <div>
             <div class="inputs-container">
                 <h3>{{ formName }}</h3>
 
