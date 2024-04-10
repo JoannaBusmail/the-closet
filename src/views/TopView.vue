@@ -3,8 +3,10 @@
         sectionName="TOP"
         :postData="topPosts"
         :loadingPosts="loadingPosts"
+        :isBtnActive="isSaleTag"
         onView="top"
         @btnClick="handleBtnClick"
+        @toggleSwitch="handleSwitchBtnClick"
         @intersect="fetchNextTopPosts"
     >
     </SectionsContent>
@@ -13,10 +15,12 @@
 <script setup>
 import SectionsContent from '@/components/SectionsContent.vue'
 import Observer from '@/components/Observer.vue'
-import { onMounted, watch } from 'vue'
+import { onMounted, watch, ref } from 'vue'
 import { useUserStore } from '@/stores/users'
 import { useFetchTopDataStore } from '@/stores/fetchTopData'
 import { storeToRefs } from 'pinia'
+
+
 
 
 
@@ -26,15 +30,28 @@ const { user: loggedUser } = storeToRefs(userStore)
 
 // FETCH DATA STORE
 const fetchTopDataStore = useFetchTopDataStore()
-const { fetchTopPosts, deleteTopPost, fetchNextTopPosts } = fetchTopDataStore
-const { topPosts, loadingPosts } = storeToRefs(fetchTopDataStore)
+const { fetchTopPosts, deleteTopPost, fetchNextTopPosts, addSaleTag, deleteSaleTag } = fetchTopDataStore
+const { topPosts, loadingPosts, isSaleTag } = storeToRefs(fetchTopDataStore)
+
 
 
 const handleBtnClick = (post) =>
 {
     if (post && post.id) {
-        console.log('Botón clickeado en TopView:', post)
         deleteTopPost(post.id)
+    }
+}
+
+
+const handleSwitchBtnClick = async (post) =>
+{
+    // Toggle the sale status locally
+    post.sale = !post.sale
+
+    if (post.sale) {
+        await addSaleTag(post.id)
+    } else {
+        await deleteSaleTag(post.id)
     }
 }
 
@@ -42,6 +59,7 @@ const handleBtnClick = (post) =>
 onMounted(async () =>
 {
     await fetchTopPosts()
+
 })
 
 </script>

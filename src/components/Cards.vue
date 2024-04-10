@@ -7,6 +7,7 @@
             :post="post"
             :loadingPosts="loadingPosts"
             @btnClick="$emit('btnClick', post)"
+            @toggleSwitch="$emit('toggleSwitch', post)"
         />
 
     </div>
@@ -21,12 +22,9 @@ import Card from './Card.vue'
 import Observer from './Observer.vue'
 
 
-const emit = defineEmits([ 'intersect', 'btnClick' ])
+const emit = defineEmits([ 'intersect', 'btnClick', 'toggleSwitch' ])
 
-const emitIntersectEvent = () =>
-{
-    emit('intersect')
-}
+const emitIntersectEvent = () => { emit('intersect') }
 
 const props = defineProps({
     postData: Array,

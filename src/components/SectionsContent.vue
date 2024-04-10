@@ -15,6 +15,7 @@
                     :postData="postData"
                     :loadingPosts="loadingPosts"
                     @btnClick="handleCardBtnClick"
+                    @toggleSwitch="handleCardSwitchBtnClick"
                     @intersect="emitIntersectEvent"
                 />
             </div>
@@ -34,25 +35,22 @@ import { useUIActions } from '@/composables/useUIActions.js'
 const { contentStyles } = useUIActions()
 
 const props = defineProps({
+
     sectionName: String,
     postData: Array,
+    isBtnActive: Boolean,
     loadingPosts: Boolean,
     onView: String
 
 })
 
-const emit = defineEmits([ 'btnClick', 'intersect' ])
+const emit = defineEmits([ 'btnClick', 'intersect', 'toggleSwitch' ])
 
-const handleCardBtnClick = (post) =>
-{
-    console.log('Button clicked in section component:', post)
-    emit('btnClick', post)
-}
+const handleCardBtnClick = (post) => { emit('btnClick', post) }
 
-const emitIntersectEvent = () =>
-{
-    emit('intersect')
-}
+const handleCardSwitchBtnClick = (post) => { emit('toggleSwitch', post) }
+
+const emitIntersectEvent = () => { emit('intersect') }
 
 </script>
 

@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import { useUserStore } from '@/stores/users'
 import { storeToRefs } from 'pinia'
 
+
 export const useFetchTopDataStore = defineStore('fetchTopData', () => { 
 
 
@@ -16,7 +17,6 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
     const lastCardIndex = ref(1)
     const reachEndOfPosts = ref(false)
     const loadingPosts = ref(false)
-
 
 
     // fetch only the 2 first posts - this fetch is for loading post while scrolling down
@@ -33,7 +33,6 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
 
 
             topPosts.value = fetchTopPosts
-            console.log(topPosts.value)
             loadingPosts.value = false
             
       };
@@ -54,7 +53,6 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
 
 
             topPosts.value = fetchTopPosts
-            console.log(topPosts.value)
             loadingPosts.value = false
             
       };
@@ -95,6 +93,30 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
     }
     
 
+    const addSaleTag = async (id) => {
+   
+        const saleTag = topPosts.value.find(post => post.id === id);
+        if (!saleTag) { return}
+        await supabase
+        .from('top')
+        .update({ sale: true}) 
+        .eq('id', id)
+    
+       
+    }
+
+    const deleteSaleTag = async (id) => {
+        const saleTag = topPosts.value.find(post => post.id === id);
+        if (!saleTag) {return}
+        await supabase
+        .from('top')
+        .update({ sale: false}) 
+        .eq('id', id)
+
+        
+
+    }
+
     const fetchNextTopPosts = async () => {
 
         if (!reachEndOfPosts.value) {
@@ -133,7 +155,7 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
 
    
 
-    return { fetchTopPosts, fetchAllTopPosts,  topPosts, loadingPosts, filteredTopPosts, addNewPost, deleteTopPost, fetchNextTopPosts , setTopPosts, setFilteredTopPosts}
+    return { fetchTopPosts, fetchAllTopPosts, addSaleTag, deleteSaleTag, topPosts, loadingPosts, filteredTopPosts, addNewPost, deleteTopPost, fetchNextTopPosts , setTopPosts, setFilteredTopPosts}
 })
 
 

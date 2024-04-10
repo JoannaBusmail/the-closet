@@ -19,10 +19,7 @@ const props = defineProps({
 const emit = defineEmits([ 'btnClick' ])
 
 
-const handleBtnClick = (e) =>
-{
-    emit('btnClick', e)
-}
+const handleBtnClick = (e) => { emit('btnClick', e) }
 
 
 const btnClass = computed(() =>

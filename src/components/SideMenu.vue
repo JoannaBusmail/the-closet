@@ -153,7 +153,7 @@ const goHome = () =>
 
 const goToTop = () =>
 {
-    console.log('Logged User:', loggedUser.value)
+
     if (loggedUser.value) {
         router.push(`/closet/top/${loggedUser?.value.username}`)
     } else {

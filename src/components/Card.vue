@@ -15,16 +15,24 @@
             v-if="post.seen_at"
             :tag="post.seen_at"
         ></Tag>
+
         <img
             class="image"
             :src="`${VITE_BASE_PHOTO_URL}${post.url}`"
             alt="random image"
         />
+
         <div class="image-info">
             <p>{{ post.color }}</p>
             <p>{{ post.style }}</p>
         </div>
 
+        <SwitchButton
+            class="card-switchBtn"
+            :isSwitchActive="post.sale"
+            :switchBtnText="post.sale ? 'For sale' : 'Sale?'"
+            @toggleSwitch="toggleSwitch"
+        ></SwitchButton>
 
     </div>
 </template>
@@ -33,6 +41,8 @@
 import Spinner from './Spinner.vue'
 import Button from './Button.vue'
 import Tag from './Tag.vue'
+import SwitchButton from './SwitchButton.vue'
+
 
 const { VITE_BASE_PHOTO_URL } = import.meta.env
 
@@ -41,7 +51,9 @@ const props = defineProps({
     loadingPosts: Boolean
 })
 
+const emit = defineEmits([ 'toggleSwitch' ])
 
+const toggleSwitch = (post) => { emit('toggleSwitch', post) }
 
 
 </script>
@@ -85,5 +97,12 @@ const props = defineProps({
     position: absolute;
     top: 15px;
     left: 15px;
+}
+
+.card-switchBtn {
+    position: absolute;
+    bottom: 65px;
+
+
 }
 </style>
