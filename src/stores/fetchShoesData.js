@@ -100,7 +100,25 @@ export const useFetchShoesDataStore = defineStore('fetchShoesData', () => {
         await supabase.storage.from('photos').remove([`public/${fileName}`]);
     }
     
-    
+    const addSaleTag = async (id) => {
+   
+        const saleTag = shoesPosts.value.find(post => post.id === id);
+        if (!saleTag) { return}
+        await supabase
+        .from('shoes')
+        .update({ sale: true}) 
+        .eq('id', id)
+    }
+
+    const deleteSaleTag = async (id) => {
+        const saleTag = shoesPosts.value.find(post => post.id === id);
+        if (!saleTag) {return}
+        await supabase
+        .from('shoes')
+        .update({ sale: false}) 
+        .eq('id', id)
+    }
+
 
     const fetchNextShoesPosts = async () => {
 
@@ -130,6 +148,6 @@ export const useFetchShoesDataStore = defineStore('fetchShoesData', () => {
     }
 
 
-    return { fetchShoesPosts, fetchAllShoesPosts,  shoesPosts, loadingShoesPosts,filteredShoesPosts, addNewPost, deleteShoesPost, fetchNextShoesPosts, setFilteredShoesPosts }
+    return { fetchShoesPosts, fetchAllShoesPosts, addSaleTag, deleteSaleTag,  shoesPosts, loadingShoesPosts,filteredShoesPosts, addNewPost, deleteShoesPost, fetchNextShoesPosts, setFilteredShoesPosts }
 })
 

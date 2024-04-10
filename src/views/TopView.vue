@@ -31,7 +31,7 @@ const { user: loggedUser } = storeToRefs(userStore)
 // FETCH DATA STORE
 const fetchTopDataStore = useFetchTopDataStore()
 const { fetchTopPosts, deleteTopPost, fetchNextTopPosts, addSaleTag, deleteSaleTag } = fetchTopDataStore
-const { topPosts, loadingPosts, isSaleTag } = storeToRefs(fetchTopDataStore)
+const { topPosts, loadingPosts } = storeToRefs(fetchTopDataStore)
 
 
 

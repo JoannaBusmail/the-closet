@@ -98,6 +98,26 @@ export const useFetchBottomDataStore = defineStore('fetchBottomData', () => {
         await supabase.storage.from('photos').remove([`public/${fileName}`]);
     }
     
+
+    const addSaleTag = async (id) => {
+   
+        const saleTag = bottomPosts.value.find(post => post.id === id);
+        if (!saleTag) { return}
+        await supabase
+        .from('bottom')
+        .update({ sale: true}) 
+        .eq('id', id)
+    }
+
+    const deleteSaleTag = async (id) => {
+        const saleTag = bottomPosts.value.find(post => post.id === id);
+        if (!saleTag) {return}
+        await supabase
+        .from('bottom')
+        .update({ sale: false}) 
+        .eq('id', id)
+    }
+
     
 
     const fetchNextBottomPosts = async () => {
@@ -130,7 +150,7 @@ export const useFetchBottomDataStore = defineStore('fetchBottomData', () => {
     }
 
 
-    return { fetchBottomPosts, fetchAllBottomPosts, bottomPosts, loadingBottomPosts, filteredBottomPosts, addNewPost, deleteBottomPost, fetchNextBottomPosts, setFilteredBottomPosts }
+    return { fetchBottomPosts, fetchAllBottomPosts,addSaleTag, deleteSaleTag, bottomPosts, loadingBottomPosts, filteredBottomPosts, addNewPost, deleteBottomPost, fetchNextBottomPosts, setFilteredBottomPosts }
 })
 
 

@@ -101,8 +101,6 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
         .from('top')
         .update({ sale: true}) 
         .eq('id', id)
-    
-       
     }
 
     const deleteSaleTag = async (id) => {
@@ -112,10 +110,8 @@ export const useFetchTopDataStore = defineStore('fetchTopData', () => {
         .from('top')
         .update({ sale: false}) 
         .eq('id', id)
-
-        
-
     }
+
 
     const fetchNextTopPosts = async () => {
 
