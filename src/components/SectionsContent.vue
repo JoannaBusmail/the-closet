@@ -38,7 +38,6 @@ const props = defineProps({
 
     sectionName: String,
     postData: Array,
-    isBtnActive: Boolean,
     loadingPosts: Boolean,
     onView: String
 

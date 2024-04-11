@@ -128,6 +128,7 @@ onMounted(async () =>
     await fetchClosetCasualPosts()
     await fetchIsPublicPosts()
     await fetchLoggedUserFollowCount()
+    console.log(closetCasualPosts.value)
 
 })
 

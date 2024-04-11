@@ -12,13 +12,13 @@ import { computed } from 'vue'
 
 const props = defineProps({
     tag: String,
-    isFollowingTag: Boolean
+    isActiveTag: Boolean
 })
 
 
 const followTag = computed(() =>
 {
-    return props.isFollowingTag ? 'follow-tag' : 'tag'
+    return props.isActiveTag ? 'active-tag' : 'tag'
 })
 
 </script>
@@ -35,18 +35,19 @@ const followTag = computed(() =>
     border: 1px solid rgb(248, 57, 120);
     color: rgb(248, 57, 120);
     font-size: 12px;
+    font-weight: 700;
     justify-content: center;
 
 }
 
-.follow-tag {
+.active-tag {
     padding: 2px 12px;
     border-radius: 9999px;
     border: 1px solid rgb(248, 57, 120);
     background-color: rgb(248, 57, 120);
     color: #fff;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 400;
     justify-content: center;
 
 }

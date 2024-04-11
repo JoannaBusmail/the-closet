@@ -4,7 +4,7 @@ import { supabase } from '../../supabase'
 
 
 
-const selectedPost = reactive({ top: { id: null, url: null, seen_at: null }, bottom: { id: null, url: null, seen_at: null  }, shoes: { id: null, url: null, seen_at: null  }})
+const selectedPost = reactive({ top: { id: null, url: null, seen_at: null, sale: null}, bottom: { id: null, url: null, seen_at: null, sale: null  }, shoes: { id: null, url: null, seen_at: null, sale: null  }})
 const loadingClosetPost= ref(false)
 const errorMsgUploadClosetPost = ref('')
 const successMsgUploadClosetPost = ref('')
@@ -30,7 +30,8 @@ export function usePostActions () {
             selectedPost[postType] = {
                 id: post.id,
                 url: `${post.url}`,
-                seen_at: post.seen_at
+                seen_at: post.seen_at,
+                sale: post.sale
             };
             console.log('Selected id:', selectedPost[postType].id)
             console.log('url:', selectedPost[postType].url)
@@ -111,12 +112,15 @@ export function usePostActions () {
             top_id: selectedPost.top.id,
             top_url: selectedPost.top.url,
             top_seen_at: selectedPost.top.seen_at,
+            top_sale: selectedPost.top.sale,
             bottom_id: selectedPost.bottom.id,
             bottom_url: selectedPost.bottom.url,
             bottom_seen_at: selectedPost.bottom.seen_at,
+            bottom_sale: selectedPost.bottom.sale,
             shoes_id: selectedPost.shoes.id,
             shoes_url: selectedPost.shoes.url,
             shoes_seen_at: selectedPost.shoes.seen_at,
+            shoes_sale: selectedPost.shoes.sale,
             outfit_name: name,
             owner_id: user
         }
@@ -142,8 +146,9 @@ export function usePostActions () {
             loadingClosetPost.value = false
 
     }
+
+
   
-    
     return { selectedPost, loadingClosetPost, selectPost, filterPosts, selectPostHandler, showPosts, handleUploadClosetPost, errorMsgUploadClosetPost, successMsgUploadClosetPost, uploadedClosetPost}
 }
 

@@ -20,6 +20,12 @@
                     class="closet-card-tag"
                     :tag="item.tag"
                 ></Tag>
+                <Tag
+                    v-if="item.sale_tag"
+                    :isActiveTag="item.sale_tag"
+                    class="closet-card-sale-tag"
+                    tag="For Sale"
+                ></Tag>
                 <img
                     class="image"
                     :src="`${VITE_BASE_PHOTO_URL}${item.image}`"
@@ -29,15 +35,19 @@
         </div>
         <div class="image-info">
             <p>{{ post.outfit_name }}</p>
-
+            <ph-chat-dots
+                :size="28"
+                style="color: rgb(248, 57, 120);"
+            />
         </div>
+
     </div>
 </template>
 
 <script setup>
-import Spinner from './Spinner.vue'
 import Button from './Button.vue'
 import Tag from './Tag.vue'
+import { PhChatDots } from '@phosphor-icons/vue'
 
 const { VITE_BASE_PHOTO_URL } = import.meta.env
 
@@ -48,9 +58,9 @@ const props = defineProps({
 })
 
 const postImagesAndTags = [
-    { image: props.post.top_url, tag: props.post.top_seen_at },
-    { image: props.post.bottom_url, tag: props.post.bottom_seen_at },
-    { image: props.post.shoes_url, tag: props.post.shoes_seen_at }
+    { image: props.post.top_url, tag: props.post.top_seen_at, sale_tag: props.post.top_sale },
+    { image: props.post.bottom_url, tag: props.post.bottom_seen_at, sale_tag: props.post.bottom_sale },
+    { image: props.post.shoes_url, tag: props.post.shoes_seen_at, sale_tag: props.post.shoes_sale }
 ]
 
 
@@ -119,6 +129,12 @@ p {
 
 
 .closet-card-tag {
+    position: absolute;
+    top: 25px;
+    left: auto;
+}
+
+.closet-card-sale-tag {
     position: absolute;
     bottom: 75px;
     left: auto;

@@ -3,7 +3,6 @@
         sectionName="TOP"
         :postData="topPosts"
         :loadingPosts="loadingPosts"
-        :isBtnActive="isSaleTag"
         onView="top"
         @btnClick="handleBtnClick"
         @toggleSwitch="handleSwitchBtnClick"

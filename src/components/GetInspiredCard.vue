@@ -8,7 +8,7 @@
                 class="card-tag"
                 v-if="isFollowing"
                 tag="Following"
-                :isFollowingTag="isFollowing"
+                :isActiveTag="isFollowing"
             ></Tag>
 
             <img

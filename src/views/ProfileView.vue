@@ -99,7 +99,7 @@ const followBtnStyleChange = computed(() =>
 const followBtnTextChange = computed(() =>
 {
     console.log('isfollowing', isFollowing.value)
-    if (paramsUserFollowersCount.value > 0) {
+    if (paramsUserFollowersCount.value > 0 && isFollowing.value) {
         return `Following ${paramUser.value.username}`
     } else {
         console.log('isfollowing', isFollowing.value)

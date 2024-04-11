@@ -47,7 +47,7 @@
                         :loadingPosts="loading"
                         @handleClick="goToUserProfile"
                         :isFollowing="isFollowingMap[post.username]"
-                        :isFollowingTag="isFollowingMap[post.username]"
+                        :isActiveTag="isFollowingMap[post.username]"
                     />
                 </div>
             </div>
@@ -138,7 +138,6 @@ const fetchIsFollowinfForAllposts = async () =>
     for (const post of postsWithUserInfo.value) {
         const isFollowing = await fetchIsFollowingTag(post.username)
         isFollowingMap.value[ post.username ] = isFollowing
-        console.log(isFollowingMap.value)
     }
 }
 
