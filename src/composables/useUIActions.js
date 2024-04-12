@@ -32,8 +32,8 @@ export function useUIActions () {
           };
       } else {
           return {
-              width: showSideMenu.value ? 'calc(100vw - 25vw)' : '100vw',
-              left: showSideMenu.value ? '25vw' : '0',
+              width: showSideMenu.value ? 'calc(100vw - 18vw)' : '100vw',
+              left: showSideMenu.value ? '18vw' : '0',
           };
       }
   });

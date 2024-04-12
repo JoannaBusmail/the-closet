@@ -9,6 +9,7 @@ import ElegantClosetView from '../views/ElegantClosetView.vue'
 import GetInspiredView from '../views/GetInspiredView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import NoRegisterUserView from '../views/NoRegisterUserView.vue'
+import NotificationsView from '../views/NotificationsView.vue'
 import { useUserStore } from '@/stores/users'
 import { storeToRefs } from 'pinia'
 
@@ -88,7 +89,12 @@ const router = createRouter({
         component: ElegantClosetView,
         beforeEnter: requireAuth
       },
-    
+      {
+        path: '/notifications',
+        name: 'NotificationsView',
+        component: NotificationsView,
+        beforeEnter: requireAuth
+      }
     
   ]
 })

@@ -45,6 +45,18 @@
                     btnType="principal"
                     @btnClick="handleProfile"
                 />
+                <NotificationBubble
+                    v-if="notification"
+                    class="bigScreen-btn"
+                    @click="handleNotifications"
+                />
+
+                <ph-bell-ringing
+                    v-else
+                    class="bigScreen-btn"
+                    :size="20"
+                    @click="handleNotifications"
+                />
 
                 <Button
                     btnName="GET INSPIRED"
@@ -80,17 +92,28 @@
                 <ph-user-circle
                     @click="handleProfile"
                     class="mobile-btn"
-                    :size="24"
+                    :size="22"
+                />
+                <NotificationBubble
+                    v-if="notification"
+                    class="mobile-btn"
+                    @click="handleNotifications"
+                />
+                <ph-bell-ringing
+                    v-else
+                    class="mobile-btn"
+                    :size="22"
+                    @click="handleNotifications"
                 />
                 <ph-lightbulb
                     class="mobile-btn"
-                    :size="24"
+                    :size="22"
                     @click="handleGetInspired"
                 />
 
                 <ph-sign-out
                     class="mobile-btn"
-                    :size="24"
+                    :size="22"
                     @click="handleLogout"
                 />
             </div>
@@ -104,14 +127,17 @@
 <script setup>
 import Button from './Button.vue'
 import Avatar from './Avatar.vue'
-import { PhCaretDown, PhUserCircle, PhSignIn, PhPassword, PhSignOut, PhLightbulb } from "@phosphor-icons/vue"
+import NotificationBubble from './NotificationBubble.vue'
+import { PhCaretDown, PhUserCircle, PhSignIn, PhPassword, PhSignOut, PhLightbulb, PhBellRinging } from "@phosphor-icons/vue"
 import { PhCaretUp } from "@phosphor-icons/vue"
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useUIActions } from '@/composables/useUIActions.js'
 import { useUserStore } from '@/stores/users'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 
+
+const notification = ref(true)
 
 const userStore = useUserStore()
 const { handleLogout } = userStore
@@ -119,14 +145,13 @@ const { user } = storeToRefs(userStore)
 
 const router = useRouter()
 
-console.log('user:', user.value)
 
 const { isSmallScreen } = useUIActions()
 
 const caretUp = ref(false)
 
 
-const emit = defineEmits([ 'chevronClick', 'loginClick', 'signUpClick', 'profileClick', 'getInspiredClick' ])
+const emit = defineEmits([ 'chevronClick', 'loginClick', 'signUpClick', 'profileClick', 'getInspiredClick', 'notificationsClick' ])
 
 const handleLogoClick = () =>
 {
@@ -157,6 +182,11 @@ const handleGetInspired = () =>
     emit('getInspiredClick')
 }
 
+const handleNotifications = () =>
+{
+    emit('notificationsClick')
+}
+
 </script>
 
 <style scoped>
@@ -185,6 +215,17 @@ h1 {
     margin-right: 20px;
 }
 
+
+.bigScreen-btn {
+    margin: 20px 15px;
+
+}
+
+.bigScreen-btn:hover {
+    color: rgb(248, 57, 120);
+
+}
+
 @media screen and (max-width: 768px) {
     h1 {
         font-size: 18px;
@@ -206,7 +247,7 @@ h1 {
 }
 
 .mobile-btn {
-    margin: 0 15px;
+    margin: 0 12px;
 }
 </style>
 ```

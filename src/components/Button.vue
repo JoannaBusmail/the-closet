@@ -87,7 +87,7 @@ const btnClass = computed(() =>
 .principle-btn:hover,
 .secondary-btn:hover {
     color: rgb(248, 57, 120);
-    font-weight: 600;
+
 }
 
 button:disabled {

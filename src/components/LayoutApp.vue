@@ -16,6 +16,7 @@
             @signUpClick="() => handleAuthModal('signUp')"
             @profileClick="handleProfile"
             @getInspiredClick="handleGetInspired"
+            @notificationsClick="handleNotifications"
             :caretUp="showSideMenu"
         />
         <div class="layout-container">
@@ -76,6 +77,10 @@ const handleGetInspired = () =>
     router.push('/getInspired')
 }
 
+const handleNotifications = () =>
+{
+    router.push('/notifications')
+}
 
 
 

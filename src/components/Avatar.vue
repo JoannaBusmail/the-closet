@@ -23,7 +23,14 @@ const props = defineProps({
 
 const style = computed(() =>
 {
-    return props.size === 'small' ? 'avatar-small' : 'avatar-big'
+    if (props.size === 'small') {
+        return 'avatar-small'
+    } else if (props.size === 'super-small') {
+        return 'avatar-super-small'
+    } else {
+        return 'avatar-big'
+    }
+
 })
 
 
@@ -46,6 +53,15 @@ const src = computed(() =>
     object-fit: cover;
     width: 50px;
     height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid rgb(248, 57, 120);
+}
+
+.avatar-super-small {
+    object-fit: cover;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     overflow: hidden;
     border: 1px solid rgb(248, 57, 120);

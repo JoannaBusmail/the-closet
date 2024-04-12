@@ -225,7 +225,7 @@ const goToElegant = () =>
     align-items: flex-start;
     background-color: #F5F5F5;
     height: 100vh;
-    width: 25vw;
+    width: 18vw;
     padding: 2rem;
     z-index: 10;
 }
@@ -277,7 +277,7 @@ h3:hover {
 .closets-menu {
     display: flex;
     flex-direction: column;
-    margin-left: 100px;
+    margin-left: 50px;
     align-items: flex-end;
     margin-top: 10px;
     width: 6vw;
@@ -296,9 +296,8 @@ h4 {
         position: absolute;
         flex-direction: row;
         top: 50%;
-        right: 28%;
+        right: 18%;
         gap: 20px;
-
     }
 
     .casual,
@@ -306,7 +305,18 @@ h4 {
         font-size: 12px;
         font-weight: 600;
     }
+}
+
+@media screen and (max-width: 440px) {
+    .closets-menu {
+        right: 30%;
+    }
+}
 
 
+@media screen and (max-width: 280px) {
+    .closets-menu {
+        right: 40%;
+    }
 }
 </style>
