@@ -1,8 +1,11 @@
 <template>
 
-    <div class="boxMsg_container">
+    <div
+        @click="$emit('msgClick', messagesData)"
+        class="boxMsg_container"
+    >
         <div
-            v-if="newMessage"
+            v-if="messagesData.newMessage"
             class="bubble"
         >1</div>
         <Avatar
@@ -11,19 +14,20 @@
         />
         <div class="name_msg_container">
 
-            <h3>{{ formatUserName(username) }}</h3>
-            <p>{{ formatMessage(message) }}</p>
-            <p class="date">{{ formatDate(date) }}</p>
+            <h3>{{ formatUserName(messagesData.username) }}</h3>
+            <p>{{ formatMessage(messagesData.message) }}</p>
+            <p class="date">{{ formatDate(messagesData.date) }}</p>
         </div>
     </div>
 </template>
 <script setup>
 import Avatar from './Avatar.vue'
 
+const props = defineProps({
+    messagesData: Object
+})
 
-const newMessage = true
-const message = 'very loooonng messsage for this user who is ver intense very very vyer vyer vyer vyer vyer'
-const username = 'LONG USERNAMEEEEEEE'
+
 
 const formatMessage = (message) =>
 {
@@ -35,14 +39,14 @@ const formatMessage = (message) =>
 
 const formatUserName = (name) =>
 {
-    if (name.length > 16) {
-        return name.slice(0, 15) + ' . . . '
+    if (name.length > 14) {
+        return name.slice(0, 13) + ' . . . '
     }
     return name
 }
 
 
-const date = '2024-02-28 10:28:34.379527+00'
+
 const formatDate = (date) =>
 {
 
@@ -59,12 +63,12 @@ const formatDate = (date) =>
 <style scoped>
 .boxMsg_container {
     display: flex;
-    width: 280px;
+    width: 260px;
     align-items: center;
-    margin-top: 20px;
     margin-right: 15px;
-    border-bottom: 1px solid #c2bfbf;
+    margin-top: 5px;
     border-top: 1px solid #c2bfbf;
+    position: relative;
 }
 
 .name_msg_container {
@@ -90,13 +94,13 @@ p {
 
 .bubble {
     position: absolute;
-    top: 105px;
-    left: 65px;
+    top: 15px;
+    left: 35px;
     background-color: rgb(248, 57, 120);
     color: white;
     border-radius: 50%;
     width: 25px;
-    height: px;
+    height: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -106,9 +110,11 @@ p {
 @media screen and (max-width: 767px) {
     .boxMsg_container {
         display: flex;
-        width: 340px;
+        width: 260px;
 
     }
+
+
 
 }
 </style>
