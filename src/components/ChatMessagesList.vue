@@ -19,6 +19,7 @@
         <TextArea
             v-model="message"
             @input="updateMessage"
+            @sendMessage="sendMessageHandler"
         />
     </div>
 </template>
@@ -35,11 +36,17 @@ const props = defineProps({
 
 const message = ref('')
 
-const emit = defineEmits([ 'clickBack', 'updateMessage' ])
+const emit = defineEmits([ 'clickBack', 'updateMessage', 'sendMessage' ])
 
 const updateMessage = () =>
 {
     emit('updateMessage', { message: message.value })
+
+}
+
+const sendMessageHandler = () =>
+{
+    emit('sendMessage', message.value)
 }
 
 </script>

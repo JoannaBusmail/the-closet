@@ -10,6 +10,7 @@
         <ph-paper-plane-tilt
             class="sendLogo"
             :size="28"
+            @click="$emit('sendMessage', modelValue)"
         />
     </div>
 </template>

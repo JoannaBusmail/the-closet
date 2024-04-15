@@ -5,47 +5,43 @@
     >
         <div class="content-container">
             <h1>NOTIFICATIONS</h1>
-            <form
-                @submit.prevent="handleSendMessage"
-                v-if="isSmallScreen"
-            >
-                <div>
 
-                    <BoxMessagesList
-                        class="msgList_container"
-                        v-if="!showChat"
-                        :messagesData="messagesData"
-                        @msgClick="handleMessage"
-                    />
-                    <ChatMessagesList
-                        v-else
-                        :smallScreen="isSmallScreen"
-                        @clickBack="showChat = false"
-                        :messagesData="messagesData"
-                    />
+            <div v-if="isSmallScreen">
+
+                <BoxMessagesList
+                    class="msgList_container"
+                    v-if="!showChat"
+                    :messagesData="messagesData"
+                    @msgClick="handleMessage"
+                />
+                <ChatMessagesList
+                    v-else
+                    :smallScreen="isSmallScreen"
+                    @clickBack="showChat = false"
+                    :messagesData="messagesData"
+                />
 
 
-                </div>
-            </form>
+            </div>
 
-            <form
+
+
+            <div
                 v-else
-                @submit.prevent="handleSendMessage"
                 class="msgList_andChat_container"
             >
-                <div class="msgList_andChat_container">
 
-                    <BoxMessagesList
-                        :messagesData="messagesData"
-                        @msgClick="handleMessage"
-                    />
-                    <ChatMessagesList
-                        :messagesData="messagesData"
-                        @updateMessage="handleSendMessage"
-                    />
+                <BoxMessagesList
+                    :messagesData="messagesData"
+                    @msgClick="handleMessage"
+                />
+                <ChatMessagesList
+                    :messagesData="messagesData"
+                    @sendMessage="handleSendMessage"
+                />
 
-                </div>
-            </form>
+            </div>
+
         </div>
     </div>
 </template>
@@ -138,6 +134,7 @@ const handleMessage = (message) =>
 
 const handleSendMessage = (message) =>
 {
+
     console.log('send message', message)
 }
 
