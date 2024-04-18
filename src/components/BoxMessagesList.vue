@@ -1,14 +1,18 @@
 <template>
     <div class="msgList_container">
+
         <BoxMessage
-            v-for="message in messagesData"
+            v-for="message in lastMessageData"
             :key="message.id"
             :messagesData="message"
+            :isSender="isLoggedUserSender(message)"
             @click="$emit('msgClick', message)"
         >
         </BoxMessage>
 
+
     </div>
+
 </template>
 
 <script setup>
@@ -16,7 +20,8 @@ import BoxMessage from './BoxMessage.vue'
 
 
 const props = defineProps({
-    messagesData: Array
+    lastMessageData: Array,
+    isLoggedUserSender: Function,
 })
 
 

@@ -4,27 +4,31 @@
         @click="$emit('msgClick', messagesData)"
         class="boxMsg_container"
     >
+
+
         <div
             v-if="messagesData.newMessage"
             class="bubble"
         >1</div>
         <Avatar
             size="small"
-            :src=null
+            :src=getMessageAvatar
         />
         <div class="name_msg_container">
 
-            <h3>{{ formatUserName(messagesData.username) }}</h3>
-            <p>{{ formatMessage(messagesData.message) }}</p>
-            <p class="date">{{ formatDate(messagesData.date) }}</p>
+            <h3>{{ getDisplayName }}</h3>
+            <p>{{ formatMessage(messagesData.content) }}</p>
+            <p class="date">{{ formatDate(messagesData.created_at) }}</p>
         </div>
     </div>
 </template>
 <script setup>
 import Avatar from './Avatar.vue'
+import { computed } from 'vue'
 
 const props = defineProps({
-    messagesData: Object
+    messagesData: Object,
+    isSender: 'isLoggedUserSender' | 'isLastMessageLoggedUser' | undefined,
 })
 
 
@@ -56,6 +60,18 @@ const formatDate = (date) =>
 
 }
 
+const getMessageAvatar = computed(() =>
+{
+    props.isSender === 'isLoggedUserSender' ? props.messagesData.receiver_user_avatar : props.messagesData.sender_user_avatar
+})
+
+
+const getDisplayName = computed(() =>
+{
+    const username = props.isSender === 'isLoggedUserSender' ? props.messagesData.receiver_user_username : props.messagesData.sender_user_username
+
+    return formatUserName(username)
+})
 
 
 </script>
@@ -74,6 +90,7 @@ const formatDate = (date) =>
 .name_msg_container {
     display: flex;
     flex-direction: column;
+    width: 100%;
     padding: 0 10px;
     margin-left: 15px;
     margin-top: 20px;

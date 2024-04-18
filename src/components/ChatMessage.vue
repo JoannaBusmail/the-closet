@@ -1,50 +1,50 @@
 <template>
-
     <div :class="chatDirection">
-        <Avatar
-            size="super-small"
-            :src=null
-        />
-        <div class="name_msg_container">
-            <h4>{{ messagesData.username }}</h4>
-            <p>{{ messagesData.message }}</p>
-            <p class="date">{{ formatDate(messagesData.date) }}</p>
-        </div>
+      <Avatar size="super-small" :src="getMessageAvatar" />
+      <div class="name_msg_container">
+        <h4>{{ getDisplayName }}</h4>
+        <p>{{ messagesData.content }}</p>
+        <p class="date">{{ formatDate(messagesData.created_at) }}</p>
+      </div>
     </div>
-</template>
-
-<script setup>
-import Avatar from './Avatar.vue'
-import { computed } from 'vue'
-
-const props = defineProps({
-    messagesData: Object
-})
-
-
-
-
-const chatDirection = computed(() =>
-{
-    const isLoggedUser = props.messagesData.loggedUser
-    return isLoggedUser ? 'chatMsg_container_reverse ' : 'chatMsg_container'
-})
-
-const formatDate = (date) =>
-{
-
+  </template>
+  
+  <script setup>
+  import Avatar from './Avatar.vue'
+  import { computed } from 'vue'
+  
+  const props = defineProps({
+    messagesData: Object,
+    messageAlignment: 'sender' | 'receiver' | undefined,
+    isLoggedUser: Boolean
+  })
+  
+ 
+  const formatDate = (date) => {
     const dateObj = new Date(date)
     const options = {
-        year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit',
-        minute: '2-digit'
+      year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit',
+      minute: '2-digit'
     }
     return dateObj.toLocaleDateString(undefined, options)
+  }
+  
+  const chatDirection = computed(() => {
+    return props.messageAlignment === 'sender' ? 'chatMsg_container_reverse' : 'chatMsg_container';
+  });
+  
 
-}
+  const getMessageAvatar = computed(() => {
+    return props.isLoggedUser ? props.messagesData.sender_user_avatar : props.messagesData.receiver_user_avatar;
+  })
+  
+  const getDisplayName = computed(() => {
+    return props.isLoggedUser ? props.messagesData.sender_user_username : props.messagesData.receiver_user_username;
+  })
+
+  </script>
 
 
-
-</script>
 
 <style scoped>
 .chatMsg_container {

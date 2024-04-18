@@ -11,6 +11,8 @@
                 v-for="message in messagesData"
                 :key="message.id"
                 :messagesData="message"
+                :messageAlignment="getMessageAlignment(message)"
+                :isLoggedUser="isLoggedUser"
                 @click="$emit('msgClick', message)"
             >
             </ChatMessage>
@@ -29,9 +31,13 @@ import { PhArrowLeft } from '@phosphor-icons/vue'
 import ChatMessage from './ChatMessage.vue'
 import TextArea from './TextArea.vue'
 
+
 const props = defineProps({
     smallScreen: Boolean,
     messagesData: Array,
+    newMessage: String,
+    getMessageAlignment: Function,
+    isLoggedUser: Boolean
 })
 
 const message = ref('')
@@ -47,7 +53,10 @@ const updateMessage = () =>
 const sendMessageHandler = () =>
 {
     emit('sendMessage', message.value)
+    message.value = ''
 }
+
+
 
 </script>
 
@@ -55,6 +64,8 @@ const sendMessageHandler = () =>
 .chat_container {
     display: flex;
     flex-direction: column;
+    width: 100%;
+
 
 }
 
