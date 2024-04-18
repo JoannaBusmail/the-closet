@@ -36,8 +36,10 @@
         <div class="image-info">
             <p>{{ post.outfit_name }}</p>
             <ph-chat-dots
+                v-if="!isOwner"
                 :size="28"
                 style="color: rgb(248, 57, 120);"
+                @click="$emit('postClicked', post)"
             />
         </div>
 

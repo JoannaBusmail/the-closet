@@ -8,6 +8,7 @@
             :loadingPosts="loadingPosts"
             :isOwner="isOwner"
             @btnClick="$emit('btnClick', post)"
+            @postClicked="handlePostclicked"
         />
 
     </div>
@@ -22,11 +23,16 @@ import ClosetCard from './ClosetCard.vue'
 import Observer from './Observer.vue'
 
 
-const emit = defineEmits([ 'intersect', 'btnClick' ])
+const emit = defineEmits([ 'intersect', 'btnClick', 'postClicked' ])
 
 const emitIntersectEvent = () =>
 {
     emit('intersect')
+}
+
+const handlePostclicked = (post) =>
+{
+    emit('postClicked', post)
 }
 
 const props = defineProps({
