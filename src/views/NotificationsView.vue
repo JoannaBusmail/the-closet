@@ -6,37 +6,58 @@
         <div class="content-container">
             <h1>NOTIFICATIONS</h1>
 
-            <div v-if="isSmallScreen">
 
-                <BoxMessagesList
-                    class="msgList_container"
-                    v-if="!showChat"
-                    :messagesData="messagesData"
-                    @msgClick="handleMessage"
-                />
-                <ChatMessagesList
+            <p>Param user name{{ paramUser.username }}</p>
+
+            <div v-if="messagesData.length > 0">
+                <div v-if="isSmallScreen">
+
+                    <BoxMessagesList
+                        v-if="!showChat"
+                        :lastMessageData="lastMessageData"
+                        :isLoggedUserSender="getLastMessageUser"
+                        @msgClick="handleMessage"
+                    />
+                    <ChatMessagesList
+                        v-else
+                        :smallScreen="isSmallScreen"
+                        @clickBack="showChat = false"
+                        :messagesData="messagesData"
+                        :getMessageAlignment="getMessageAlignment"
+                        :isLoggedUser="isLoggedUser"
+                    />
+
+                </div>
+
+
+
+                <div
                     v-else
-                    :smallScreen="isSmallScreen"
-                    @clickBack="showChat = false"
-                    :messagesData="messagesData"
-                />
+                    class="msgList_andChat_container"
+                >
+
+                    <BoxMessagesList
+                        :lastMessageData="lastMessageData"
+                        :isLoggedUserSender="getLastMessageUser"
+                        @msgClick="handleMessage"
+                    />
 
 
+                    <ChatMessagesList
+                        :messagesData="messagesData"
+                        :getMessageAlignment="getMessageAlignment"
+                        :isLoggedUser="isLoggedUser"
+                        @sendMessage="handleSendMessage"
+                    />
+
+                </div>
             </div>
-
-
-
-            <div
-                v-else
-                class="msgList_andChat_container"
-            >
-
-                <BoxMessagesList
-                    :messagesData="messagesData"
-                    @msgClick="handleMessage"
-                />
+            <div v-else>
+                <p>No messages received yet</p>
                 <ChatMessagesList
                     :messagesData="messagesData"
+                    :getMessageAlignment="getMessageAlignment"
+                    :isLoggedUser="isLoggedUser"
                     @sendMessage="handleSendMessage"
                 />
 
@@ -50,7 +71,13 @@
 import { useUIActions } from '@/composables/useUIActions.js'
 import BoxMessagesList from '@/components/BoxMessagesList.vue'
 import ChatMessagesList from '@/components/ChatMessagesList.vue'
-import { ref } from 'vue'
+import { ref, onMounted, reactive, computed } from 'vue'
+import { useFetchUserParamsDataStore } from '@/stores/fetchUserParamsData'
+import { useFetchMessages } from '@/stores/fetchMessages'
+import { useUserStore } from '@/stores/users'
+import { storeToRefs } from 'pinia'
+
+
 
 const isSmallScreen = ref(window.innerWidth <= 767)
 // UI AND POSTS ACTIONS
@@ -58,86 +85,90 @@ const { contentStyles } = useUIActions()
 
 const showChat = ref(false)
 
-const messagesData = [
-    {
-        newMessage: true,
-        message: 'very loooonng messsage for this user who is ver intense very very vyer vyer gdfgdfgdfgdfgfgnn fgshfsgh fdg adfgs dfg adfga dfgfgj hgjyrjrwtg dfg fhfghfdghvyer vyer vyer',
-        username: 'LONG USERNAMEEEEEEE',
-        date: '2024-02-28 10:28:34.379527+00',
-        loggedUser: true,
-    },
-    {
-        newMessage: true,
-        message: 'very loooonng messsage for this user who is ver intense very very vyer vyer vyer vyer vyer',
-        username: 'USER 2',
-        date: '2024-02-28 10:28:34.379527+00',
-        loggedUser: false,
-    },
-    {
-        newMessage: false,
-        message: 'very loooonng messsage for this user who is ver intense very very vyer vyer vyer vyer vyer',
-        username: 'USER 3',
-        date: '2024-02-28 10:28:34.379527+00',
-        loggedUser: true,
-    },
-    {
-        newMessage: true,
-        message: 'very loooonng messsage for this user who is ver intense very very vyer vyer vyer vyer vyer',
-        username: 'USER 4',
-        date: '2024-02-28 10:28:34.379527+00',
-        loggedUser: false,
-    },
-    {
-        newMessage: true,
-        message: 'very loooonng messsage for this user who is ver intense very very vyer vyer vyer vyer vyer',
-        username: '5 LONG USERNAMEEEEEEE',
-        date: '2024-02-28 10:28:34.379527+00',
-        loggedUser: true,
-    },
-    {
-        newMessage: true,
-        message: 'very loooonng messsage for this user who is ver intense very very vyer vyer vyer vyer vyer',
-        username: '6 LONG USERNAMEEEEEEE',
-        date: '2024-02-28 10:28:34.379527+00',
-        loggedUser: false,
-    },
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
 
-    {
-        newMessage: true,
-        message: 'very loooonng messsage for this user who is ver intense very very vyer vyer vyer vyer vyer',
-        username: 'USER 4',
-        loggedUser: true,
-    },
-    {
-        newMessage: true,
-        message: 'very loooonng messsage for this user who is ver intense very very vyer vyer vyer vyer vyer',
-        username: '5 LONG USERNAMEEEEEEE',
-        date: '2024-02-28 10:28:34.379527+00',
-        loggedUser: false,
-    },
-    {
-        newMessage: true,
-        message: 'very loooonng messsage for this user who is ver intense very very vyer vyer vyer vyer vyer',
-        username: '6 LONG USERNAMEEEEEEE',
-        date: '2024-02-28 10:28:34.379527+00',
-        loggedUser: true,
-    },
 
-]
+//FETCH USER PARAM STORE
+const fetchUserParamsDataStore = useFetchUserParamsDataStore()
+const { paramUser, paramUserPosts } = storeToRefs(fetchUserParamsDataStore)
+
+//FETCH MESSAGES
+const fetchMessagesStore = useFetchMessages()
+const { addMessageToDB, fetchMessages, fetchLastMessages } = fetchMessagesStore
+const { newMessage, messagesData, lastMessageData } = storeToRefs(fetchMessagesStore)
+
+
+
+
+
+
+const getMessageAlignment = (message) =>
+{
+    return message.sender_user_id === user.value.id ? 'sender' : 'receiver'
+}
+
+
 
 
 const handleMessage = (message) =>
 {
     showChat.value = true
     console.log(message)
+
 }
+
+
 
 const handleSendMessage = (message) =>
 {
+    newMessage.value = message
+    addMessageToDB(paramUser.value)
 
-    console.log('send message', message)
 }
 
+const isLoggedUser = computed(() =>
+{
+    const isSender = messagesData.value.some((message) => message.sender_user_id === user.value.id)
+    return isSender
+})
+
+
+//OTRA FORMA DE HACERLO
+/*const isLoggedUser = computed(() =>
+{
+    for (const message of messagesData.value) {
+       
+        if (message.sender_user_id === user.value.id) {
+            return true 
+        }
+    }
+    return false 
+})*/
+
+
+const getLastMessageUser = (message) =>
+{
+    return message.sender_user_id === user.value.id ? 'isLoggedUserSender' : 'isLastMessageLoggedUser'
+
+}
+
+onMounted(async () =>
+{
+    await fetchMessages(paramUser.value)
+    await fetchLastMessages()
+
+
+    console.log('actualUser', user.value.id)
+
+
+    console.log('loggedusermessagedb', messagesData.value)
+    console.log('lastMessageData', lastMessageData.value)
+
+    console.log('paramUser', paramUser.value)
+    console.log('paramUserPosts', paramUserPosts.value)
+
+})
 
 </script>
 
@@ -169,15 +200,19 @@ h1 {
     display: flex;
     gap: 20px;
     height: 100vh;
-    width: 100%;
     padding: 20px;
 
 }
 
-.msgList_container {
-    margin: auto;
-}
 
+
+
+.nameChat_container {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+
+}
 
 @media screen and (max-width: 768px) {
 

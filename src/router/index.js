@@ -14,6 +14,9 @@ import { useUserStore } from '@/stores/users'
 import { storeToRefs } from 'pinia'
 
 
+
+
+
 const requireAuth = (to, from, next) => {
   const userStore = useUserStore()
   const { user: loggedUser } = storeToRefs(userStore)
@@ -93,7 +96,8 @@ const router = createRouter({
         path: '/notifications',
         name: 'NotificationsView',
         component: NotificationsView,
-        beforeEnter: requireAuth
+        beforeEnter: requireAuth,
+        
       }
     
   ]

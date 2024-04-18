@@ -28,6 +28,7 @@
                     :isOwner=false
                     :postData="paramUserPosts"
                     :loadingPosts="loadingParamUserPost"
+                    @postClicked="handlePostClicked"
                 />
 
             </div>
@@ -49,7 +50,7 @@ import ClosetCardsVue from '@/components/ClosetCards.vue'
 import Button from '@/components/Button.vue'
 import { onMounted, ref, computed, watchEffect } from 'vue'
 import { useUIActions } from '@/composables/useUIActions.js'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useFetchUserParamsDataStore } from '@/stores/fetchUserParamsData'
 import { useFollowDataStore } from '@/stores/followData'
 import { storeToRefs } from 'pinia'
@@ -59,6 +60,7 @@ const { contentStyles } = useUIActions()
 
 //ROUTE
 const route = useRoute()
+const router = useRouter()
 const { username: usernameParam } = route.params
 console.log(usernameParam)
 
@@ -81,6 +83,7 @@ onMounted(async () =>
     await fetchIsFollowing()
     await fetchParamUserFollowersCount()
     console.log('paramUser', paramUser.value)
+    console.log('paramUserPosts', paramUserPosts.value)
 
 })
 
@@ -108,6 +111,16 @@ const followBtnTextChange = computed(() =>
     }
 
 })
+
+const selectedPost = ref(null)
+
+const handlePostClicked = (post) =>
+{
+    console.log('post', post)
+    selectedPost.value = post
+    console.log('selectedPost', selectedPost.value)
+    router.push('/notifications')
+}
 
 </script>
 
