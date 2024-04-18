@@ -12,7 +12,7 @@
         >1</div>
         <Avatar
             size="small"
-            :src=getMessageAvatar
+            :src="getMessageAvatar"
         />
         <div class="name_msg_container">
 
@@ -62,7 +62,7 @@ const formatDate = (date) =>
 
 const getMessageAvatar = computed(() =>
 {
-    props.isSender === 'isLoggedUserSender' ? props.messagesData.receiver_user_avatar : props.messagesData.sender_user_avatar
+    return props.isSender === 'isLoggedUserSender' ? props.messagesData.receiver_user_avatar : props.messagesData.sender_user_avatar
 })
 
 
