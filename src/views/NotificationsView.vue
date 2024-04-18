@@ -9,14 +9,14 @@
 
             <p>Param user name{{ paramUser.username }}</p>
 
-            <div v-if="messagesData.length > 0">
+            <div v-if="lastMessageData.length > 0">
                 <div v-if="isSmallScreen">
 
                     <BoxMessagesList
                         v-if="!showChat"
                         :lastMessageData="lastMessageData"
                         :isLoggedUserSender="getLastMessageUser"
-                        @msgClick="handleMessage"
+                        @msgClick="handleBoxMessage"
                     />
                     <ChatMessagesList
                         v-else
@@ -39,7 +39,7 @@
                     <BoxMessagesList
                         :lastMessageData="lastMessageData"
                         :isLoggedUserSender="getLastMessageUser"
-                        @msgClick="handleMessage"
+                        @msgClick="handleBoxMessage"
                     />
 
 
@@ -110,12 +110,26 @@ const getMessageAlignment = (message) =>
 
 
 
-
-const handleMessage = (message) =>
+const handleBoxMessage = async (message) =>
 {
     showChat.value = true
     console.log(message)
 
+    const connectWith = message.sender_user_id === user.value.id ? {
+        id: message.receiver_user_id,
+        username: message.receiver_username,
+        profile_url: message.receiver_profile_url,
+        email: message.receiver_email
+    } : {
+        id: message.sender_user_id,
+        username: message.sender_username,
+        profile_url: message.sender_profile_url,
+        email: message.sender_email
+    }
+
+    console.log('connectWith', connectWith)
+
+    await fetchMessages(connectWith)
 }
 
 
@@ -153,18 +167,33 @@ const getLastMessageUser = (message) =>
 
 }
 
+
+const fetchLastMessagesWithoutRepetition = async () =>
+{
+    await fetchLastMessages()
+
+    const newMessages = messagesData.value.filter(message =>
+    {   //con ! para que devuelva true si no lo encuentra y por tanto agregarlo
+        return !lastMessageData.value.find(existingMessage => existingMessage.id === message.id)
+    })
+
+    lastMessageData.value.push(...newMessages)
+}
+
+
 onMounted(async () =>
 {
     await fetchMessages(paramUser.value)
-    await fetchLastMessages()
+
+    if (lastMessageData.value.length === 0) {
+        await fetchLastMessagesWithoutRepetition()
+    }
+
 
 
     console.log('actualUser', user.value.id)
-
-
-    console.log('loggedusermessagedb', messagesData.value)
+    console.log('messagesData', messagesData.value)
     console.log('lastMessageData', lastMessageData.value)
-
     console.log('paramUser', paramUser.value)
     console.log('paramUserPosts', paramUserPosts.value)
 

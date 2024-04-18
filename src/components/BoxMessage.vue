@@ -85,6 +85,7 @@ const getDisplayName = computed(() =>
     margin-top: 5px;
     border-top: 1px solid #c2bfbf;
     position: relative;
+    cursor: pointer;
 }
 
 .name_msg_container {
