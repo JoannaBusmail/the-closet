@@ -95,7 +95,7 @@ const { paramUser, paramUserPosts } = storeToRefs(fetchUserParamsDataStore)
 
 //FETCH MESSAGES
 const fetchMessagesStore = useFetchMessages()
-const { addMessageToDB, fetchMessages, fetchLastMessages } = fetchMessagesStore
+const { addMessageToDB, fetchMessages, fetchLastMessages, fetchRealTimeMessages } = fetchMessagesStore
 const { newMessage, messagesData, lastMessageData } = storeToRefs(fetchMessagesStore)
 
 
@@ -110,34 +110,43 @@ const getMessageAlignment = (message) =>
 
 
 
+const connectWith = reactive({})
+
 const handleBoxMessage = async (message) =>
 {
     showChat.value = true
     console.log(message)
 
-    const connectWith = message.sender_user_id === user.value.id ? {
+    connectWith.value = message.sender_user_id === user.value.id ? {
         id: message.receiver_user_id,
-        username: message.receiver_username,
-        profile_url: message.receiver_profile_url,
-        email: message.receiver_email
+        username: message.receiver_user_username,
+        profile_url: message.receiver_user_profile_url,
+        email: message.receiver_user_email
     } : {
         id: message.sender_user_id,
-        username: message.sender_username,
-        profile_url: message.sender_profile_url,
-        email: message.sender_email
+        username: message.sender_user__username,
+        profile_url: message.senderuser__profile_url,
+        email: message.sender_user_email
     }
 
-    console.log('connectWith', connectWith)
+    console.log('connectWith', connectWith.value)
 
-    await fetchMessages(connectWith)
+    await fetchMessages(connectWith.value)
 }
 
 
 
-const handleSendMessage = (message) =>
+const handleSendMessage = async (message) =>
 {
     newMessage.value = message
-    addMessageToDB(paramUser.value)
+    if (paramUser.value.id === '') {
+        await addMessageToDB(connectWith.value)
+
+    } else {
+        await addMessageToDB(paramUser.value)
+    }
+
+
 
 }
 
@@ -168,9 +177,17 @@ const getLastMessageUser = (message) =>
 }
 
 
+const orderLastMessage = (a, b) =>
+{
+    return new Date(b.created_at) - new Date(a.created_at)
+}
+
+
+
 const fetchLastMessagesWithoutRepetition = async () =>
 {
     await fetchLastMessages()
+
 
     const newMessages = messagesData.value.filter(message =>
     {   //con ! para que devuelva true si no lo encuentra y por tanto agregarlo
@@ -178,7 +195,10 @@ const fetchLastMessagesWithoutRepetition = async () =>
     })
 
     lastMessageData.value.push(...newMessages)
+    lastMessageData.value.sort(orderLastMessage)
 }
+
+
 
 
 onMounted(async () =>
@@ -188,6 +208,7 @@ onMounted(async () =>
     if (lastMessageData.value.length === 0) {
         await fetchLastMessagesWithoutRepetition()
     }
+
 
 
 
