@@ -132,6 +132,7 @@ const handleBoxMessage = async (message) =>
     console.log('connectWith', connectWith.value)
 
     await fetchMessages(connectWith.value)
+    await fetchRealTimeMessages(connectWith.value)
 }
 
 
@@ -204,11 +205,12 @@ const fetchLastMessagesWithoutRepetition = async () =>
 onMounted(async () =>
 {
     await fetchMessages(paramUser.value)
+    await fetchRealTimeMessages(paramUser.value)
 
     if (lastMessageData.value.length === 0) {
         await fetchLastMessagesWithoutRepetition()
     }
-
+    //await fetchLastMessages()
 
 
 

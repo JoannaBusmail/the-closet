@@ -18,8 +18,10 @@ export const useFetchMessages = defineStore('fetchMessages', () => {
     const errorMessage = ref('')
 
     const addNewMessage = (newMessage) => {
-        messagesData.value =[...messagesData.value, newMessage]
+        console.log("Adding new message:", newMessage);
+        messagesData.value = [...messagesData.value, newMessage];
     }
+    
     
     const addMessageToDB = async ( receiverUser) => {
         const newMessageData = {
@@ -221,7 +223,28 @@ export const useFetchMessages = defineStore('fetchMessages', () => {
     }
 };
 
-    return { addMessageToDB, fetchMessages, fetchLastMessages,  messagesData, newMessage, lastMessageData, errorMessage, addNewMessage}
+const fetchRealTimeMessages = async (receiverUser) => {
+    const channel = supabase.channel("*")
+        .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" },
+        (payload) => {
+            const newMessage = payload.new;
+            console.log("New message received:", newMessage);
+            if ((newMessage.sender_user_id === user.value.id && newMessage.receiver_user_id === receiverUser.id) ||
+                (newMessage.sender_user_id === receiverUser.id && newMessage.receiver_user_id === user.value.id)) {
+                console.log("Adding new message to messagesData:", newMessage);
+                addNewMessage(newMessage);
+            }
+        })
+        .subscribe();
+
+    return () => {
+        supabase.removeChannel(channel);
+    };
+}
+
+
+
+    return { addMessageToDB, fetchMessages, fetchLastMessages, fetchRealTimeMessages,  messagesData, newMessage, lastMessageData, errorMessage, addNewMessage}
 })
 
 
